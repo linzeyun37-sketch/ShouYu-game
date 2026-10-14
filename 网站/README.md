@@ -30,6 +30,7 @@
 
 双击 `网站/ShouYu-game.html`，用浏览器打开即可，无需安装或联网。
 线上版本：https://linzeyun37-sketch.github.io/ShouYu-game/网站/ShouYu-game.html
+单独下载 `ShouYu-game.html` 到电脑或手机上打开时，资料下载需要联网（链接会指向线上的资料文件）。
 
 修改内容后，在“网站”文件夹中运行 `build_single.ps1`，重新生成 `ShouYu-game.html`。
 `index.html` 与 `css/`、`js/` 是生成它的源文件，不需要直接打开。

@@ -5,6 +5,8 @@ window.SITE = {
   subtitle: "手语分社 · 心创组资料汇总 · 2026 年 10 月",
   notice: "目前已整理 01–53 号游戏及部分新增游戏的玩法讲解；其余待补录的游戏见「待补充与反馈」页，完整玩法页面日后上线。",
   updated: "资料更新于 2026 年 10 月",
+  // 线上地址（资料仓库根目录）：只下载 HTML 文件打开时，资料链接改用这个地址
+  remoteBase: "https://linzeyun37-sketch.github.io/ShouYu-game/",
   // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
   feedbackEmail: "2500011719@stu.pku.edu.cn"
 };
