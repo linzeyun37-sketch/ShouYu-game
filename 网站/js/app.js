@@ -71,7 +71,7 @@
 
   // 网页在线打开时用相对路径；单独下载 HTML 到本地打开时，改用线上地址
   function fileHref(path) {
-    var base = location.protocol === "file:" && window.SITE.remoteBase ? window.SITE.remoteBase : "../";
+    var base = location.protocol === "file:" && window.SITE.remoteBase ? window.SITE.remoteBase : (window.SITE.resourceBase || "../");
     return base + encodeURI(path);
   }
 

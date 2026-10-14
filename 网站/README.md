@@ -33,7 +33,9 @@
 ## 打开方式
 
 双击 `网站/ShouYu-game.html`，用浏览器打开即可，无需安装或联网。
-线上版本：https://linzeyun37-sketch.github.io/ShouYu-game/网站/ShouYu-game.html
+正式地址：https://shouyulove.cn/signplay/
+
+GitHub Pages 源码版：https://linzeyun37-sketch.github.io/ShouYu-game/网站/ShouYu-game.html
 单独下载 `ShouYu-game.html` 到电脑或手机上打开时，资料下载需要联网（链接会指向线上的资料文件）。
 
 修改内容后，在“网站”文件夹中运行 `python3 build_single.py`，重新生成 `ShouYu-game.html`。Windows 也可以继续使用 `build_single.ps1`。两种构建方式都会内嵌 CSS、JavaScript、Logo 和网页图标，单独打开 HTML 时不依赖同目录的图片。
@@ -48,7 +50,7 @@ Logo 用浅暖米色手掌托起雾蓝骰子，延续以手予爱图标的灰绿
 
 网站沿用原来的奶油底色、陶土橙、芥末黄和橄榄绿配色。首页按活动与难度分组，桌面并排展示，手机顺序阅读。分类颜色由 `css/style.css` 中的 `.tone-1` 至 `.tone-8` 统一管理；卡片使用完整边框，列表和详情页沿用相同配色。页面使用系统字体，不加载远程字体。
 
-本次设计仅作本地预览，未更新线上版本。游戏数据与规则沿用原仓库；站名和展示布局已调整。
+正式站点已部署到用户服务器。游戏数据与规则沿用原仓库，设计者署名为伍家阳。服务器使用独立发布包，构建和回滚方式见 `../deploy/README.md`。
 
 ## 日常维护
 
