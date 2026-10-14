@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手语小游戏手册</title>
+  <meta name="description" content="手语分社小游戏玩法手册：66 个破冰、猜词、复习、合作解谜游戏，含人数、时长、难度和原始资料。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23D8704A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23E9B44C'/%3E%3C/svg%3E">
+  <style>
+/* 配色：奶油底色 + 陶土、芥末黄、橄榄绿、鼠尾草绿点缀 */
+:root {
+  --bg: #FBF5EA;
+  --card: #FFFDF8;
+  --ink: #4A3426;
+  --muted: #6B5744;
+  --line: #EADCC6;
+  --terra: #D8704A;
+  --mustard: #E9B44C;
+  --olive: #8AA35E;
+  --sage: #DDE6C4;
+  --clay: #F3E0C7;
+  --radius: 14px;
+  --shadow: 0 4px 14px rgba(74, 52, 38, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+a { color: var(--terra); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 18px 48px;
+}
+
+/* 顶部 */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: var(--card);
+  border-bottom: 4px solid var(--mustard);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+}
+.brand:hover { text-decoration: none; }
+
+.brand-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--terra);
+  box-shadow: 14px 0 0 var(--mustard), 28px 0 0 var(--olive);
+  margin-right: 26px;
+}
+
+.top-nav a {
+  margin-left: 18px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* 通用区块 */
+.hero {
+  background: linear-gradient(120deg, var(--clay), var(--sage));
+  border-radius: var(--radius);
+  padding: 28px 26px;
+  margin-bottom: 26px;
+}
+/* 统一标题：首页、分类页、详情页、资料页共用字号与颜色；仅首页带下划线 */
+.page-title {
+  margin: 4px 0 8px;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.home-title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--ink);
+  display: inline-block;
+  border-bottom: 3px solid var(--mustard);
+  padding-bottom: 2px;
+}
+
+.hero h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: var(--ink);
+}
+
+.card .example {
+  margin-top: 6px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.hero p { margin: 0; color: var(--ink); }
+
+.notice {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 6px 14px;
+  background: var(--mustard);
+  color: var(--ink);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+h2.section-title {
+  font-size: 20px;
+  margin: 30px 0 14px;
+  color: var(--ink);
+  border-left: 6px solid var(--terra);
+  padding-left: 10px;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.card {
+  display: block;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  transition: transform 0.15s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.card .tag {
+  display: inline-block;
+  font-size: 12px;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.card .count {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.scene {
+  border-top: 5px solid var(--terra);
+}
+
+.cat-bar {
+  height: 8px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+/* 分类页 */
+.page-head {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+.page-head .page-title {
+  margin: 4px 0 8px;
+}
+.page-head p { margin: 0; color: var(--muted); }
+
+.crumb {
+  font-size: 14px;
+  color: var(--muted);
+}
+.crumb a { color: var(--muted); }
+
+.status {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.status.complete { background: var(--sage); color: #3F5A23; }
+.status.replay { background: var(--clay); color: #7A4A22; }
+.status.todo { background: #E6E0D6; color: #6B5D4D; }
+
+.game-list {
+  display: grid;
+  gap: 12px;
+}
+
+.game-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  color: var(--ink);
+}
+.game-item:hover { text-decoration: none; border-color: var(--mustard); }
+
+.game-no {
+  min-width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+}
+
+.game-item h3 {
+  margin: 0 0 2px;
+  font-size: 16px;
+}
+.game-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* 详情页 */
+.detail {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+  box-shadow: var(--shadow);
+}
+.detail .page-title {
+  margin: 6px 0 12px;
+}
+
+.guide-list {
+  margin: 4px 0 0;
+  padding-left: 22px;
+}
+.guide-list li { margin-bottom: 4px; }
+/* 标题层级：大节（玩法讲解 / 完整页面 / 原始资料 / 相关游戏）> 子标题（适用场景 / 准备 …） */
+.detail h2.major-title {
+  display: inline-block;
+  margin: 26px 0 12px;
+  padding: 8px 18px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--terra);
+  border-radius: 10px;
+  letter-spacing: 2px;
+}
+
+.detail h2.sec-title {
+  margin: 26px 0 10px;
+  padding-left: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  border-left: 5px solid var(--olive);
+}
+
+.detail h3.sub-title {
+  margin: 16px 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--olive);
+}
+.detail h3.sub-title::before {
+  content: "●";
+  margin-right: 6px;
+  font-size: 10px;
+  color: var(--mustard);
+  vertical-align: middle;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0 6px;
+}
+.info-cell {
+  background: var(--clay);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.info-cell span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+}
+.info-cell strong {
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.note {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.chips {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--clay);
+  color: var(--ink);
+}
+.chip-level { background: var(--sage); color: #3F5A23; font-weight: 700; }
+.chip-todo { background: #E6E0D6; color: #6B5D4D; }
+
+.back-row { margin-top: 26px; }
+
+/* 顶部搜索框 */
+.header-search {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  max-width: 260px;
+  margin: 0 16px;
+}
+.header-search input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #FFFCF5;
+  color: var(--ink);
+}
+.header-search button {
+  font: inherit;
+  font-size: 14px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--olive);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* 搜索与筛选 */
+.search-panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.search-panel > input[type="search"] {
+  font: inherit;
+  font-size: 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #FFFCF5;
+  color: var(--ink);
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+}
+.filters label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 150px;
+}
+.filters select {
+  font: inherit;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FFFCF5;
+  color: var(--ink);
+}
+.filters button {
+  font: inherit;
+  border: 2px solid var(--terra);
+  cursor: pointer;
+}
+
+/* 信息卡：文字不再嵌套标签，避免重叠 */
+.info-grid > * { min-width: 0; }
+.info-cell strong {
+  display: block;
+  word-break: break-all;
+}
+
+/* 难度卡片 */
+.level-card { border-top: 5px solid var(--olive); }
+.level-1 { border-top-color: var(--olive); }
+.level-2 { border-top-color: var(--mustard); }
+.level-3 { border-top-color: var(--terra); }
+.level-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.level-head h3 { margin: 0; }
+.level-stars {
+  color: var(--terra);
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+/* 反馈表单 */
+.feedback {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 14px;
+}
+.feedback label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+/* 统一的表单控件：去掉系统原生外观，字号 16px 避免 iOS 聚焦时自动放大 */
+.feedback select,
+.feedback input,
+.feedback textarea,
+.filters select,
+.search-panel > input[type="search"],
+.feedback-result textarea {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: #FFFCF5;
+  color: var(--ink);
+}
+.feedback select,
+.filters select {
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234A3426' stroke-width='1.8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.feedback textarea { resize: vertical; }
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.feedback button.btn {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+.feedback-result {
+  margin-top: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.feedback-result textarea {
+  width: 100%;
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FFFCF5;
+  color: var(--ink);
+}
+.detail .summary {
+  font-size: 16px;
+  background: var(--clay);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.placeholder {
+  border: 2px dashed var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: var(--muted);
+  font-size: 14px;
+  background: #FFFCF5;
+}
+.placeholder ul { margin: 6px 0 0; padding-left: 20px; }
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  background: var(--olive);
+  color: #fff;
+}
+.btn:hover { text-decoration: none; filter: brightness(1.05); }
+.btn.disabled {
+  background: #D9CFBF;
+  color: #7C6E5E;
+  cursor: not-allowed;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--terra);
+  border: 2px solid var(--terra);
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.file-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  background: #FFFCF5;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.file-list li > a:not(.dl) {
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+}
+.file-list .dl {
+  order: 2;
+  margin-left: auto;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.file-list .file-ids {
+  order: 3;
+  flex-basis: 100%;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* 上一个 / 下一个 */
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 14px;
+}
+.pager a { max-width: 48%; }
+
+/* 相关游戏：站内跳转，使用文字链接样式 */
+.related-list {
+  margin: 4px 0 0;
+  padding-left: 20px;
+}
+.related-list li { margin-bottom: 4px; }
+
+/* 资料文件的游戏编号标注 */
+.file-ids {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* 回到顶部 */
+.to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: var(--terra);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.to-top.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 18px;
+  border-top: 1px solid var(--line);
+}
+
+/* 打印：隐藏导航、按钮和阴影，保留规则文字 */
+@media print {
+  .site-header,
+  .header-search,
+  .top-nav,
+  .back-row,
+  .pager,
+  .to-top,
+  .site-footer,
+  .btn,
+  .filters,
+  .feedback { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card, .game-item, .detail, .page-head, .feedback-result {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  .detail .major-title { background: none; color: #000; padding: 0; }
+  a { color: #000; }
+  .container { max-width: none; padding: 0; }
+}
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 22px; }
+  .brand-dot { margin-right: 0; box-shadow: none; }
+  .top-nav a { margin-left: 10px; }
+  .site-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+  .header-search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+    margin: 0;
+  }
+  .top-nav {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+  }
+  .info-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 22px; }
+}
+
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#/">
+      <span class="brand-dot"></span>
+      <span class="brand-text" id="site-title">手语小游戏手册</span>
+    </a>
+    <form class="header-search" id="header-search" role="search">
+      <input name="q" type="search" aria-label="搜索游戏" placeholder="搜索游戏">
+      <button type="submit">筛选</button>
+    </form>
+    <nav class="top-nav" aria-label="主导航">
+      <a href="#/">首页</a>
+      <a href="#/search">筛选</a>
+      <a href="#/todo">待补充与反馈</a>
+      <a href="#/files">资料下载</a>
+    </nav>
+  </header>
+
+  <main id="app" class="container"></main>
+
+  <footer class="site-footer">
+    <p id="site-subtitle"></p>
+  </footer>
+
+  <button type="button" id="to-top" class="to-top" aria-label="回到顶部">↑</button>
+
+  <script>
+// 手语游戏网站数据：来源为《手语分社小游戏玩法手册》（2026 年 10 月）
+// 资料路径相对于“网站”文件夹的上一级（即“手语游戏整理”）
+window.SITE = {
+  title: "手语小游戏手册",
+  subtitle: "手语分社 · 心创组资料汇总 · 2026 年 10 月",
+  notice: "目前已整理 01–53 号游戏的玩法讲解；54–66 号规则待补录，完整玩法页面日后上线。",
+  updated: "资料更新于 2026 年 10 月",
+  // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
+  feedbackEmail: "2500011719@stu.pku.edu.cn"
+};
+
+window.CATEGORIES = [
+  { key: "1", name: "一 猜词和信息传递", short: "猜词和信息传递", color: "#D8704A", intro: "用手语、画画和肢体动作传递信息，练习表达与猜测。" },
+  { key: "2", name: "二 破冰和小组互动", short: "破冰和小组互动", color: "#E9B44C", intro: "适合新成员相互认识，也适合小团热场。" },
+  { key: "3", name: "三 词汇和数字复习", short: "词汇和数字复习", color: "#8AA35E", intro: "借助炸弹、挖宝等规则复习词汇和数字。" },
+  { key: "4", name: "四 造句和讲故事", short: "造句和讲故事", color: "#5E9C94", intro: "用手语造句、接龙讲故事，练习连贯表达。" },
+  { key: "5", name: "五 合作和情景解谜", short: "合作和情景解谜", color: "#A8653A", intro: "分组合作、推理与解谜，在情景里使用手语。" },
+  { key: "6", name: "六 卡牌和桌游", short: "卡牌和桌游", color: "#D08C5B", intro: "卡牌与桌游，适合总复习和晚间活动。" },
+  { key: "7", name: "七 出摊和手型体验", short: "出摊和手型体验", color: "#6F8F4E", intro: "零基础也能参与的出摊活动和手型体验。" },
+  { key: "8", name: "八 待补充的游戏规则", short: "待补充", color: "#9C8C74", intro: "原始资料只留名称与线索，规则待补录。" }
+];
+
+// 场景入口（对应手册“按活动需要选游戏”表）
+window.SCENES = [
+  { name: "猜词和表达", cat: "1", example: "你划我猜、传声筒、表演猜故事" },
+  { name: "互相认识", cat: "2", example: "默契测试、转述信息、我有你没有" },
+  { name: "复习词汇", cat: "3", example: "字母炸弹、女巫挖宝、萝卜蹲" },
+  { name: "练习造句", cat: "4", example: "家族树、故事王、黑暗料理" },
+  { name: "合作解谜", cat: "5", example: "完美一餐、拆弹专家、乱室寻衣" },
+  { name: "总复习和桌游", cat: "6", example: "骷髅牌、行动代号、手语大富翁" },
+  { name: "零基础出摊", cat: "7", example: "拆拆猜、手型骰子、知识问答" }
+];
+
+// status: 完整规则 / 复玩方案 / 待补充
+// resources: 相对于“手语游戏整理”的路径；page: 日后完整页面（暂未建设，留空）
+window.GAMES = [
+  // 一 猜词和信息传递
+  { id: "01", title: "你划我猜", cat: "1", status: "完整规则", summary: "表演者用手语或肢体动作表达词语，其他人猜词，按所选版本计分。", resources: ["一_猜词和信息传递/游戏规则讲解.docx", "一_猜词和信息传递/北海定向材料.pptx"] },
+  { id: "02", title: "你画我猜", cat: "1", status: "完整规则", summary: "出题者把词语画出来，其他人猜，猜对最多的一组获胜。", resources: ["一_猜词和信息传递/22fall游戏词汇（联大方）.docx", "一_猜词和信息传递/2022fall task card.docx"] },
+  { id: "03", title: "手势猜成语和诗句", cat: "1", status: "完整规则", summary: "三组先比划成语，再表达诗句，按猜中数量和用时排名。", resources: [] },
+  { id: "04", title: "手语传声筒", cat: "1", status: "完整规则", summary: "从第一人开始用手语逐人传递句子，最后比较原句与末尾理解。", resources: ["一_猜词和信息传递/手语传声筒题目.docx"] },
+  { id: "05", title: "背后传画", cat: "1", status: "复玩方案", summary: "用手语传递带空间关系的句子，边传边画，检查物件与位置是否保留。", resources: [] },
+  { id: "06", title: "手语绘画接龙", cat: "1", status: "复玩方案", summary: "交替绘画与打手语传递一个词，最后一人猜出原词。", resources: [] },
+  { id: "07", title: "表演猜故事", cat: "1", status: "完整规则", summary: "表演者用手语和肢体演童话故事，其他人猜故事并大致复述。", resources: [] },
+  { id: "08", title: "正话反说", cat: "1", status: "完整规则", summary: "出题者把形容词换成反义词打出，猜题者反推出原词。", resources: ["一_猜词和信息传递/2022fall task card.docx", "一_猜词和信息传递/2022fall 游戏词汇（北大方）.docx"] },
+
+  // 二 破冰和小组互动
+  { id: "09", title: "自我介绍默契测试", cat: "2", status: "完整规则", summary: "两人背对背同时打手语，组长检查两边表达的是否为同一信息。", resources: ["二_破冰和小组互动/组长材料.docx"] },
+  { id: "10", title: "转述队友信息", cat: "2", status: "完整规则", summary: "四人分组，通过转述复述队友的姓名、年级、专业和家乡。", resources: ["二_破冰和小组互动/组长材料.docx"] },
+  { id: "11", title: "手语名字反应游戏", cat: "2", status: "复玩方案", summary: "倒数结束后，每人同时打出伙伴的手语名字，反应慢者暂时出局。", resources: [] },
+  { id: "12", title: "我有你没有", cat: "2", status: "完整规则", summary: "轮流讲自己做过的事，没做过的人折纸标记，标记满五次淘汰。", resources: ["二_破冰和小组互动/活动规则（当天用）.pdf"] },
+  { id: "13", title: "曾经的我", cat: "2", status: "完整规则", summary: "以名词接“我……过”的方式接龙讲述经历，手语复玩时把内容全部打出。", resources: ["二_破冰和小组互动/燕园浮生 策划.docx", "二_破冰和小组互动/22秋燕园浮生策划案1.0.docx"] },
+  { id: "14", title: "保护任务", cat: "2", status: "完整规则", summary: "主持人为每人秘密分配保护对象与解救动作，贯穿整场小团。", resources: ["二_破冰和小组互动/保护任务.docx"] },
+  { id: "15", title: "两人一球", cat: "2", status: "完整规则", summary: "两人背夹气球走到终点，成功运到终点的一组得分，气球爆了则结束本次尝试。", resources: ["二_破冰和小组互动/组长材料.docx"] },
+
+  // 三 词汇和数字复习
+  { id: "16", title: "数字炸弹", cat: "3", status: "复玩方案", summary: "参与者按顺序报数，主持人缩小范围，报中秘密数字者触发炸弹。", resources: ["三_词汇和数字复习/小团流程.docx"] },
+  { id: "17", title: "字母炸弹", cat: "3", status: "完整规则", summary: "猜空位字母，主持人只回应“大了”或“小了”，猜出整个词组即引爆。", resources: [] },
+  { id: "18", title: "数字炸弹 CABO 融合版", cat: "3", status: "完整规则", summary: "每人三张牌，回合结算时满足条件者爆炸，并用手语介绍自己。", resources: ["三_词汇和数字复习/烧麦团第一小团游戏（数字炸弹CABO版）.docx"] },
+  { id: "19", title: "隐藏技能水果炸弹", cat: "3", status: "完整规则", summary: "用蔬果手语累加总数，按技能卡发动跳过、反向等效果，达到 100 爆炸。", resources: ["三_词汇和数字复习/游戏设计.docx", "三_词汇和数字复习/游戏卡片 打印技能用.docx"] },
+  { id: "20", title: "炸飞机", cat: "3", status: "复玩方案", summary: "两队秘密摆好飞机，用词汇坐标轮流攻击，守方反馈未命中、击中机身或机头。", resources: ["三_词汇和数字复习/【蛇团更新】新孩子炸飞机词表.docx"] },
+  { id: "21", title: "女巫的毒药 低配挖宝版", cat: "3", status: "完整规则", summary: "三组轮流挖宝词，划掉没挖到的词，最后一个宝藏所属组获胜。", resources: ["三_词汇和数字复习/女巫的毒药·低配版 新孩子+只刷词汇.docx"] },
+  { id: "22", title: "毒药笑话", cat: "3", status: "完整规则", summary: "用“时间＋数字＋人物＋生活动词”造句，触发毒药或解药后按规则计分。", resources: ["三_词汇和数字复习/2.毒药笑话游戏规则.docx"] },
+  { id: "23", title: "手语萝卜蹲和神秘家族", cat: "3", status: "完整规则", summary: "被点名组边下蹲边打出本组的词，并可组合亲属词玩神秘家族版。", resources: [] },
+  { id: "24", title: "逛三园", cat: "3", status: "复玩方案", summary: "按类别轮流打出属于该类的词，不能重复，超时或重复记一次失误。", resources: [] },
+  { id: "25", title: "手语版抓鸭子", cat: "3", status: "复玩方案", summary: "把抓鸭子口令换成词汇类别，大家依次用手语完成新的口令。", resources: [] },
+
+  // 四 造句和讲故事
+  { id: "26", title: "家族树", cat: "4", status: "完整规则", summary: "每人秘密认领一个字母角色，轮流说亲属关系，主持人连线推算辈分。", resources: ["四_造句和讲故事/家族树 新孩子+亲属、字母表+造句.docx"] },
+  { id: "27", title: "故事接龙", cat: "4", status: "复玩方案", summary: "每人接一句故事，尽量带入复习词，最后一人收尾并回顾词汇。", resources: ["四_造句和讲故事/爱团不团 第五次小团内容.docx"] },
+  { id: "28", title: "手型 1 到 10 故事接龙", cat: "4", status: "复玩方案", summary: "按 1 至 10 的手型顺序演一个连续故事，检查手型有没有混用。", resources: [] },
+  { id: "29", title: "故事王", cat: "4", status: "完整规则", summary: "用词汇卡与结局卡讲故事，故事中出现卡上的词就打出卡片并接过讲述权。", resources: ["四_造句和讲故事/故事王 游戏规则.docx", "四_造句和讲故事/《故事王》 结局.docx", "四_造句和讲故事/第十次 游戏 《故事王》关键词.docx"] },
+  { id: "30", title: "八卦人八卦魂", cat: "4", status: "完整规则", summary: "掷骰选开头，各组轮流续写含亲属词的故事，遇到命运事件则补全。", resources: ["四_造句和讲故事/八卦人八卦魂.docx"] },
+  { id: "31", title: "手型分组毒药造句", cat: "4", status: "复玩方案", summary: "从不同手型组选词造句，主持人检查是否出现秘密毒药组合。", resources: [] },
+  { id: "32", title: "黑暗料理", cat: "4", status: "复玩方案", summary: "每人组合相关词成一道菜名，其他人猜菜名并说出食材或味道。", resources: [] },
+  { id: "33", title: "穿衣服", cat: "4", status: "复玩方案", summary: "为手小语穿上服装，并用手语完整描述它穿了什么。", resources: [] },
+
+  // 五 合作和情景解谜
+  { id: "34", title: "完美一餐", cat: "5", status: "完整规则", summary: "轮流提议菜品并表态，菜单要覆盖每人至少一个爱吃项且无人反对。", resources: ["五_合作和情景解谜/完美一餐.docx"] },
+  { id: "35", title: "几个菜啊花这老些", cat: "5", status: "复玩方案", summary: "点菜队公开菜品数量和总价，猜菜队对照菜单推断并用手语报菜名。", resources: [] },
+  { id: "36", title: "烧小麦的一天", cat: "5", status: "完整规则", summary: "三组按“生活词＋时间词”行动，能量变化后揭晓剧情结局。", resources: ["五_合作和情景解谜/烧麦团第二次游戏.docx"] },
+  { id: "37", title: "打败幻境怪兽", cat: "5", status: "完整规则", summary: "其余组猜数字与形容词，猜中加分，猜到炸弹减分，积分最高组获胜。", resources: ["五_合作和情景解谜/打败幻境怪兽 新孩子+数字、形容词+阵营猜词.docx"] },
+  { id: "38", title: "冰可乐的四季", cat: "5", status: "完整规则", summary: "守护者提交四类圣物答案，并通过投票找出混乱者，30 分钟内完成封印。", resources: ["五_合作和情景解谜/冰可乐的四季.docx", "五_合作和情景解谜/冰可乐的四季规则.docx", "五_合作和情景解谜/冰可乐四季主持人手册.docx"] },
+  { id: "39", title: "拆弹专家", cat: "5", status: "完整规则", summary: "拆弹者看炸弹、专家看手册，用手语描述模块并传回操作指令，在倒计时内完成。", resources: ["五_合作和情景解谜/游戏说明.docx", "五_合作和情景解谜/拆弹手册.pdf"] },
+  { id: "40", title: "雪豹凶杀案", cat: "5", status: "完整规则", summary: "玩家轮流用手语调查家具与工具，主持人按剧本反馈线索，最后推理真相。", resources: ["五_合作和情景解谜/雪豹凶杀案 dm文档.docx", "五_合作和情景解谜/优吉.桦雪死亡案 玩家文档.docx"] },
+  { id: "41", title: "乱室寻衣", cat: "5", status: "完整规则", summary: "用房间与家具的手语解锁探索，找到能穿去运动的衣服。", resources: [] },
+  { id: "42", title: "海龟汤", cat: "5", status: "完整规则", summary: "出题者给出有疑点的简短故事，参与者轮流提问，逐步还原事实。", resources: ["五_合作和情景解谜/海龟汤合集1 新孩子（老少皆宜）.docx"] },
+
+  // 六 卡牌和桌游
+  { id: "43", title: "行动代号", cat: "6", status: "完整规则", summary: "两队组长给出手语线索，队员猜中后盖住对应颜色词，先覆盖完的队获胜。", resources: [] },
+  { id: "44", title: "骷髅牌", cat: "6", status: "完整规则", summary: "依次翻牌猜词汇，翻到骷髅牌即失败，先打空手牌者获胜。", resources: [] },
+  { id: "45", title: "手语大富翁", cat: "6", status: "完整规则", summary: "用词汇卡代替钱，走棋买地、过路付费，复习词汇并淘汰破产者。", resources: ["六_卡牌和桌游/手语大富翁 老孩子（皆宜）+总复习/大富翁游戏规则.docx"] },
+  { id: "46", title: "谁是卧底", cat: "6", status: "完整规则", summary: "每人用手语描述自己的词，投票淘汰，卧底活到最后即获胜。", resources: ["六_卡牌和桌游/卧底+接龙.docx"] },
+  { id: "47", title: "狼人杀", cat: "6", status: "完整规则", summary: "夜间行动、白天发言投票，好人与狼人对抗，发言采用手语。", resources: ["六_卡牌和桌游/狼人杀.docx"] },
+  { id: "48", title: "吹牛", cat: "6", status: "完整规则", summary: "用手语宣告牌的点数和张数，真假均可，被质疑者按规则收牌。", resources: [] },
+  { id: "49", title: "UNO", cat: "6", status: "完整规则", summary: "按颜色、数字或符号出牌，只剩一张时用手语示意“UNO”。", resources: [] },
+
+  // 七 出摊和手型体验
+  { id: "50", title: "手语拆拆猜", cat: "7", status: "完整规则", summary: "志愿者打出手语词，参与者从选项中回答，观察小题如何组成一个词。", resources: ["七_出摊和手型体验/手语拆拆猜 题目.doc", "七_出摊和手型体验/福祉博览会互动体验规则汇总&志愿者培训文档.docx"] },
+  { id: "51", title: "手型骰子挑战", cat: "7", status: "完整规则", summary: "掷骰子确定手型，有基础者打出含该手型的词，零基础者猜出词义。", resources: ["七_出摊和手型体验/掷骰子内容-志愿者版.docx"] },
+  { id: "52", title: "手语知识问答", cat: "7", status: "完整规则", summary: "看题选答案，最多作答六题，自主答对三题即通过。", resources: ["七_出摊和手型体验/知识问答内容-志愿者版.docx"] },
+  { id: "53", title: "手语视频打卡", cat: "7", status: "完整规则", summary: "从句子卡中选内容，学习后拍摄打卡视频，属于体验项目，不设积分。", resources: ["七_出摊和手型体验/打卡视频内容.docx"] },
+
+  // 八 待补充的游戏规则（原资料仅留名称与线索）
+  { id: "54", title: "抢数字", cat: "8", status: "待补充", summary: "再来一团第九次、雪团第一次出现；索引仅写“草莓诗和西兰花雨”。", resources: [] },
+  { id: "55", title: "大坏蛋与守护者", cat: "8", status: "待补充", summary: "雪团第三次出现，索引说明为带机制的刷词游戏，完整规则仅留外部链接。", resources: [] },
+  { id: "56", title: "天才笨笨碰", cat: "8", status: "待补充", summary: "雪团第六、七次出现，索引称芳老师首次改编，未留下规则正文。", resources: [] },
+  { id: "57", title: "万里挑一", cat: "8", status: "待补充", summary: "雪团第九次出现，索引附黑板照片，但没有选择、轮次和胜负规则。", resources: [] },
+  { id: "58", title: "蜂巢格子棋", cat: "8", status: "待补充", summary: "雪团第十次复习，原记录直接写“具体规则我忘了”。", resources: [] },
+  { id: "59", title: "我看你有病", cat: "8", status: "待补充", summary: "雪团第十次复习，仅记录名称与来源。", resources: [] },
+  { id: "60", title: "火星人迟到", cat: "8", status: "待补充", summary: "借月观山第六次出现，仅注明改编自即兴喜剧。", resources: [] },
+  { id: "61", title: "打牌复习", cat: "8", status: "待补充", summary: "今日成团第八次、揣一朵云团第九次出现，索引留有 BBS 帖子链接。", resources: [] },
+  { id: "62", title: "医院里", cat: "8", status: "待补充", summary: "萤火团第四次材料写作“医院里面有什么”，与身体和疾病词汇配合。", resources: ["八_待补充的游戏规则/萤火团第四次材料.pdf"] },
+  { id: "63", title: "黄油君献给期中鼠鼠的鲜花", cat: "8", status: "待补充", summary: "黄油面团第七次材料留有游戏标题，没有过程和计分。", resources: [] },
+  { id: "64", title: "不可或缺的句子", cat: "8", status: "待补充", summary: "纸团与爱团不团第七次材料中出现该标题，另有“猜句子”记录。", resources: ["八_待补充的游戏规则/纸团x爱团不团 第七次小团材料.pdf"] },
+  { id: "65", title: "你画我猜猜歌名版", cat: "8", status: "待补充", summary: "2024 秋手随歌舞主持词提到该版本，歌名题库及独立计分未保留。", resources: ["八_待补充的游戏规则/手随歌舞主持词.pdf"] },
+  { id: "66", title: "新闻联播和飞行棋", cat: "8", status: "待补充", summary: "哎哟团反馈提到实际玩过，但未留独立玩法，应向当时带领人补录。", resources: [] }
+];
+
+</script>
+  <script>
+// 基本信息：人数、时长、难度（★ 数量：1 入门 / 2 进阶 / 3 挑战）
+// 说明：依据手册规则和旧记录的初步评估，正式开团前请带领人确认
+window.META = {
+  "01": { players: "6 人以上（1 人表演，其余猜）", duration: "每轮 5 分钟，整场约 20–30 分钟", level: 1 },
+  "02": { players: "2 组以上，每组 3 人起", duration: "每轮约 10 分钟", level: 1 },
+  "03": { players: "6 人以上（三组，每组 2 人表演）", duration: "约 10 分钟", level: 3 },
+  "04": { players: "5 人以上（排成一列）", duration: "约 10–15 分钟", level: 1 },
+  "05": { players: "4 人以上", duration: "约 15 分钟", level: 2 },
+  "06": { players: "3 人以上", duration: "约 15 分钟", level: 2 },
+  "07": { players: "2 人以上（表演与猜题）", duration: "表演 2–5 分钟，整场约 10–15 分钟", level: 3 },
+  "08": { players: "2 方，每方 3 人以上", duration: "每方出题 10 分钟", level: 3 },
+
+  "09": { players: "6 人以上（两人一组）", duration: "约 10 分钟", level: 1 },
+  "10": { players: "4 人一组，可多组同时", duration: "约 10 分钟", level: 2 },
+  "11": { players: "6 人以上（围成一圈）", duration: "约 5–10 分钟", level: 1 },
+  "12": { players: "5 人以上", duration: "约 15 分钟", level: 1 },
+  "13": { players: "5 人以上", duration: "约 10–15 分钟", level: 1 },
+  "14": { players: "8 人以上（小团全员）", duration: "贯穿整场小团", level: 3 },
+  "15": { players: "2 人一组，多组同时", duration: "约 10 分钟", level: 2 },
+  "16": { players: "4 人以上", duration: "约 10 分钟", level: 2 },
+  "17": { players: "4 人以上", duration: "约 10 分钟", level: 2 },
+  "18": { players: "4–6 人", duration: "约 15 分钟", level: 3 },
+  "19": { players: "6 人以上（需记数助教）", duration: "约 20 分钟", level: 3 },
+  "20": { players: "2 队，每队 3 人以上", duration: "约 20–30 分钟", level: 3 },
+  "21": { players: "15 人左右，分 3 组", duration: "约 20 分钟", level: 2 },
+  "22": { players: "3 组，每组 3 人以上", duration: "约 15 分钟（6 句起）", level: 3 },
+  "23": { players: "3 组以上", duration: "萝卜蹲约 5 分钟；神秘家族约 8 分钟", level: 2 },
+  "24": { players: "4 人以上", duration: "约 10 分钟", level: 2 },
+  "25": { players: "4 人以上", duration: "约 10 分钟", level: 1 },
+  "26": { players: "6 人以上（每人一个字母角色）", duration: "约 30 分钟", level: 3 },
+  "27": { players: "4 人以上", duration: "约 15 分钟", level: 2 },
+  "28": { players: "3 人以上", duration: "约 10 分钟", level: 2 },
+  "29": { players: "4–7 人", duration: "约 20–30 分钟", level: 2 },
+  "30": { players: "3 组以上", duration: "每句 1 分钟，整场约 20 分钟", level: 3 },
+  "31": { players: "4 人以上", duration: "约 15 分钟", level: 3 },
+  "32": { players: "4 人以上", duration: "约 10 分钟", level: 1 },
+  "33": { players: "3 人以上", duration: "约 10 分钟", level: 1 },
+  "34": { players: "5–10 人", duration: "约 20 分钟（超时即失败）", level: 3 },
+  "35": { players: "4 人以上（分两队）", duration: "约 15 分钟", level: 2 },
+  "36": { players: "3 组，每组 3 人以上", duration: "约 30 分钟", level: 2 },
+  "37": { players: "4 组（每组 2–4 人）", duration: "按约定轮次，约 20 分钟", level: 2 },
+  "38": { players: "6–10 人（3 名混乱者）", duration: "30 分钟内完成", level: 3 },
+  "39": { players: "3–6 人一组", duration: "按模块数 × 6 分钟", level: 3 },
+  "40": { players: "4–6 人（另加主持人）", duration: "约 60 分钟（30 次调查机会）", level: 3 },
+  "41": { players: "4 人以上", duration: "约 20 分钟", level: 2 },
+  "42": { players: "5 人猜、1 人出题", duration: "约 15–20 分钟", level: 3 },
+  "43": { players: "2 队，每队 3–6 人", duration: "约 20 分钟", level: 2 },
+  "44": { players: "3–6 人", duration: "约 15 分钟", level: 2 },
+  "45": { players: "3–6 人", duration: "约 60 分钟（按场地时间）", level: 3 },
+  "46": { players: "5–10 人", duration: "约 15 分钟", level: 3 },
+  "47": { players: "6–12 人", duration: "约 30–40 分钟", level: 3 },
+  "48": { players: "3–6 人", duration: "约 15 分钟", level: 2 },
+  "49": { players: "2–6 人（用 UNO 牌）", duration: "约 15 分钟", level: 1 },
+  "50": { players: "1–2 人一组（志愿者带领）", duration: "约 5–10 分钟", level: 1 },
+  "51": { players: "1 人一轮（志愿者配合）", duration: "约 5 分钟", level: 1 },
+  "52": { players: "1 人一轮", duration: "约 5–10 分钟", level: 1 },
+  "53": { players: "1 人一组", duration: "约 10 分钟", level: 1 },
+
+  "54": { players: "待补充", duration: "待补充", level: 0 },
+  "55": { players: "待补充", duration: "待补充", level: 0 },
+  "56": { players: "待补充", duration: "待补充", level: 0 },
+  "57": { players: "待补充", duration: "待补充", level: 0 },
+  "58": { players: "待补充", duration: "待补充", level: 0 },
+  "59": { players: "待补充", duration: "待补充", level: 0 },
+  "60": { players: "待补充", duration: "待补充", level: 0 },
+  "61": { players: "待补充", duration: "待补充", level: 0 },
+  "62": { players: "待补充", duration: "待补充", level: 0 },
+  "63": { players: "待补充", duration: "待补充", level: 0 },
+  "64": { players: "待补充", duration: "待补充", level: 0 },
+  "65": { players: "待补充", duration: "待补充", level: 0 },
+  "66": { players: "待补充", duration: "待补充", level: 0 }
+};
+
+</script>
+  <script>
+// Guides for games 01-53. 01-08: category 1; 09-53: categories 2-7. Add new guides in this file.
+// 玩法详解：按《手语分社小游戏玩法手册》整理
+// 目前完成：一 猜词和信息传递（01–08）；其余分类的详解待补充
+window.GUIDES = {
+  "01": {
+    scene: "猜词和表达",
+    prep: ["准备词卡、计时器和记分纸", "猜词的人不能看到词卡"],
+    steps: [
+      "组长把词语展示给表演者，表演者用手语或肢体动作表达，其他人猜词。",
+      "猜不出来可以喊“过”，换下一张；表演者不能出声。",
+      "按所选版本的规则计时、计分。"
+    ],
+    scoring: "按所选版本累计得分，结束后统一讲解大家没猜出的词。",
+    notes: ["“疯狂来往”在旧索引中被说明为手语版你比划我猜，可归入这一类。", "成语、校园地名、日常词汇都能替换题库。"],
+    versions: [
+      "2023 春聋听版：每轮 5 分钟，猜对一个得 2 分。",
+      "2024 北海版：每轮 5 分钟，完成一轮得 6 分，每猜对一个再加 1 分。"
+    ],
+    related: ["03", "07", "02"]
+  },
+  "02": {
+    scene: "猜词和表达",
+    prep: ["准备画纸或白板、笔和词卡", "线上可用共享画板"],
+    steps: [
+      "出题者看词卡，把词语画出来，其他人猜。",
+      "猜出一个就在表上做标记。",
+      "时间到后比较标记数量。"
+    ],
+    scoring: "猜对最多的一组获胜。",
+    notes: ["这里的“画”是绘画；若主要靠手语和动作表达，使用“你划我猜”的规则。"],
+    versions: ["两校交流版：先由北大方出题、联大方猜，10 分钟后交换；两方使用不同的词汇表。"],
+    related: ["01", "08"]
+  },
+  "03": {
+    scene: "猜词和表达",
+    prep: ["准备成语、诗句题库和计时器", "分成三组"],
+    steps: [
+      "先猜成语：每组派两人比划，允许各比各的；每组 6 道简单题、6 道进阶题，不会可跳过，限时 2 分钟。",
+      "再猜诗句：每组 8 句，由两人讨论后用同一套动作表达；可以提示字数，不会可跳过，限时 2 分 30 秒。",
+      "按猜中数量和用时排出名次。"
+    ],
+    scoring: "成语轮三组分别得 3、1.5、0 分；诗句轮分别得 5、2、0 分，合计决定名次。",
+    notes: ["提示字数的手势不计入诗句的表达动作。"],
+    versions: [],
+    related: ["01", "04"]
+  },
+  "04": {
+    scene: "猜词和表达",
+    prep: ["准备句子题库", "所有人排成一列，尚未轮到的人背向传递方向"],
+    steps: [
+      "组织者只给第一人看题目，第一人用手语传给第二人，依次向后传。",
+      "其他人不能提前偷看，也不能出声提醒。最后一人说出或写出自己理解的内容。"
+    ],
+    scoring: "结束后比较原句和末尾答案，讲清楚信息从哪一步开始变化。",
+    notes: ["题库已有普通句、成语和诗句。给新孩子用短句，长诗句更适合熟悉手语的成员。"],
+    versions: [
+      "2021 春版：按最后答对的字数记录成绩。",
+      "2023 春版：完成一句得 10 分，按偏差扣分，最低 5 分。"
+    ],
+    related: ["05", "06"]
+  },
+  "05": {
+    scene: "猜词和表达",
+    prep: ["准备画纸和笔", "使用带空间关系的句子"],
+    steps: [
+      "第一人看题目，例如“我的自行车上有鼠标和键盘”，用手语告诉下一人。",
+      "下一人把理解到的物件和位置画出来，再让后面的人根据图继续表达或绘画。",
+      "最后一人还原句子，大家依次展示中间结果。"
+    ],
+    scoring: "比较物件、位置和关系是否保留；复玩时可按这三项分别记分。原材料未规定分值。",
+    notes: ["旧索引写明“画画版本的传声筒＋空间方位表达”。这里的步骤是据此整理的复玩方案。"],
+    versions: [],
+    related: ["04", "06"]
+  },
+  "06": {
+    scene: "猜词和表达",
+    prep: ["准备动物、学习、食物、颜色词库", "准备纸和笔"],
+    steps: [
+      "第一人抽词并用手语表达，只让第二人看。",
+      "第二人画出理解到的词，第三人根据画面用手语表达，后面的人交替绘画、打手语。",
+      "最后一人猜原词，全组按顺序展示自己的画和动作。"
+    ],
+    scoring: "以还原原词为一轮结束条件，轮换第一位出题者。原材料未写出完整计分规则。",
+    notes: ["资源包留有词汇表和黑板照片；交替传递的流程是复玩方案。"],
+    versions: [],
+    related: ["04", "05"]
+  },
+  "07": {
+    scene: "猜词和表达",
+    prep: ["准备童话剧本", "分出表演者和猜故事的人"],
+    steps: [
+      "抽取一个故事，表演者先简单排练，允许一人分饰多角；猜题者不能提前知道故事名字。",
+      "用手语和肢体动作表演，不念台词，尽量把故事演完整。",
+      "其余成员猜故事并大致复述。"
+    ],
+    scoring: "完成一个故事得 20 分。现有剧本包括小红帽、小马过河、拔萝卜、三只小猪、皇帝的新装。",
+    notes: ["两个版本的时长和计分应分别使用。"],
+    versions: [
+      "2021 春版：先留 1 分钟商议，再进行表演。",
+      "2023 春版：表演超过 2 分钟，建议控制在 5 分钟以内。"
+    ],
+    related: ["01", "29"]
+  },
+  "08": {
+    scene: "猜词和表达",
+    prep: ["准备含形容词的词表", "双方分别持有自己的题库"],
+    steps: [
+      "出题者看到词语后，把其中的形容词换成反义词，用手语打出来。",
+      "猜题者要从这个“反着说”的描述推回原词，例如看到“短”要考虑原题中的“长”。",
+      "两校交流版中，每方出题 10 分钟，然后交换角色，猜对就在词表上标记。"
+    ],
+    scoring: "与猜词环节一起比较标记数，猜对最多组获奖。",
+    notes: ["组长先确认反义词的打法，避免大家因为手语版本不同而猜错。"],
+    versions: ["两校交流版：每方出题 10 分钟，交换角色。"],
+    related: ["02", "01"]
+  }
+};
+
+// 玩法详解（二至七分类）：依据《手语分社小游戏玩法手册》整理
+// 手册中标注为“复玩方案”或“原材料未写明”的内容，已在“带领时注意”中说明
+(function () {
+  var G = {
+    "09": {
+      scene: "互相认识",
+      prep: ["先互相介绍姓名、专业和家乡", "准备三对任务卡，每对分别是“自己的信息”和“对方的信息”"],
+      steps: [
+        "除组长外，两人一组，逐对背对背站好。",
+        "组长给一人看“自己的姓名”，给另一人看“对方的姓名”；专业、家乡同理。",
+        "两人同时打手语，组长检查两边表达的是否为同一条信息。"
+      ],
+      scoring: "2023 春版任务成功加 5 分，失败扣 2 分。",
+      notes: ["第一组站好前不要提前透露卡片任务，这样能检验大家是否真的记住了对方。"],
+      versions: ["2023 春版：任务成功加 5 分，失败扣 2 分。"],
+      related: ["10", "12"]
+    },
+    "10": {
+      scene: "互相认识",
+      prep: ["四人组成一组", "B 和 C 背对背，分别面对 A 和 D"],
+      steps: [
+        "B 向 A、C 向 D 用手语介绍姓名、年级、专业、家乡。",
+        "A 向 D 转述 B 的信息，D 向 A 转述 C 的信息。",
+        "B 和 C 根据对面转述的内容，复述站在自己背后的队友信息。"
+      ],
+      scoring: "双方转述成功得 10 分；全部成员都成功完成一次，再加 20 分。",
+      notes: ["适合刚认识的小组，重点是记住队友信息并准确转达。"],
+      versions: [],
+      related: ["09", "13"]
+    },
+    "11": {
+      scene: "互相认识",
+      prep: ["先学习小组成员的手语名字", "所有人围成一圈"],
+      steps: [
+        "主持人倒数“3、2、1”。",
+        "倒计时结束后，每人立即看向一位伙伴，同时打出对方的手语名字。",
+        "反应慢或手势错误的人暂时出局，剩余成员继续。"
+      ],
+      scoring: "原策划采用逐轮出局。复玩时可约定轮数或留到最后的人数，再重新开一局。",
+      notes: ["人数终点属于复玩安排；活动策划未设统一获胜人数。"],
+      versions: [],
+      related: ["09", "25"]
+    },
+    "12": {
+      scene: "互相认识",
+      prep: ["每人准备一张可以折叠的纸"],
+      steps: [
+        "轮流用手语讲一件自己做过、觉得别人没做过的事。",
+        "没做过这件事的人把纸折一下，记一个标记。",
+        "如果其他人全都没做过，讲述者自己也折一下；有 5 个标记的人淘汰。"
+      ],
+      scoring: "最后留下的两个人获胜。",
+      notes: ["讲述内容尽量用大家能理解的词，必要时请组长协助表达。"],
+      versions: [],
+      related: ["13", "09"]
+    },
+    "13": {
+      scene: "互相认识",
+      prep: ["围坐或排成一圈，确定接龙顺序"],
+      steps: [
+        "第一人给出一个名词，下一人接“我……过”，表达与这个名词有关的经历。",
+        "下一组继续给名词、接经历，例如“爱情—我错过”“头发—我掉过”。",
+        "按顺序往下接，不要求统一节奏。"
+      ],
+      scoring: "原规则没有积分或淘汰条件，以全员完成一轮或主持人收尾为结束。",
+      notes: ["手语复玩时，把名词和经历都打出来，避免游戏只剩口头接话。"],
+      versions: [],
+      related: ["12", "27"]
+    },
+    "14": {
+      scene: "互相认识",
+      prep: ["主持人为每人秘密分配保护对象、危险动作和解救动作"],
+      steps: [
+        "先在介绍环节认清自己的保护对象，不公开自己的任务。",
+        "小团过程中留意对方，一旦对方做出指定危险动作，就完成自己的解救动作。",
+        "解救动作可能触发别人的任务。例如“递东西”触发“询问手语词汇打法”，形成连锁反应。"
+      ],
+      scoring: "游戏贯穿小团；原材料没有胜负分值，结束后可统一揭晓任务链。",
+      notes: ["安排动作时要确保容易观察，并让每个人都能参与。"],
+      versions: [],
+      related: ["09", "10"]
+    },
+    "15": {
+      scene: "互相认识",
+      prep: ["准备气球", "在平坦空地设起点、终点，相距 8 步"],
+      steps: [
+        "两人背靠背站好，组长帮忙把气球放在两人背之间。",
+        "用背夹住球，配合走到终点；球落地可重来，也可放弃。",
+        "如果气球爆了，这次尝试立即结束。"
+      ],
+      scoring: "成功运到终点的一组得 10 分。",
+      notes: ["原组长材料明确要求不竞速。背夹困难时，可以向后牵手稍微护球。"],
+      versions: [],
+      related: ["14", "09"]
+    },
+    "16": {
+      scene: "复习词汇",
+      prep: ["主持人设一个秘密数字，并公布上下界"],
+      steps: [
+        "参与者按顺序用手语报数字。",
+        "主持人根据答案缩小范围：大于秘密数字就下调上界，小于秘密数字就上调下界。",
+        "下一人必须在新的范围中继续猜，直到有人报中秘密数字。"
+      ],
+      scoring: "报中者触发“炸弹”。复玩可让其打手语自我介绍，再开始新一轮。",
+      notes: ["旧索引记录多次使用，但未写完整流程，此处补成常见复玩规则；升级版可把数字扩成“几个某物”。"],
+      versions: [],
+      related: ["17", "18"]
+    },
+    "17": {
+      scene: "复习词汇",
+      prep: ["准备带空位的词组", "约定按 26 个英文字母的顺序判断大小"],
+      steps: [
+        "参与者猜空位字母，用手指字母打出。",
+        "主持人只回应“大了”或“小了”，大家继续缩小范围。",
+        "有人提前猜出整个词组，并把词组对应的手语打出，就引爆炸弹。"
+      ],
+      scoring: "引爆者可让身边两位参与者用手语自我介绍。旧记录用时约 10 分钟。",
+      notes: ["题库已有 chaos、loving heart society、sign language。先讲清“猜出整个词组”才引爆。"],
+      versions: [],
+      related: ["16", "18"]
+    },
+    "18": {
+      scene: "复习词汇",
+      prep: ["每人发 3 张背面朝上的牌，标明点数、花色及 50 或 100 积分", "起初只能偷偷看两张"],
+      steps: [
+        "按座位顺序进行。玩家可弃一张牌发动花色效果，也可不求助 CABO。",
+        "方块、红桃、黑桃分别对应名字、院系、家乡介绍；梅花可与下一人盲换一张牌。",
+        "回合结算时翻牌：点数和为 7 的倍数或含数字 7、三张牌同花色或全不同、积分和为 150 或 300，满足一项就爆炸。"
+      ],
+      scoring: "爆炸者按弃牌花色用手语介绍自己；想主动介绍的人也可以直接呼唤 CABO。",
+      notes: ["A 算 1，J、Q、K 算 11、12、13。开局要先约定弃牌后如何恢复到三张牌；原文结算写三张，但未写补牌步骤。"],
+      versions: [],
+      related: ["16", "19"]
+    },
+    "19": {
+      scene: "复习词汇",
+      prep: ["准备红、黄、绿三组蔬果词表和技能卡", "总数字从 1 开始，主持人记数"],
+      steps: [
+        "每人每次打一个蔬果手语。红色累计两次使数字乘 1.5；黄色自选 1—10 加到总数；绿色加 5，并获知当前总数。",
+        "玩家按技能卡打出触发词，发动跳过、反向、转移、改运算、复活等技能。",
+        "主持人记录每次运算和技能剩余次数，按原技能卡结算。"
+      ],
+      scoring: "总数字达到 100 或小于 1 时爆炸，结算淘汰及复活效果。",
+      notes: ["技能次数有一次、两次和被动技能之分。先把蔬果分类和发动动作展示清楚，主持人最好配一名记数助教。"],
+      versions: [],
+      related: ["18", "20"]
+    },
+    "20": {
+      scene: "复习词汇",
+      prep: ["准备 10×10 词汇坐标表、两队各自的飞机布局和命中记录"],
+      steps: [
+        "两队秘密摆好飞机；轮流用格子里的手语词汇报攻击位置。",
+        "守方只反馈未命中、击中机身或击中机头，攻方在记录表上做标记。",
+        "下一轮根据已有反馈推断飞机位置，继续报词攻击。"
+      ],
+      scoring: "复玩方案采用击中全部机头获胜；开局统一飞机形状、数量、是否允许重叠和机头判定。",
+      notes: ["现存题库和小团记录能确认使用，但未给完整战斗规则。上面的布机、命中与胜利条件是复玩建议。"],
+      versions: [],
+      related: ["19", "21"]
+    },
+    "21": {
+      scene: "复习词汇",
+      prep: ["把常用词写在黑板上", "旧记录用 30 个词、15 人，分 3 组", "每组秘密选两个宝藏词告诉老师"],
+      steps: [
+        "三组轮流派人选一个尚未用过的词，并打出手语。",
+        "没挖到宝就划掉该词；挖到宝就圈出来，记录属于哪一组。",
+        "每组内部轮换出场的人，直到场上只剩最后一个宝藏。"
+      ],
+      scoring: "最后一个宝藏所属组获胜。",
+      notes: ["宝藏词可能重合，所以每组选两个更稳妥。记录中的实际活动后来改为挖宝；额外地雷只作为后续设想。"],
+      versions: [],
+      related: ["22", "16"]
+    },
+    "22": {
+      scene: "复习词汇",
+      prep: ["分 3 组；每组抽 4 张毒药、1 张解药，由助教保管，不公开内容"],
+      steps: [
+        "各组轮流用手语造句，句式为“时间＋数字＋人物＋生活动词”。",
+        "句子出现卡片内容就翻牌，该牌只能触发一次；毒药针对其他组，解药只针对本组。",
+        "只有毒药生效：用药组加 2 分；毒药和解药同时触发：获救，不计分；只有解药触发：本组被毒死，另两组各加 1 分。"
+      ],
+      scoring: "可先玩两轮共 6 个句子，再按时间继续；累计得分最高组获胜。",
+      notes: ["连续两瓶毒药生效时，第二个被毒死者所在组减 1；两瓶解药用完时最低分组加 1。毒药和解药同时触发者自我介绍；被自家解药毒死者所在组再抽 1 瓶解药。主持人稿另写 5 张毒药，开局需统一发牌数。"],
+      versions: [],
+      related: ["21", "18"]
+    },
+    "23": {
+      scene: "复习词汇",
+      prep: ["每组选一个学过的词当组名", "可用形容词＋亲属词，如“新爸爸”“恶毒姐姐”"],
+      steps: [
+        "被点名组一边做下蹲动作，一边用手语打自己的词，再指定下一组。",
+        "被点名组接上相同流程，继续把回合交给另一组。",
+        "神秘家族版先在黑板上标出各组的亲属和关系，再用这些组合词玩萝卜蹲。"
+      ],
+      scoring: "萝卜蹲原主持稿未规定统一淘汰方式，可按错词或未接上记失误；神秘家族旧记录约 8 分钟，实际曾因时间不足中断。",
+      notes: ["角色名先带大家过一遍。神秘家族要留出造词和连线时间，否则容易只完成前半段。"],
+      versions: ["萝卜蹲：按错词或未接上记失误。", "神秘家族：约 8 分钟，需留出造词和连线时间。"],
+      related: ["26", "24"]
+    },
+    "24": {
+      scene: "复习词汇",
+      prep: ["先选定动物园、植物园或菜园、食物园等类别", "只用已学过的词"],
+      steps: [
+        "主持人公布本轮类别，大家按顺序轮流打出一个属于该类的词。",
+        "后一人不能重复前面已出现的词。",
+        "遇到不会的词可先暂停，由助教教学，再换一个类别继续。"
+      ],
+      scoring: "复玩可规定每人 5 秒，超时、重复或不属于该类记一次失误；全员完成一轮后换类别。",
+      notes: ["旧索引和小团材料留有使用记录，但没有完整节奏和淘汰规则。限时与记失误是复玩建议。"],
+      versions: [],
+      related: ["25", "23"]
+    },
+    "25": {
+      scene: "复习词汇",
+      prep: ["选一个词汇类别，让大家先熟悉其中的词"],
+      steps: [
+        "把原抓鸭子口令里的“鸭子”换成这一类词汇，把数字位置换成具体的词。",
+        "大家按原抓鸭子的接龙节奏，依次用手语完成新的口令。",
+        "主持人先示范一轮，再逐渐加快；出现重复或动作错误时暂停核对。"
+      ],
+      scoring: "旧索引没有给出固定轮数和胜负。复玩可按每人一次失误结束本轮，再换类别。",
+      notes: ["这是根据索引说明整理的复玩方案；当年的具体口令顺序需要向原带领人核对。"],
+      versions: [],
+      related: ["24", "16"]
+    },
+    "26": {
+      scene: "练习造句",
+      prep: ["每人秘密认领一个字母", "在黑板上写出 Alice、Bob 等字母角色，准备关系图"],
+      steps: [
+        "轮流打并说出“某字母是某字母的某亲属”。整局不能重复亲属名词。",
+        "主持人把每句关系连成带方向的图；结算前不公开谁对应哪个字母。",
+        "从连线最多者开始推家族辈分，遇到循环或矛盾只能选一条路径，并扣分。"
+      ],
+      scoring: "分数为长辈次数减晚辈次数，加同辈关系数量，再减矛盾次数；父辈、祖辈可重复算。可评家族长老、端水大师、独自闪耀。",
+      notes: ["当年的身份认领用树洞评论完成；复玩也可用不公开的纸签。"],
+      versions: [],
+      related: ["23", "27"]
+    },
+    "27": {
+      scene: "练习造句",
+      prep: ["准备已学词汇和一个故事开头", "确定接龙顺序"],
+      steps: [
+        "第一人用手语讲一句开头，下一人接着讲，使人物、地点或事件延续。",
+        "每句尽量带入当轮需要复习的词，不能把故事突然改成无关内容。",
+        "全员接完一轮后，最后一人收尾，再回顾词汇和故事脉络。"
+      ],
+      scoring: "旧索引记录多次使用，没有固定积分；轮数、每句时长和限定词数量可在复玩前约定。",
+      notes: ["这里整理为基本复玩流程；有词汇卡和结局卡的版本见“故事王”。"],
+      versions: [],
+      related: ["29", "28"]
+    },
+    "28": {
+      scene: "练习造句",
+      prep: ["先复习 1—10 手型", "准备“一去二三里”的示范故事"],
+      steps: [
+        "按数字顺序，用对应手型演一个连续故事。",
+        "原示例依次为：1 孕妇大肚子、2 走路、3 掉汗珠、4 擦汗、5 捂肚子、6 生孩子、7 检查、8 胖、9 弯眉毛、10 吃手指。",
+        "复玩时可让每个人负责一个手型，接着前面的情节继续演。"
+      ],
+      scoring: "完成 1—10 的连续故事即可；让大家再连贯演一遍，检查手型有没有混用。",
+      notes: ["“手型 1—10 故事接龙”在旧索引中有记录；示范故事来自再来一团第二次材料，逐人接龙是复玩安排。"],
+      versions: [],
+      related: ["27", "51"]
+    },
+    "29": {
+      scene: "练习造句",
+      prep: ["建议 4—7 人", "每人发 5 张词汇卡、1 张结局卡"],
+      steps: [
+        "指定一人开始讲故事，故事里出现自己卡上的词或同义词，就能打出对应卡；无人打断时可以继续讲。",
+        "别人讲到你卡上的词，你可以打断、打出卡片，并接过讲述权，继续原故事。",
+        "故事必须前后连贯；明显矛盾或不合逻辑时，讲述权交给顺时针下一人。"
+      ],
+      scoring: "先打完 5 张词汇卡，再把故事接到自己的结局卡，打出结局者获胜；结局卡不能用于打断。",
+      notes: ["原反馈认为人多时有人难获得讲述机会；带领人应留意不太主动打断的成员。"],
+      versions: [],
+      related: ["27", "30", "07"]
+    },
+    "30": {
+      scene: "练习造句",
+      prep: ["准备亲属与生活词库、6 张故事启动卡、骰子和关系图白板"],
+      steps: [
+        "第一人掷骰子选故事开头，各组轮流派一人续写。",
+        "每句至少含一个亲属词，用手语打出关键亲属词；同一亲属词不能重复，可用“妈妈的妈妈”等组合替代。",
+        "15 秒内开始讲，1 分钟内讲完。出现特定生活词时触发命运事件，由当前玩家指定人物并补全。"
+      ],
+      scoring: "全员完成一轮后结束，助教展示关系图并复述。原规则不设积分胜负。",
+      notes: ["命运事件如出生后婴儿被调换、葬礼出现神秘子女、结婚时有人抢婚；原表附有完整触发词。"],
+      versions: [],
+      related: ["26", "29"]
+    },
+    "31": {
+      scene: "练习造句",
+      prep: ["准备 15 组按手型分类的词库", "主持人另行设定能触发毒药的两类词汇组合"],
+      steps: [
+        "轮流从至少两个手型组中选词，用手语造句。",
+        "每次必须换组合，不能重复前面已经出现的搭配。",
+        "主持人检查句中是否同时出现秘密毒药组合；触发后再揭晓相关词组。"
+      ],
+      scoring: "现存规则未写触发毒药后的扣分、惩罚或结束条件。复玩前需先补定这些条件。",
+      notes: ["可以先仅作造句练习；若使用毒药机制，主持人必须有完整判定表。"],
+      versions: [],
+      related: ["22", "28"]
+    },
+    "32": {
+      scene: "练习造句",
+      prep: ["准备食物、味道、颜色、烹饪动作等词汇"],
+      steps: [
+        "每人选几个相关词，组合成一道菜名，并用手语打出来。",
+        "其他人猜菜名，再用手语说出这道菜里的食材或味道。",
+        "轮换出题者，尽量使用尚未出现的词。"
+      ],
+      scoring: "旧索引只记“用相关词汇组合成菜名”；猜菜名和轮换流程是复玩方案，不设历史分值。",
+      notes: ["可给新孩子提供固定句式，如“辣的……”“甜的……”，先求表达清楚。"],
+      versions: [],
+      related: ["31", "33"]
+    },
+    "33": {
+      scene: "练习造句",
+      prep: ["准备手小语形象和衣服词卡或可替换的服装图片"],
+      steps: [
+        "带领人展示服装，参与者用手语说出服装名称，再给手小语穿上。",
+        "复玩可给一个场景，如上课、运动或下雨，让大家选择合适衣服并解释。",
+        "最后用手语完整描述手小语穿了什么。"
+      ],
+      scoring: "完成一套穿搭即可；场景选择和解释步骤是复玩安排。",
+      notes: ["旧索引记录用途为给手小语穿衣服、复习服装词汇，未留完整分值。"],
+      versions: [],
+      related: ["32", "41"]
+    },
+    "34": {
+      scene: "合作解谜",
+      prep: ["5—10 人；每人秘密抽两张词卡，分别代表爱吃和不吃", "准备公共菜单"],
+      steps: [
+        "轮流提议一道菜并打手语。大家用手语表态：同意、反对或特别喜欢，不说明自己的秘密词。",
+        "只要有人反对，这道菜就撤销；大家根据反应推测伙伴的喜好，继续点菜。",
+        "让留下的菜单覆盖每个人至少一个爱吃项，且无人反对。"
+      ],
+      scoring: "菜单菜数至少等于人数，同时满足全部喜好即可获胜。原规则给出连续 5 次加菜失败或 20 分钟未完成作为失败例子；开局选定后再执行。",
+      notes: ["结束后亮出秘密词，检查菜单，再一起用手语复述吃了什么。互相矛盾的喜好可能导致无解，应在发卡时留意。"],
+      versions: [],
+      related: ["35", "36"]
+    },
+    "35": {
+      scene: "合作解谜",
+      prep: ["准备有标价的菜单", "一队秘密点菜，另一队猜"],
+      steps: [
+        "点菜队公开菜品总数量和总价，但不公布具体菜名。",
+        "猜菜队对照菜单，列出符合数量和总价的组合，并用手语报菜名。",
+        "点菜队核对答案，交换角色再玩。"
+      ],
+      scoring: "原索引没有规定询问次数和计分。复玩可限时猜；菜单有多个同价组合时，允许多个答案或补充线索。",
+      notes: ["猜菜机制来自旧索引；轮换和多解处理是复玩安排。"],
+      versions: [],
+      related: ["34", "32"]
+    },
+    "36": {
+      scene: "合作解谜",
+      prep: ["分红、蓝、绿 3 组", "准备能量进度条、生活词和时间词、骰子"],
+      steps: [
+        "每轮各组都行动一次，顺序可变。每次打出“生活词＋时间词”，助教按隐藏效果改能量。",
+        "效果包括：起床减 10、刷牙加 10、洗脸加 30、洗澡加骰点乘 10、梳头本组加 5 且别组减 5、理发减 20、聊天加 30。",
+        "出生把本组变 100，死亡变 0，整局各只能出现一次；生活使所有组加或减 20，由骰子决定，每组一次；睡觉保护本组三回合不受别组影响，每组一次。"
+      ],
+      scoring: "任一组超过 85 分后，补齐各组回合数，再按能量区间揭晓剧情结局。",
+      notes: ["原表的 0—15 与 15—50 区间在 15 分重叠，85 分也只列入结局而未触发“超过 85”的停局条件；开局需统一这两个边界。"],
+      versions: [],
+      related: ["34", "38"]
+    },
+    "37": {
+      scene: "合作解谜",
+      prep: ["分头、腹、尾巴、腿 4 组", "每组秘密设身体部位数量及两个形容词，并设反义词炸弹"],
+      steps: [
+        "其余三组每轮各猜一个数字和两个形容词，用手语表达。",
+        "猜中数字加 10；猜中一个形容词加 10，一次猜中两个加 25。",
+        "猜到炸弹减 15；5 秒内打出正确形容词安抚怪兽可加 10，唱一句歌或自我介绍可再加 5。"
+      ],
+      scoring: "约定轮次结束后，积分最高组获胜。",
+      notes: ["数量可限定为十以内或整十，配合孩子刚学过的数字范围。"],
+      versions: [],
+      related: ["08", "38"]
+    },
+    "38": {
+      scene: "合作解谜",
+      prep: ["设 3 名混乱者，其余为守护者", "准备字母、数字、时间、生活四类圣物答案和线索"],
+      steps: [
+        "第一轮和第三轮公布线索。每轮讨论 4 分钟，守护者用手语提交四类圣物答案。",
+        "主持人公布正确数量；全员可投出一名疑似混乱者，主持人宣布放逐成功或失败。",
+        "混乱者事先知道答案，三种一次性技能分别可污染一项答案、篡改主持人反馈、抵抗一次放逐。"
+      ],
+      scoring: "30 分钟内，成功封印圣物数加成功投出混乱者数达到 5，守护者获胜。",
+      notes: ["这里采用玩家规则和主持人手册的 3 名混乱者版本；剧情初稿另有“4 位”文字，不能混用人数。"],
+      versions: [],
+      related: ["39", "40"]
+    },
+    "39": {
+      scene: "合作解谜",
+      prep: ["每组 3—6 人；1—2 名拆弹者，其余拿手册", "打印炸弹、拆弹手册及主持人答案"],
+      steps: [
+        "拆弹者能看炸弹，不能看手册；专家能看手册，不能看炸弹。",
+        "拆弹者描述模块、字母、数字或颜色，专家查手册，再把操作指令传回。",
+        "按水平选交流要求：自由交流、关键词只能用手语、或全程手语。建议倒计时按模块数乘 6 分钟设置。"
+      ],
+      scoring: "在倒计时结束前正确完成全部解密模块，就算拆弹成功。",
+      notes: ["原反馈认为信息差和逻辑负担较大，人不宜太多。首次可少放模块，并找愿意主动表达的成员当拆弹者。"],
+      versions: [],
+      related: ["40", "38"]
+    },
+    "40": {
+      scene: "合作解谜",
+      prep: ["主持人拿 DM 文档，玩家只拿玩家本", "先展示别墅布局和案情"],
+      steps: [
+        "玩家轮流用手语说出要调查的家具或工具，每人一次只选一个。",
+        "主持人按 DM 文档反馈线索；关键线索需要完成相应考验才能解锁。",
+        "大家用得到的线索讨论死亡经过和嫌疑人，继续决定调查哪里。"
+      ],
+      scoring: "总共 30 次调查机会。玩家给出推理后，由主持人对照 DM 真相揭晓；最终作答方式可在开局约定。",
+      notes: ["不要把 DM 本提前发给玩家；家具、空间和工具词汇是这个版本的主要复习内容。"],
+      versions: [],
+      related: ["39", "41"]
+    },
+    "41": {
+      scene: "合作解谜",
+      prep: ["准备房间、家具、衣服词库", "助教预先把衣服安排到各空间，黑板记录探索情况"],
+      steps: [
+        "孩子打出一个房间或家具的手语，解锁该处探索。",
+        "助教用手语告诉大家这里有什么衣服；孩子正确识别词汇后获得衣物。",
+        "通过探索拼出一套能穿去运动的衣服，也可把钥匙、保险箱加入寻找链。"
+      ],
+      scoring: "找到运动所需衣物即完成任务；旧索引未规定固定积分。",
+      notes: ["旧记录曾把内裤藏在保险箱里，钥匙放在客厅的碗中；设置机关时保证线索能通向答案。"],
+      versions: [],
+      related: ["40", "33"]
+    },
+    "42": {
+      scene: "合作解谜",
+      prep: ["准备汤面、完整汤底", "推广策划建议 5 人猜、1 人出题"],
+      steps: [
+        "出题者给出简短但有疑点的故事。参与者轮流提问，通过回答逐渐还原事实。",
+        "手语版中，答题者可以用手语表达；推广策划要求出题者不说话，问题关键词另做手语教学。",
+        "猜出后，出题者讲清完整故事，并带大家复习生词。"
+      ],
+      scoring: "还原核心经过后结束；是否仅回答“是、否、无关”可按选用题目的玩法提前说明。",
+      notes: ["合集里有两道题留了“汤底”标题却未附答案，不能直接用于正式出题；先选答案完整的题。"],
+      versions: [],
+      related: ["40", "41"]
+    },
+    "43": {
+      scene: "总复习和桌游",
+      prep: ["两队人数、水平尽量接近，各选一名组长", "摆 25 张词卡成 5×5 网格，另备关键牌"],
+      steps: [
+        "关键牌标出红队词、蓝队词、中立词和炸弹词，只有组长能看。",
+        "组长轮流给出一个手语打法和一个数字作线索；队员至少猜一次，猜对可以继续猜。",
+        "猜中的词用对应颜色盖住，另一队再给线索。"
+      ],
+      scoring: "先覆盖完本队全部目标词的一队获胜；一旦猜中炸弹，本队立即输。",
+      notes: ["用词卡代替普通桌游题卡，组长给线索时避免直接把答案词打出来。"],
+      versions: [],
+      related: ["44", "46"]
+    },
+    "44": {
+      scene: "总复习和桌游",
+      prep: ["每人拿若干词汇牌和 2 张骷髅牌", "词汇牌各有两个本学期学过的词"],
+      steps: [
+        "每人从手牌中挑一张扣在面前。首位玩家预测扣牌中有多少张词汇牌。",
+        "按预测翻牌，不必按座位顺序，但不能连续两次翻同一人面前的牌。",
+        "翻到词汇牌，必须把两个词正确打出，成功后该牌作废、翻牌者再扣一张，并继续翻；打错则失败，结束本次翻牌。",
+        "翻到骷髅牌也失败，但不带走该牌，由原牌主把它放回手牌。"
+      ],
+      scoring: "打空手牌者获胜；可根据剩余时间决定玩到一人或多人获胜。",
+      notes: ["原规则还要求：打错的词汇牌进入翻牌者手牌，原牌主另扣一张补位；旧记录提出可取消这个补牌机制，复玩前统一版本。"],
+      versions: [],
+      related: ["43", "45"]
+    },
+    "45": {
+      scene: "总复习和桌游",
+      prep: ["准备棋盘、地产证、词汇卡、机会卡、命运卡、道具卡和棋子", "每人开局学习 6 个词并取得相应卡"],
+      steps: [
+        "按棋盘轮流前进，用词汇卡代替钱。走到空地可买地，走到别人地上付过路费，走到自己的地可按地产证加盖，最多三次。",
+        "复习事件要求在每词 15 秒内打出指定词；未完成只能得到一半词卡，并统一复习。学习事件则一起学习。",
+        "经过起点学 3 词；进牢或理科五号楼相应停一轮；机会、命运卡执行后放回牌堆底。"
+      ],
+      scoring: "复习完全部词、只剩一人未破产或场地时间到即结束；词卡不足以支付事件就是破产。",
+      notes: ["可随时抵押自己的地，得已花词卡的一半，四舍五入。格子与道具同时触发时先格子后道具；道具池空后每件道具折成 3 词。"],
+      versions: [],
+      related: ["43", "46"]
+    },
+    "46": {
+      scene: "总复习和桌游",
+      prep: ["给大多数人同一词，给卧底相近的另一个词", "可另设白板身份"],
+      steps: [
+        "每人用手语描述自己的词，不能直接把词打出来。",
+        "一轮描述结束后投票，得票最多者出局。",
+        "同票者各补一句描述，再投票；剩余成员继续下一轮。"
+      ],
+      scoring: "卧底活到只剩两人时获胜；此前被投出则非卧底获胜。",
+      notes: ["句子版有专门的“卧底＋接龙”材料，可把词卡换成句子卡；描述和投票流程仍须先讲清。"],
+      versions: [],
+      related: ["47", "45"]
+    },
+    "47": {
+      scene: "总复习和桌游",
+      prep: ["先选定身份配置，准备身份牌和主持人", "正式发言采用手语，必要时配翻译"],
+      steps: [
+        "夜间由主持人依次唤醒狼人、预言家、女巫等身份，完成击杀、查验、用药。",
+        "白天公布结果，存活玩家轮流发言，再投票放逐。",
+        "2025 秋桌游策划采用常见昼夜版；烧麦团版另有狼人任务：白天完成秘密行为后，夜间才获得杀人机会。"
+      ],
+      scoring: "常见版狼人存活人数不少于好人时狼人胜，狼人全出局好人胜。烧麦团版要求推断狼人数并一次投出，另有任务胜利条件，须整体采用该规则。",
+      notes: ["夜间用视觉唤醒时，应在开局约定各身份看指令的方法，避免看不到主持人提示。不要把两个版本的胜利条件拼在一起。"],
+      versions: ["常见昼夜版（2025 秋桌游策划）", "烧麦团版（含狼人任务，胜利条件不同）"],
+      related: ["46", "45"]
+    },
+    "48": {
+      scene: "总复习和桌游",
+      prep: ["准备 52 张扑克牌，不含大小王，分发给玩家"],
+      steps: [
+        "出牌者把一张或数张牌面朝下放在桌上，用手语宣告“这是几个某点数”，真假均可。",
+        "下家可以跟出同点数、质疑“说谎”，或按事先约定的变体跳过。",
+        "被质疑时翻开刚出的牌：说谎者收回桌上本轮全部牌；没说谎则质疑者收回。"
+      ],
+      scoring: "第一个打光手牌并成功离场的人获胜。",
+      notes: ["点数和张数用手语宣布，适合把数字、真假、相信等词放进实际对话。"],
+      versions: [],
+      related: ["49", "47"]
+    },
+    "49": {
+      scene: "总复习和桌游",
+      prep: ["准备 UNO 牌，每人发 7 张，剩余牌为摸牌堆，翻一张作起始牌"],
+      steps: [
+        "轮流出与顶牌同颜色、同数字或同符号的牌；无牌可出时摸一张，可出则立即出，否则换下家。",
+        "跳过牌使下家停一轮；反转牌改变顺序；加 2 使下家摸两张并停一轮；万能牌指定颜色；加 4 万能牌指定颜色、下家摸 4 张并停一轮。",
+        "只剩一张时立刻用手语示意“UNO”；未提醒而被其他人先指出，罚摸 2 张。加 4 的合法使用与挑战按所用牌的规则书执行。"
+      ],
+      scoring: "先打光手牌的人获胜。",
+      notes: ["加牌是否允许叠加等细则，统一按现场所用牌的规则书执行。"],
+      versions: [],
+      related: ["48", "43"]
+    },
+    "50": {
+      scene: "零基础出摊",
+      prep: ["准备三道大题及其选项，每道大题由相互关联的小题组成"],
+      steps: [
+        "志愿者打出手语词，参与者从选项中回答。",
+        "依次完成同一大题的小题，并观察这些小题怎样组成一个词。",
+        "每道大题答对两道小题，就通过该大题。"
+      ],
+      scoring: "三道大题中通过一道即可完成挑战。",
+      notes: ["适合零基础体验，选项和拆词顺序直接使用原题库。"],
+      versions: [],
+      related: ["51", "52"]
+    },
+    "51": {
+      scene: "零基础出摊",
+      prep: ["准备骰子，1—6 点各对应一种手型", "使用志愿者版和参与者版词表"],
+      steps: [
+        "参与者掷骰子，确定本轮手型。",
+        "已有手语基础者，打出至少 4 个含该手型的词。",
+        "零基础者由志愿者按词表示范对应手语，参与者猜词义；困难时提供三至四个选项。"
+      ],
+      scoring: "有基础者正确打出 4 词，零基础者猜出 3 词，完成挑战。",
+      notes: ["可根据反应减少选项；原规则注明减到两项仍猜不出时，该项体验不算通过。"],
+      versions: [],
+      related: ["50", "28"]
+    },
+    "52": {
+      scene: "零基础出摊",
+      prep: ["准备参与者题本和志愿者答案本"],
+      steps: [
+        "参与者看题并选择答案，告诉志愿者。",
+        "最多作答 6 题，志愿者逐题核对。",
+        "答完后，把做错的题讲清楚，说明正确答案。"
+      ],
+      scoring: "自主答对 3 题即通过。",
+      notes: ["可和拆拆猜、骰子挑战组合成出摊任务。兑奖数量按当次活动另定。"],
+      versions: [],
+      related: ["50", "53"]
+    },
+    "53": {
+      scene: "零基础出摊",
+      prep: ["准备句子示范卡和拍摄设备", "先征得参与者同意出镜及用于后续宣传"],
+      steps: [
+        "参与者从句子卡中选内容。零基础者由志愿者先教会；熟悉手语者可以直接演示。",
+        "确认动作后拍摄，志愿者先录一段声音说明句子内容，方便后期字幕。",
+        "结束后由参与者确认本次打卡。"
+      ],
+      scoring: "完成选句、学习或演示、拍摄即完成体验；不设置比赛积分。",
+      notes: ["属于互动体验项目，和竞技小游戏一起保留，方便策划出摊活动。"],
+      versions: [],
+      related: ["52", "51"]
+    }
+  };
+
+  window.GUIDES = Object.assign(window.GUIDES || {}, G);
+})();
+
+</script>
+  <script>
+(function () {
+  var app = document.getElementById("app");
+  var STATUS_CLASS = { "完整规则": "complete", "复玩方案": "replay", "待补充": "todo" };
+  var TODO_NOTE = {
+    "完整规则": "原始资料有完整规则",
+    "复玩方案": "由索引整理的复玩方案，使用前请带领人确认",
+    "待补充": "原始资料只留名称与线索，规则待补录"
+  };
+  var LEVELS = [
+    { level: 1, name: "入门", desc: "零基础也能上手，适合新孩子和第一次带领。" },
+    { level: 2, name: "进阶", desc: "需要一定手语基础，规则稍多，适合熟悉后的小团。" },
+    { level: 3, name: "挑战", desc: "规则复杂或时间较长，适合熟练成员和总复习。" }
+  ];
+
+  function esc(s) {
+    if (s == null) return "";
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function catOf(key) {
+    return window.CATEGORIES.filter(function (c) { return c.key === key; })[0];
+  }
+
+  function gamesIn(key) {
+    return window.GAMES.filter(function (g) { return g.cat === key; });
+  }
+
+  function gameIndex(id) {
+    for (var i = 0; i < window.GAMES.length; i++) {
+      if (window.GAMES[i].id === id) return i;
+    }
+    return -1;
+  }
+
+  function gameById(id) {
+    var i = gameIndex(id);
+    return i === -1 ? null : window.GAMES[i];
+  }
+
+  function metaOf(g) {
+    return (window.META || {})[g.id] || { players: "待补充", duration: "待补充", level: 0 };
+  }
+
+  function gamesAtLevel(level) {
+    return window.GAMES.filter(function (g) { return metaOf(g).level === level; });
+  }
+
+  function stars(level) {
+    var s = "";
+    for (var i = 1; i <= 3; i++) s += i <= level ? "★" : "☆";
+    return s;
+  }
+
+  function levelName(level) {
+    return LEVELS.filter(function (l) { return l.level === level; })[0].name;
+  }
+
+  function levelChip(level) {
+    if (!level) return '<span class="chip chip-todo">难度：待定</span>';
+    return '<span class="chip chip-level">' + stars(level) + ' ' + levelName(level) + '</span>';
+  }
+
+  function chips(g) {
+    var m = metaOf(g);
+    return '<span class="chip">人数：' + esc(m.players) + '</span>' +
+      '<span class="chip">时长：' + esc(m.duration) + '</span>' +
+      levelChip(m.level);
+  }
+
+  function fileHref(path) {
+    return "../" + encodeURI(path);
+  }
+
+  function fileName(path) {
+    return path.split("/").pop();
+  }
+
+  function statusTag(status) {
+    return '<span class="status ' + STATUS_CLASS[status] + '">' + esc(status) + "</span>";
+  }
+
+  function list(items, tag) {
+    return "<" + tag + ' class="guide-list">' + items.map(function (t) {
+      return "<li>" + esc(t) + "</li>";
+    }).join("") + "</" + tag + ">";
+  }
+
+  function backButton(href, label) {
+    return '<p class="back-row"><a class="btn ghost" href="' + href + '">← 返回 ' + esc(label) + '</a></p>';
+  }
+
+  // 资料文件 → 对应的游戏编号
+  function fileIndex() {
+    var map = {};
+    window.GAMES.forEach(function (g) {
+      g.resources.forEach(function (p) {
+        (map[p] = map[p] || []).push(g.id);
+      });
+    });
+    return map;
+  }
+
+  function gameLink(g) {
+    var cat = catOf(g.cat);
+    return '<a class="game-item" href="#/game/' + esc(g.id) + '">' +
+      '<div class="game-no" style="background:' + (cat ? cat.color : "#9C8C74") + '">' + esc(g.id) + '</div>' +
+      '<div class="game-body"><h3>' + esc(g.title) + statusTag(g.status) + '</h3>' +
+      '<p>' + esc(g.summary) + '</p>' +
+      '<div class="chips">' + chips(g) + '</div></div></a>';
+  }
+
+  function renderHome() {
+    var scenes = window.SCENES.map(function (s) {
+      var cat = catOf(s.cat);
+      return '<a class="card scene" href="#/cat/' + s.cat + '" style="border-top-color:' + cat.color + '">' +
+        '<h3>' + esc(cat.name) + '</h3>' +
+        '<p>活动需要：' + esc(s.name) + '</p>' +
+        '<p class="example">例：' + esc(s.example) + '</p></a>';
+    }).join("");
+
+    var levels = LEVELS.map(function (l) {
+      var items = gamesAtLevel(l.level);
+      var preview = items.slice(0, 4).map(function (g) { return esc(g.title); }).join("、");
+      return '<a class="card level-card level-' + l.level + '" href="#/level/' + l.level + '">' +
+        '<div class="level-head"><span class="level-stars">' + stars(l.level) + '</span>' +
+        '<h3>' + esc(l.name) + '</h3></div>' +
+        '<p>' + esc(l.desc) + '</p>' +
+        '<p class="example">如：' + preview + ' 等</p>' +
+        '<div class="count">共 ' + items.length + ' 个游戏</div></a>';
+    }).join("");
+
+    var todoCount = gamesIn("8").length;
+
+    app.innerHTML =
+      '<section class="hero">' +
+        '<h1 class="home-title">' + esc(window.SITE.title) + '</h1>' +
+        '<p>按活动需要或难度找到合适的游戏，每个游戏都附有简介、人数、时长、难度和原始资料。</p>' +
+        '<span class="notice">' + esc(window.SITE.notice) + '</span>' +
+      '</section>' +
+      '<h2 class="section-title">按活动需要选游戏</h2>' +
+      '<div class="grid">' + scenes + '</div>' +
+      '<h2 class="section-title">按难度选游戏</h2>' +
+      '<div class="grid">' + levels +
+        '<a class="card level-card level-0" href="#/level/0">' +
+          '<div class="level-head"><span class="level-stars">☆☆☆</span><h3>待定</h3></div>' +
+          '<p>难度尚未评估的游戏，多为 54–66 号待补充条目。</p>' +
+          '<div class="count">共 ' + gamesAtLevel(0).length + ' 个游戏</div></a>' +
+      '</div>' +
+      '<h2 class="section-title">待补充与反馈</h2>' +
+      '<div class="grid">' +
+        '<a class="card" href="#/todo"><h3>待补充的游戏</h3>' +
+          '<p>原始资料只留名称与线索，共 ' + todoCount + ' 条，欢迎补充规则。</p>' +
+          '<div class="count">查看列表</div></a>' +
+        '<a class="card" href="#/todo"><h3>意见反馈</h3>' +
+          '<p>发现规则有误、人数时长不合适，或想补充玩法，都可以在这里留言。</p>' +
+          '<div class="count">填写反馈</div></a>' +
+      '</div>';
+  }
+
+  function renderCategory(key) {
+    if (key === "8") return (location.hash = "#/todo");
+    var cat = catOf(key);
+    if (!cat) return renderNotFound();
+    var items = gamesIn(key).map(function (g) { return gameLink(g); }).join("");
+
+    app.innerHTML =
+      '<div class="crumb"><a href="#/">首页</a> / ' + esc(cat.name) + '</div>' +
+      '<div class="page-head">' +
+        '<div class="cat-bar" style="background:' + cat.color + '"></div>' +
+        '<h1 class="page-title">' + esc(cat.name) + '</h1>' +
+        '<p>' + esc(cat.intro) + '</p>' +
+      '</div>' +
+      '<div class="game-list">' + items + '</div>' +
+      backButton("#/", "首页");
+  }
+
+  function renderLevel(n) {
+    var lvl = n === "0"
+      ? { level: 0, name: "待定", desc: "难度尚未评估，主要是 54–66 号待补充游戏。" }
+      : LEVELS.filter(function (l) { return String(l.level) === n; })[0];
+    if (!lvl) return renderNotFound();
+    var items = gamesAtLevel(lvl.level).map(function (g) { return gameLink(g); }).join("");
+    app.innerHTML =
+      '<div class="crumb"><a href="#/">首页</a> / 按难度：' + esc(lvl.name) + '</div>' +
+      '<div class="page-head">' +
+        '<div class="cat-bar" style="background:var(--terra)"></div>' +
+        '<h1 class="page-title">' + esc(lvl.name) + '游戏' + (lvl.level ? ' ' + stars(lvl.level) : '') + '</h1>' +
+        '<p>' + esc(lvl.desc) + '</p>' +
+      '</div>' +
+      '<div class="game-list">' + items + '</div>' +
+      backButton("#/", "首页");
+  }
+
+  function renderGame(id) {
+    var idx = gameIndex(id);
+    if (idx === -1) return renderNotFound();
+    var g = window.GAMES[idx];
+    var cat = catOf(g.cat);
+    var m = metaOf(g);
+    var idmap = fileIndex();
+
+    var files = g.resources.length
+      ? '<ul class="file-list">' + g.resources.map(function (p) {
+          return '<li><a class="dl" href="' + fileHref(p) + '" download aria-label="下载 ' + esc(fileName(p)) + '">下载</a>' +
+            '<a href="' + fileHref(p) + '">' + esc(fileName(p)) + '</a></li>';
+        }).join("") + '</ul>'
+      : '<p class="empty">暂未找到对应的原始文件，待补充。</p>';
+
+    var pageBtn = g.page
+      ? '<a class="btn" href="' + esc(g.page) + '">打开完整玩法页</a>'
+      : '<span class="btn disabled">完整玩法页：预留，待上线</span>';
+
+    var guide = (window.GUIDES || {})[g.id];
+    var guideHtml;
+    if (guide) {
+      guideHtml =
+        '<h3 class="sub-title">适用场景</h3><p>' + esc(guide.scene) + '</p>' +
+        '<h3 class="sub-title">准备</h3>' + list(guide.prep, "ul") +
+        '<h3 class="sub-title">玩法步骤</h3>' + list(guide.steps, "ol") +
+        '<h3 class="sub-title">结束和计分</h3><p>' + esc(guide.scoring) + '</p>' +
+        '<h3 class="sub-title">带领时注意</h3>' + list(guide.notes, "ul") +
+        (guide.versions && guide.versions.length
+          ? '<h3 class="sub-title">版本说明</h3>' + list(guide.versions, "ul")
+          : '');
+    } else {
+      guideHtml =
+        '<div class="placeholder">此处日后补充：准备、玩法步骤、结束和计分、带领时注意。<br>' +
+          '<small>' + esc(TODO_NOTE[g.status]) + '</small></div>';
+    }
+
+    var related = (guide && guide.related ? guide.related : []).map(function (rid) {
+      var r = gameById(rid);
+      return r ? '<li><a href="#/game/' + r.id + '">' + esc(r.id + " " + r.title) + '</a></li>' : "";
+    }).join("");
+
+    var backHref = cat ? "#/cat/" + cat.key : "#/todo";
+    var backLabel = cat ? cat.name : "待补充与反馈";
+
+    var prev = idx > 0 ? window.GAMES[idx - 1] : null;
+    var next = idx < window.GAMES.length - 1 ? window.GAMES[idx + 1] : null;
+    var pager = '<nav class="pager" aria-label="游戏切换">' +
+      (prev ? '<a href="#/game/' + prev.id + '">← 上一个：' + esc(prev.id + " " + prev.title) + '</a>' : '<span></span>') +
+      (next ? '<a href="#/game/' + next.id + '">下一个：' + esc(next.id + " " + next.title) + ' →</a>' : '<span></span>') +
+      '</nav>';
+
+    app.innerHTML =
+      '<div class="crumb"><a href="#/">首页</a> / <a href="' + backHref + '">' + esc(backLabel) + '</a> / ' + esc(g.id) + '</div>' +
+      '<article class="detail">' +
+        '<span class="status ' + STATUS_CLASS[g.status] + '">' + esc(g.status) + '</span>' +
+        '<h1 class="page-title">' + esc(g.id) + ' ' + esc(g.title) + '</h1>' +
+        '<p class="summary">' + esc(g.summary) + '</p>' +
+
+        '<div class="info-grid">' +
+          '<div class="info-cell"><span>人数</span><strong>' + esc(m.players) + '</strong></div>' +
+          '<div class="info-cell"><span>时长</span><strong>' + esc(m.duration) + '</strong></div>' +
+          '<div class="info-cell"><span>难度</span><strong>' + (m.level ? stars(m.level) + ' ' + levelName(m.level) : "待定") + '</strong></div>' +
+        '</div>' +
+        '<p class="note">人数、时长与难度为依据规则的初步评估，正式开团前请带领人确认。</p>' +
+
+        '<h2 class="major-title">玩法讲解</h2>' + guideHtml +
+
+        '<h2 class="sec-title">完整页面</h2>' +
+        '<p>' + pageBtn + '</p>' +
+        '<p class="note">完整玩法页上线后，只需在数据中为本游戏填写 page 字段，此按钮即自动启用。</p>' +
+
+        '<h2 class="sec-title">原始资料</h2>' + files +
+
+        (related ? '<h2 class="sec-title">相关游戏</h2><ul class="related-list">' + related + '</ul>' : '') +
+
+        backButton(backHref, backLabel) +
+        pager +
+      '</article>';
+  }
+
+  function renderTodo() {
+    var todo = gamesIn("8").map(function (g) {
+      return '<a class="game-item" href="#/game/' + g.id + '">' +
+        '<div class="game-no" style="background:#9C8C74">' + esc(g.id) + '</div>' +
+        '<div class="game-body"><h3>' + esc(g.title) + statusTag(g.status) + '</h3>' +
+        '<p>' + esc(g.summary) + '</p></div></a>';
+    }).join("");
+
+    var options = '<option value="通用或其他">通用或其他</option>' + window.CATEGORIES.map(function (c) {
+      var items = gamesIn(c.key).map(function (g) {
+        return '<option value="' + esc(g.id + " " + g.title) + '">' + esc(g.id + " " + g.title) + '</option>';
+      }).join("");
+      return '<optgroup label="' + esc(c.name) + '">' + items + '</optgroup>';
+    }).join("");
+
+    app.innerHTML =
+      '<div class="crumb"><a href="#/">首页</a> / 待补充与反馈</div>' +
+      '<div class="page-head">' +
+        '<div class="cat-bar" style="background:#9C8C74"></div>' +
+        '<h1 class="page-title">待补充与反馈</h1>' +
+        '<p>这里列出尚未补全规则的游戏，也可以提交意见，帮助我们完善手册。</p>' +
+      '</div>' +
+
+      '<h2 class="sec-title">一、待补充的游戏</h2>' +
+      '<div class="game-list">' + todo + '</div>' +
+
+      '<h2 class="sec-title">二、意见反馈</h2>' +
+      '<form class="feedback" id="feedback-form">' +
+        '<label>相关游戏<select name="game">' + options + '</select></label>' +
+        '<label>反馈类型<select name="type">' +
+          '<option>补充规则</option><option>修正内容</option><option>人数、时长或难度</option><option>其他建议</option>' +
+        '</select></label>' +
+        '<label>反馈内容<textarea name="content" rows="5" placeholder="请写下你的意见或补充的规则"></textarea></label>' +
+        '<label>您的称呼（可不填）<input name="name" type="text"></label>' +
+        '<div class="form-actions"><button type="submit" class="btn">生成反馈</button></div>' +
+      '</form>' +
+      '<div id="feedback-result"></div>' +
+      backButton("#/", "首页");
+
+    document.getElementById("feedback-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = e.target;
+      var text = "游戏：" + f.game.value + "\n类型：" + f.type.value + "\n称呼：" + (f.name.value || "未填写") + "\n\n" + f.content.value;
+      var email = window.SITE.feedbackEmail;
+      var subject = encodeURIComponent("手语小游戏手册反馈 · " + f.game.value);
+      var body = encodeURIComponent(text);
+      var mailBtn = email
+        ? '<a class="btn" href="mailto:' + esc(email) + '?subject=' + subject + '&body=' + body + '">用邮件发送</a>'
+        : '<span class="note">尚未设置接收邮箱，请复制下方内容发送给负责人。</span>';
+      document.getElementById("feedback-result").innerHTML =
+        '<div class="feedback-result"><h3 class="sub-title">反馈内容</h3>' +
+        '<textarea readonly rows="7" id="feedback-text">' + esc(text) + '</textarea>' +
+        '<p class="form-actions">' + mailBtn + ' <button type="button" class="btn ghost" id="copy-btn">复制内容</button>' +
+        ' <button type="button" class="btn ghost" id="refill-btn">重新填写</button></p></div>';
+      f.style.display = "none";
+      document.getElementById("refill-btn").addEventListener("click", function () {
+        document.getElementById("feedback-result").innerHTML = "";
+        f.reset();
+        f.style.display = "";
+      });
+      document.getElementById("copy-btn").addEventListener("click", function () {
+        var btn = this;
+        var box = document.getElementById("feedback-text");
+        function done() { btn.textContent = "已复制"; }
+        function fallback() {
+          box.select();
+          var ok = false;
+          try { ok = document.execCommand("copy"); } catch (err) {}
+          if (ok) done(); else btn.textContent = "复制失败，请手动选中复制";
+        }
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(box.value).then(done, fallback);
+        } else {
+          fallback();
+        }
+      });
+    });
+  }
+
+  function parseQuery(qs) {
+    var out = {};
+    (qs || "").split("&").forEach(function (pair) {
+      if (!pair) return;
+      var kv = pair.split("=");
+      out[decodeURIComponent(kv[0])] = decodeURIComponent((kv[1] || "").replace(/\+/g, " "));
+    });
+    return out;
+  }
+
+  function haystack(g) {
+    var m = metaOf(g);
+    var cat = catOf(g.cat);
+    var guide = (window.GUIDES || {})[g.id] || {};
+    var parts = [
+      g.id, g.title, g.summary, g.status,
+      cat ? cat.name : "", m.players, m.duration, m.level ? levelName(m.level) : "待定",
+      guide.scene || "", (guide.prep || []).join(" "), (guide.steps || []).join(" "),
+      guide.scoring || "", (guide.notes || []).join(" "), (guide.versions || []).join(" ")
+    ];
+    return parts.join(" ").toLowerCase();
+  }
+
+  function renderSearch(qs) {
+    var p = parseQuery(qs);
+    var catOptions = '<option value="">全部分类</option>' + window.CATEGORIES.map(function (c) {
+      return '<option value="' + c.key + '"' + (p.cat === c.key ? " selected" : "") + '>' + esc(c.name) + '</option>';
+    }).join("");
+    var levelOptions = '<option value="">全部难度</option>' +
+      LEVELS.map(function (l) {
+        return '<option value="' + l.level + '"' + (p.level === String(l.level) ? " selected" : "") + '>' + stars(l.level) + ' ' + esc(l.name) + '</option>';
+      }).join("") +
+      '<option value="0"' + (p.level === "0" ? " selected" : "") + '>待定</option>';
+    var statusOptions = '<option value="">全部状态</option>' + ["完整规则", "复玩方案", "待补充"].map(function (s) {
+      return '<option value="' + s + '"' + (p.status === s ? " selected" : "") + '>' + s + '</option>';
+    }).join("");
+
+    app.innerHTML =
+      '<div class="crumb"><a href="#/">首页</a> / 搜索与筛选</div>' +
+      '<div class="page-head"><h1 class="page-title">搜索与筛选</h1>' +
+      '<p>可按游戏名、词语、玩法关键词搜索，也可以按分类、难度和状态筛选。</p></div>' +
+      '<div class="search-panel">' +
+        '<input id="s-q" type="search" aria-label="搜索游戏关键词" placeholder="例如：数字、故事、拆弹、两人" value="' + esc(p.q || "") + '">' +
+        '<div class="filters">' +
+          '<label>分类<select id="s-cat">' + catOptions + '</select></label>' +
+          '<label>难度<select id="s-level">' + levelOptions + '</select></label>' +
+          '<label>状态<select id="s-status">' + statusOptions + '</select></label>' +
+          '<button type="button" class="btn ghost" id="s-reset">清空条件</button>' +
+        '</div>' +
+      '</div>' +
+      '<p class="note" id="s-count"></p>' +
+      '<div class="game-list" id="s-results"></div>' +
+      backButton("#/", "首页");
+
+    function refresh() {
+      var q = document.getElementById("s-q").value.trim();
+      var cat = document.getElementById("s-cat").value;
+      var level = document.getElementById("s-level").value;
+      var status = document.getElementById("s-status").value;
+      var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+
+      var results = window.GAMES.filter(function (g) {
+        if (cat && g.cat !== cat) return false;
+        if (level !== "" && String(metaOf(g).level) !== level) return false;
+        if (status && g.status !== status) return false;
+        var h = haystack(g);
+        return terms.every(function (t) { return h.indexOf(t) !== -1; });
+      });
+
+      document.getElementById("s-count").textContent = "共找到 " + results.length + " 个游戏";
+      document.getElementById("s-results").innerHTML = results.length
+        ? results.map(function (g) { return gameLink(g); }).join("")
+        : '<p class="empty">没有符合条件的游戏，换个关键词或放宽筛选条件试试。</p>';
+
+      var qs = [];
+      if (q) qs.push("q=" + encodeURIComponent(q));
+      if (cat) qs.push("cat=" + cat);
+      if (level !== "") qs.push("level=" + level);
+      if (status) qs.push("status=" + encodeURIComponent(status));
+      try {
+        history.replaceState(null, "", "#/search" + (qs.length ? "?" + qs.join("&") : ""));
+      } catch (err) {
+        // 本地 file:// 打开时浏览器可能禁止修改地址，此时忽略即可
+      }
+    }
+
+    ["s-q", "s-cat", "s-level", "s-status"].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.addEventListener(id === "s-q" ? "input" : "change", refresh);
+    });
+    document.getElementById("s-reset").addEventListener("click", function () {
+      document.getElementById("s-q").value = "";
+      document.getElementById("s-cat").value = "";
+      document.getElementById("s-level").value = "";
+      document.getElementById("s-status").value = "";
+      refresh();
+    });
+    refresh();
+  }
+
+  function renderFiles() {
+    var idmap = fileIndex();
+    var sections = window.CATEGORIES.map(function (c) {
+      var files = [];
+      gamesIn(c.key).forEach(function (g) {
+        g.resources.forEach(function (p) {
+          if (files.indexOf(p) === -1) files.push(p);
+        });
+      });
+      var body = files.length
+        ? '<ul class="file-list">' + files.map(function (p) {
+            var ids = (idmap[p] || []).join("、");
+            return '<li><a class="dl" href="' + fileHref(p) + '" download aria-label="下载 ' + esc(fileName(p)) + '">下载</a>' +
+              '<a href="' + fileHref(p) + '">' + esc(fileName(p)) + '</a>' +
+              '<span class="file-ids">对应游戏：' + esc(ids) + '</span></li>';
+          }).join("") + '</ul>'
+        : '<p class="empty">暂无文件</p>';
+      return '<h2 class="sec-title">' + esc(c.name) + '</h2>' + body;
+    }).join("");
+
+    app.innerHTML =
+      '<div class="crumb"><a href="#/">首页</a> / 资料下载</div>' +
+      '<div class="page-head"><h1 class="page-title">资料下载</h1>' +
+      '<p>以下文件均可下载。每个文件后标注了对应的游戏编号，同一文件可能对应多个游戏。</p></div>' +
+      sections +
+      backButton("#/", "首页");
+  }
+
+  function renderNotFound() {
+    app.innerHTML = '<div class="detail"><h1 class="page-title">页面不存在</h1><p><a href="#/">返回首页</a></p></div>';
+  }
+
+  function route() {
+    var hash = location.hash.replace(/^#\/?/, "");
+    var parts = hash.split("/");
+    if (!hash) return renderHome();
+    var search = hash.match(/^search(?:\?(.*))?$/);
+    if (search) return renderSearch(search[1] || "");
+    if (parts[0] === "cat" && parts[1]) return renderCategory(parts[1]);
+    if (parts[0] === "level" && parts[1]) return renderLevel(parts[1]);
+    if (parts[0] === "game" && parts[1]) return renderGame(parts[1]);
+    if (parts[0] === "todo") return renderTodo();
+    if (parts[0] === "files") return renderFiles();
+    renderNotFound();
+  }
+
+  function setTitle() {
+    var h1 = app.querySelector("h1");
+    document.title = (h1 ? h1.textContent + " · " : "") + window.SITE.title;
+  }
+
+  document.getElementById("site-title").textContent = window.SITE.title;
+  document.getElementById("site-subtitle").textContent = window.SITE.subtitle + " · " + window.SITE.updated;
+  document.getElementById("header-search").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var q = this.q.value.trim();
+    var target = "#/search" + (q ? "?q=" + encodeURIComponent(q) : "");
+    if (location.hash === target) { route(); setTitle(); } else { location.hash = target; }
+  });
+
+  var toTop = document.getElementById("to-top");
+  window.addEventListener("scroll", function () {
+    toTop.classList.toggle("show", window.scrollY > 400);
+  });
+  toTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  window.addEventListener("hashchange", function () {
+    route();
+    setTitle();
+    window.scrollTo(0, 0);
+  });
+  route();
+  setTitle();
+})();
+
+</script>
+</body>
+</html>
