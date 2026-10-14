@@ -1,4 +1,6 @@
-# 手语小游戏手册 · 网站说明
+# 指间趣游 · 网站说明
+
+指间趣游是手语分社小游戏玩法手册，保留游戏分类、规则、人数时长、难度和原始资料下载。
 
 ## 目录结构
 
@@ -8,6 +10,8 @@
 │  ├─ ShouYu-game.html   ← 发布用的单文件版（网站本体，可直接打开或分享）
 │  ├─ index.html         ← 多文件版源码入口，修改后用 build_single.ps1 生成单文件版
 │  ├─ build_single.ps1   ← 生成 ShouYu-game.html
+│  ├─ build_single.py    ← macOS / Linux / Windows 的 Python 3 构建入口
+│  ├─ assets/           ← 可编辑 Logo 源图及 brand-v1 网页图标
 │  ├─ css/style.css
 │  └─ js/                ← data.js（游戏数据）、meta.js（人数/时长/难度）、
 │                           guides.js（玩法讲解，01–53 号）、app.js（页面逻辑）
@@ -32,8 +36,19 @@
 线上版本：https://linzeyun37-sketch.github.io/ShouYu-game/网站/ShouYu-game.html
 单独下载 `ShouYu-game.html` 到电脑或手机上打开时，资料下载需要联网（链接会指向线上的资料文件）。
 
-修改内容后，在“网站”文件夹中运行 `build_single.ps1`，重新生成 `ShouYu-game.html`。
-`index.html` 与 `css/`、`js/` 是生成它的源文件，不需要直接打开。
+修改内容后，在“网站”文件夹中运行 `python3 build_single.py`，重新生成 `ShouYu-game.html`。Windows 也可以继续使用 `build_single.ps1`。两种构建方式都会内嵌 CSS、JavaScript、Logo 和网页图标，单独打开 HTML 时不依赖同目录的图片。
+
+本地预览：在项目根目录运行 `python3 -m http.server 8765 --bind 127.0.0.1`，打开 `http://127.0.0.1:8765/网站/ShouYu-game.html`。也可打开 `网站/index.html` 检查多文件源码版；资料文件仍需保持原有目录关系。
+
+## 视觉与图标
+
+Logo 用浅暖米色手掌托起雾蓝骰子，延续以手予爱图标的灰绿圆润描边。`assets/logo.svg` 是可编辑主图，`assets/logo-small.svg` 是省去袖口和动线的小尺寸版本。
+
+网页引用 `assets/brand-v1/` 中的 SVG、favicon 和 Apple 触屏图标。该目录同时保留透明 PNG、明暗底及小尺寸预览。以后更换图案时使用新的版本目录，并同步修改 HTML 引用和两份构建脚本中的资源路径。
+
+首页按活动与难度分组，桌面并排展示，手机顺序阅读。分类颜色由 `css/style.css` 中的 `.tone-1` 至 `.tone-8` 统一管理；卡片使用完整边框，列表和详情页沿用相同配色。页面使用系统字体，不加载远程字体。
+
+本次设计仅作本地预览，未更新线上版本。游戏数据与规则沿用原仓库；站名和展示布局已调整。
 
 ## 日常维护
 

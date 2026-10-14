@@ -23,6 +23,21 @@ foreach ($s in $scripts) {
   $html = $html.Replace($tag, "<script>`n" + $code + "`n</script>")
 }
 
+# Keep the logo and web icons available when this HTML is used on its own.
+$assetPattern = '(src|href)="(assets/brand-v1/[^"<>]+)"'
+$assetMatches = [regex]::Matches($html, $assetPattern)
+$assetMimeTypes = @{ ".svg" = "image/svg+xml"; ".png" = "image/png"; ".ico" = "image/x-icon" }
+foreach ($asset in $assetMatches) {
+  $path = $asset.Groups[2].Value
+  $extension = [System.IO.Path]::GetExtension($path)
+  $mime = $assetMimeTypes[$extension]
+  if (-not $mime) { throw ("Unsupported image type: " + $path) }
+  $bytes = [System.IO.File]::ReadAllBytes((Join-Path $here $path))
+  $data = [Convert]::ToBase64String($bytes)
+  $replacement = $asset.Groups[1].Value + '="data:' + $mime + ';base64,' + $data + '"'
+  $html = $html.Replace($asset.Value, $replacement)
+}
+
 $out = Join-Path $here "ShouYu-game.html"
 [System.IO.File]::WriteAllText($out, $html, $utf8)
 $size = [math]::Round((Get-Item $out).Length / 1KB, 1)
