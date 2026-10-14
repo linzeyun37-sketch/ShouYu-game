@@ -4,8 +4,10 @@
 
 ```
 手语游戏整理/            ← 整个文件夹一起使用
-├─ 网站/                 ← 本网站（双击 index.html 即可打开）
-│  ├─ index.html
+├─ 网站/                 ← 本网站
+│  ├─ ShouYu-game.html   ← 发布用的单文件版（网站本体，可直接打开或分享）
+│  ├─ index.html         ← 多文件版源码入口，修改后用 build_single.ps1 生成单文件版
+│  ├─ build_single.ps1   ← 生成 ShouYu-game.html
 │  ├─ css/style.css
 │  └─ js/                ← data.js（游戏数据）、meta.js（人数/时长/难度）、
 │                           guides.js（玩法讲解，01–53 号）、app.js（页面逻辑）
@@ -26,7 +28,11 @@
 
 ## 打开方式
 
-双击 `网站/index.html`，用浏览器打开即可，无需安装或联网。
+双击 `网站/ShouYu-game.html`，用浏览器打开即可，无需安装或联网。
+线上版本：https://linzeyun37-sketch.github.io/ShouYu-game/网站/ShouYu-game.html
+
+修改内容后，在“网站”文件夹中运行 `build_single.ps1`，重新生成 `ShouYu-game.html`。
+`index.html` 与 `css/`、`js/` 是生成它的源文件，不需要直接打开。
 
 ## 日常维护
 

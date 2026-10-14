@@ -1,7 +1,7 @@
 # Build a single-file version: inline css/style.css and js/*.js into index.html
 # Usage (run inside the 网站 folder):
 #   powershell -ExecutionPolicy Bypass -File build_single.ps1
-# Output: handbook_single.html
+# Output: ShouYu-game.html (the published single-file page)
 
 $ErrorActionPreference = "Stop"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -23,7 +23,7 @@ foreach ($s in $scripts) {
   $html = $html.Replace($tag, "<script>`n" + $code + "`n</script>")
 }
 
-$out = Join-Path $here "handbook_single.html"
+$out = Join-Path $here "ShouYu-game.html"
 [System.IO.File]::WriteAllText($out, $html, $utf8)
 $size = [math]::Round((Get-Item $out).Length / 1KB, 1)
 Write-Output ("Built: " + $out + " (" + $size + " KB)")
