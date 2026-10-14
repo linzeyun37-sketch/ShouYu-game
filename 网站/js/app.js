@@ -148,7 +148,6 @@
     app.innerHTML =
       '<section class="hero">' +
         '<div class="hero-copy"><p class="eyebrow">指间趣游</p><h1 class="home-title">手语小游戏手册</h1>' +
-        '<p class="hero-intro">按活动需要与难度挑选，查看玩法、人数、时长和原始资料。</p>' +
         '<p class="hero-meta"><span><strong>' + window.GAMES.length + '</strong> 个游戏</span>' +
           '<span><strong>' + window.SCENES.length + '</strong> 类活动</span>' +
           '<a href="#/search">浏览全部 <span aria-hidden="true">↗</span></a></p></div>' +
@@ -303,10 +302,8 @@
     }).join("");
 
     app.innerHTML =
-      '<div class="crumb"><a href="#/">首页</a> / 待补充与反馈</div>' +
       '<div class="page-head">' +
         '<h1 class="page-title">待补充与反馈</h1>' +
-        '<p>这里列出尚未补全规则的游戏，也可以提交意见，帮助我们完善手册。</p>' +
       '</div>' +
 
       '<h2 class="sec-title">一、待补充的游戏</h2>' +
@@ -403,9 +400,7 @@
     }).join("");
 
     app.innerHTML =
-      '<div class="crumb"><a href="#/">首页</a> / 搜索与筛选</div>' +
-      '<div class="page-head"><h1 class="page-title">搜索与筛选</h1>' +
-      '<p>可按游戏名、词语、玩法关键词搜索，也可以按分类、难度和状态筛选。</p></div>' +
+      '<div class="page-head"><h1 class="page-title">搜索与筛选</h1></div>' +
       '<div class="search-panel">' +
         '<input id="s-q" type="search" aria-label="搜索游戏关键词" placeholder="例如：数字、故事、拆弹、两人" value="' + esc(p.q || "") + '">' +
         '<div class="filters">' +
@@ -487,9 +482,7 @@
     }).join("");
 
     app.innerHTML =
-      '<div class="crumb"><a href="#/">首页</a> / 资料下载</div>' +
-      '<div class="page-head"><h1 class="page-title">资料下载</h1>' +
-      '<p>以下文件均可下载。每个文件后标注了对应的游戏编号，同一文件可能对应多个游戏。</p></div>' +
+      '<div class="page-head"><h1 class="page-title">资料下载</h1></div>' +
       sections +
       backButton("#/", "首页");
   }
