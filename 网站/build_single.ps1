@@ -14,7 +14,7 @@ if ($html.IndexOf($cssTag) -lt 0) { throw "stylesheet tag not found in index.htm
 $css = [System.IO.File]::ReadAllText((Join-Path $here "css\style.css"), $utf8)
 $html = $html.Replace($cssTag, "<style>`n" + $css + "`n</style>")
 
-$scripts = @("js/data.js", "js/meta.js", "js/guides.js", "js/app.js")
+$scripts = @("js/data.js", "js/meta.js", "js/guides.js", "js/banks.js", "js/app.js")
 foreach ($s in $scripts) {
   $code = [System.IO.File]::ReadAllText((Join-Path $here ($s -replace "/", "\")), $utf8)
   if ($code.IndexOf("</script") -ge 0) { throw ($s + " contains a closing script tag and cannot be inlined") }

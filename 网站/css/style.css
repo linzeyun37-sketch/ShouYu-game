@@ -296,3 +296,64 @@ select { appearance: none; padding-right: 36px; background-image: url("data:imag
   h2, h3 { break-after: avoid; }
   .info-grid, .file-list li { break-inside: avoid; }
 }
+
+/* 题库 */
+.bank-hint {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 4px 0 10px;
+}
+.bank-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 8px;
+}
+.bank-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: #FFFCF5;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.bank-text {
+  font-size: 16px;
+  word-break: break-all;
+}
+.like-btn {
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  padding: 5px 12px;
+  border: 1px solid var(--terra);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--terra);
+  cursor: pointer;
+}
+.like-btn:disabled {
+  border-color: #D9CFBF;
+  color: #7C6E5E;
+  cursor: default;
+}
+.bank-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bank-form input {
+  flex: 1;
+  min-width: 180px;
+  font: inherit;
+  font-size: 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FFFCF5;
+  color: var(--ink);
+}
+.bank-form button { border: none; cursor: pointer; font: inherit; }

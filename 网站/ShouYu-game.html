@@ -309,6 +309,67 @@ select { appearance: none; padding-right: 36px; background-image: url("data:imag
   .info-grid, .file-list li { break-inside: avoid; }
 }
 
+/* 题库 */
+.bank-hint {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 4px 0 10px;
+}
+.bank-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 8px;
+}
+.bank-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: #FFFCF5;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.bank-text {
+  font-size: 16px;
+  word-break: break-all;
+}
+.like-btn {
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  padding: 5px 12px;
+  border: 1px solid var(--terra);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--terra);
+  cursor: pointer;
+}
+.like-btn:disabled {
+  border-color: #D9CFBF;
+  color: #7C6E5E;
+  cursor: default;
+}
+.bank-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bank-form input {
+  flex: 1;
+  min-width: 180px;
+  font: inherit;
+  font-size: 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FFFCF5;
+  color: var(--ink);
+}
+.bank-form button { border: none; cursor: pointer; font: inherit; }
+
 </style>
 </head>
 <body>
@@ -351,6 +412,8 @@ window.SITE = {
   resourceBase: "../",
   // 单独下载 HTML 打开时，从正式站点取得资料。
   remoteBase: "https://shouyulove.cn/signplay/resources/",
+  // 在线题库（投稿、点赞）使用的 Firebase Realtime Database 地址；留空则题库只显示示例题目
+  dbUrl: "",
   // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
   feedbackEmail: "2500011719@stu.pku.edu.cn"
 };
@@ -448,7 +511,7 @@ window.GAMES = [
   { id: "53", title: "手语视频打卡", cat: "7", status: "完整规则", summary: "从句子卡中选内容，学习后拍摄打卡视频，属于体验项目，不设积分。", resources: ["七_出摊和手型体验/打卡视频内容.docx"] },
 
   // 八 待补充的游戏规则（原资料仅留名称与线索）
-  { id: "54", title: "抢数字", cat: "8", status: "待补充", summary: "再来一团第九次、雪团第一次出现；索引仅写“草莓诗和西兰花雨”。", resources: [] },
+  { id: "54", title: "抢数字", cat: "2", status: "复玩方案", summary: "每人起一个手语代号，轮流从 1 开始报数，同一个数字同时报出的人要把所有人的代号说并打出来。", resources: [] },
   { id: "55", title: "大坏蛋与守护者", cat: "8", status: "待补充", summary: "雪团第三次出现，索引说明为带机制的刷词游戏，完整规则仅留外部链接。", resources: [] },
   { id: "56", title: "天才笨笨碰", cat: "8", status: "待补充", summary: "雪团第六、七次出现，索引称芳老师首次改编，未留下规则正文。", resources: [] },
   { id: "57", title: "万里挑一", cat: "8", status: "待补充", summary: "雪团第九次出现，索引附黑板照片，但没有选择、轮次和胜负规则。", resources: [] },
@@ -461,6 +524,7 @@ window.GAMES = [
   { id: "64", title: "不可或缺的句子", cat: "8", status: "待补充", summary: "纸团与爱团不团第七次材料中出现该标题，另有“猜句子”记录。", resources: ["八_待补充的游戏规则/纸团x爱团不团 第七次小团材料.pdf"] },
   { id: "65", title: "你画我猜猜歌名版", cat: "8", status: "待补充", summary: "2024 秋手随歌舞主持词提到该版本，歌名题库及独立计分未保留。", resources: ["八_待补充的游戏规则/手随歌舞主持词.pdf"] },
   { id: "66", title: "新闻联播和飞行棋", cat: "8", status: "待补充", summary: "哎哟团反馈提到实际玩过，但未留独立玩法，应向当时带领人补录。", resources: [] },
+
 
   // 新增（带领人口述补充，规则以现场确认为准）
   { id: "67", title: "闹钟炸弹", cat: "2", status: "复玩方案", summary: "主持人设定一个神秘时间的倒计时，手机在谁手上闹钟响了谁就输，每人提问后挑人传手机。", resources: [] }
@@ -526,7 +590,7 @@ window.META = {
   "52": { players: "1 人一轮", duration: "约 5–10 分钟", level: 1 },
   "53": { players: "1 人一组", duration: "约 10 分钟", level: 1 },
 
-  "54": { players: "待补充", duration: "待补充", level: 0 },
+  "54": { players: "6 人以上（围成一圈）", duration: "约 10 分钟", level: 1 },
   "55": { players: "待补充", duration: "待补充", level: 0 },
   "56": { players: "待补充", duration: "待补充", level: 0 },
   "57": { players: "待补充", duration: "待补充", level: 0 },
@@ -1283,21 +1347,82 @@ window.GUIDES = {
       prep: ["准备一部手机或其他不怕摔的道具", "主持人在心里设定一个倒计时，如 20 秒或 2 分半，不告诉大家"],
       steps: [
         "主持人启动倒计时，把道具交给第一位玩家。",
-        "玩家想一个任意问题并问出来，然后挑一个人把道具传给ta。",
-        "被挑的人回答问题，再问一个问题，然后挑下一个人传道具。",
+        "玩家想一个任意问题，口语问出来（可用手语），问完后挑一个人把道具传给ta。",
+        "被挑的人回答问题，再问一个新问题，问完后挑下一个人传道具。",
         "倒计时结束、闹钟响起时，道具在谁手上，谁就输。"
       ],
       scoring: "道具在谁手上闹钟响，谁就输；输的人的处理方式可由带领人事先约定。",
       notes: [
-        "和击鼓传花相似，但提问和回答会拖长每个人手持道具的时间，因此要提醒大家回答完再传。",
-        "建议问题和回答都用手语完成，既练习表达也保证节奏。",
+        "和击鼓传花相似，但提问和回答会拖长每个人手持道具的时间，因此要提醒大家问完再传。",
+        "首选口语提问和回答；有手语基础的成员可以尝试用手语，但不要因此拖慢节奏。",
         "规则为带领人口述补充，首次使用前请与主持人确认细节。"
       ],
       versions: ["短版：倒计时 20 秒，节奏快。", "长版：倒计时 2 分半，适合多人长时间互动。"],
       related: ["09", "12"]
+    },
+    "54": {
+      scene: "互相认识",
+      prep: [
+        "每人给自己起一个手语代号，可以是新的手语名字，并让大家记住。",
+        "大家围成一圈，确定从谁开始报数。"
+      ],
+      steps: [
+        "从 1 开始，轮流报数，每人依次报下一个数字：1、2、3……",
+        "如果同一个数字有两个或以上的人同时报出，报了这个数的人要把其他所有人的代号说出来，并用手语打出来。",
+        "代号说完后，从下一个数字继续报数。"
+      ],
+      scoring: "规则为口述整理的复玩方案，原材料未写明胜负、淘汰或计分方式，可由带领人在开局时约定。",
+      notes: [
+        "小团里可以先让大家起手语代号并练习几遍，再开始报数。",
+        "“同时报出”的判定以现场为准，开局时请先说明清楚。"
+      ],
+      versions: [],
+      related: ["11", "09"]
     }
   });
 })();
+
+</script>
+  <script>
+// 题库：按游戏编号列出示例题目。大家可以在网页上投稿、点赞（需要在线题库开通）。
+// seeds 为示例题目，不会因为投稿而改变。
+window.BANKS = {
+  "01": {
+    title: "你划我猜题库",
+    hint: "题目可以是成语、故事、人物、日常词，也可以是手语知识点。投稿时写清楚题目即可。",
+    seeds: [
+      "猫抓老鼠",
+      "司马光",
+      "守株待兔",
+      "亡羊补牢",
+      "对牛弹琴",
+      "画蛇添足"
+    ]
+  },
+  "02": {
+    title: "你画我猜题库",
+    hint: "适合画得出来的词：动物、物品、场景、成语画面都可以。",
+    seeds: [
+      "猫抓老鼠",
+      "太阳",
+      "房子",
+      "大象",
+      "雨伞",
+      "小鸭子"
+    ]
+  },
+  "04": {
+    title: "手语传声筒题库",
+    hint: "可以是普通句、成语或诗句。给新成员用短句，长句适合熟悉手语的成员。",
+    seeds: [
+      "今天天气很好",
+      "我们一起去图书馆",
+      "小猫在树上睡觉",
+      "床前明月光",
+      "守株待兔"
+    ]
+  }
+};
 
 </script>
   <script>
@@ -1574,7 +1699,7 @@ window.GUIDES = {
         '</div>' +
         '<p class="note">人数、时长与难度为依据规则的初步评估，正式开团前请带领人确认。</p>' +
 
-        '<h2 class="major-title">玩法讲解</h2>' + guideHtml +
+        '<h2 class="major-title">玩法讲解</h2>' + guideHtml + bankSection(g.id) +
 
         (pageBtn ? '<h2 class="sec-title">完整页面</h2><p>' + pageBtn + '</p>' : '') +
 
@@ -1585,6 +1710,108 @@ window.GUIDES = {
         backButton(backHref, backLabel) +
         pager +
       '</article>';
+    loadBank(g.id);
+  }
+
+  // ===== 题库：示例题目 + 在线投稿与点赞（需要配置 SITE.dbUrl） =====
+  function dbUrl() {
+    return window.SITE.dbUrl || "";
+  }
+
+  function dbCall(path, method, body) {
+    var opts = { method: method || "GET", headers: { "Content-Type": "application/json" } };
+    if (body !== undefined) opts.body = JSON.stringify(body);
+    return fetch(dbUrl() + "/" + path + ".json", opts).then(function (r) {
+      if (!r.ok) throw new Error("数据库请求失败：" + r.status);
+      return r.json();
+    });
+  }
+
+  function hasVoted(gid, key) {
+    try { return localStorage.getItem("vote:" + gid + ":" + key) === "1"; } catch (e) { return false; }
+  }
+
+  function markVoted(gid, key) {
+    try { localStorage.setItem("vote:" + gid + ":" + key, "1"); } catch (e) {}
+  }
+
+  function bankSection(gid) {
+    var b = (window.BANKS || {})[gid];
+    if (!b) return "";
+    return '<h2 class="major-title">题库</h2>' +
+      '<p class="bank-hint">' + esc(b.title) + '：' + esc(b.hint) + '</p>' +
+      '<div id="bank-box"><p class="note">加载中……</p></div>';
+  }
+
+  function loadBank(gid) {
+    var b = (window.BANKS || {})[gid];
+    if (!b || !document.getElementById("bank-box")) return;
+    if (!dbUrl()) {
+      renderBank(gid, b, {}, false);
+      return;
+    }
+    dbCall("banks/" + gid, "GET").then(function (data) {
+      renderBank(gid, b, data || {}, true);
+    }).catch(function (e) {
+      document.getElementById("bank-box").innerHTML = '<p class="note">题库暂时无法加载：' + esc(e.message) + '</p>';
+    });
+  }
+
+  function renderBank(gid, b, data, online) {
+    var box = document.getElementById("bank-box");
+    if (!box) return;
+    var items = b.seeds.map(function (t, i) {
+      var rec = data["s" + i] || {};
+      return { key: "s" + i, text: t, likes: rec.likes || 0 };
+    });
+    Object.keys(data).filter(function (k) { return k.charAt(0) === "u" && data[k]; }).forEach(function (k) {
+      items.push({ key: k, text: data[k].text, likes: data[k].likes || 0 });
+    });
+    items.sort(function (x, y) { return y.likes - x.likes; });
+
+    var list = items.map(function (it) {
+      var voted = hasVoted(gid, it.key);
+      var disabled = !online || voted;
+      return '<li class="bank-item"><span class="bank-text">' + esc(it.text) + '</span>' +
+        '<button type="button" class="like-btn" data-key="' + esc(it.key) + '" data-text="' + esc(it.text) + '"' +
+        (disabled ? ' disabled' : '') + '>' + (voted ? '已点赞' : '点赞') + ' · ' + it.likes + '</button></li>';
+    }).join("");
+
+    var form = online
+      ? '<form class="bank-form" id="bank-form"><input type="text" id="bank-input" maxlength="40" placeholder="写下你想投稿的题目">' +
+        '<button type="submit" class="btn">投稿</button></form><p class="note" id="bank-msg"></p>'
+      : '<p class="note">在线题库尚未开通，目前只显示示例题目，暂不能投稿和点赞。</p>';
+
+    box.innerHTML = '<ul class="bank-list">' + list + '</ul>' + form;
+    if (!online) return;
+
+    box.querySelectorAll(".like-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        like(gid, btn.getAttribute("data-key"), btn.getAttribute("data-text"));
+      });
+    });
+    document.getElementById("bank-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var text = document.getElementById("bank-input").value.trim();
+      var msg = document.getElementById("bank-msg");
+      if (!text) { msg.textContent = "请先写下题目。"; return; }
+      var key = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      dbCall("banks/" + gid + "/" + key, "PUT", { text: text, likes: 0 }).then(function () {
+        loadBank(gid);
+      }).catch(function (err) { msg.textContent = err.message; });
+    });
+  }
+
+  function like(gid, key, text) {
+    if (hasVoted(gid, key)) return;
+    var path = "banks/" + gid + "/" + key;
+    dbCall(path, "GET").then(function (rec) {
+      var n = (rec && rec.likes) || 0;
+      return dbCall(path, "PUT", { text: (rec && rec.text) || text, likes: n + 1 });
+    }).then(function () {
+      markVoted(gid, key);
+      loadBank(gid);
+    }).catch(function () {});
   }
 
   function renderTodo() {
