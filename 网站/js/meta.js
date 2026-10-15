@@ -56,7 +56,7 @@ window.META = {
   "52": { players: "1 人一轮", duration: "约 5–10 分钟", level: 1 },
   "53": { players: "1 人一组", duration: "约 10 分钟", level: 1 },
 
-  "54": { players: "待补充", duration: "待补充", level: 0 },
+  "54": { players: "6 人以上（围成一圈）", duration: "约 10 分钟", level: 1 },
   "55": { players: "待补充", duration: "待补充", level: 0 },
   "56": { players: "待补充", duration: "待补充", level: 0 },
   "57": { players: "待补充", duration: "待补充", level: 0 },

@@ -14,28 +14,13 @@ if ($html.IndexOf($cssTag) -lt 0) { throw "stylesheet tag not found in index.htm
 $css = [System.IO.File]::ReadAllText((Join-Path $here "css\style.css"), $utf8)
 $html = $html.Replace($cssTag, "<style>`n" + $css + "`n</style>")
 
-$scripts = @("js/data.js", "js/meta.js", "js/guides.js", "js/app.js")
+$scripts = @("js/data.js", "js/meta.js", "js/guides.js", "js/banks.js", "js/app.js")
 foreach ($s in $scripts) {
   $code = [System.IO.File]::ReadAllText((Join-Path $here ($s -replace "/", "\")), $utf8)
   if ($code.IndexOf("</script") -ge 0) { throw ($s + " contains a closing script tag and cannot be inlined") }
   $tag = '<script src="' + $s + '"></script>'
   if ($html.IndexOf($tag) -lt 0) { throw ("tag not found: " + $tag) }
   $html = $html.Replace($tag, "<script>`n" + $code + "`n</script>")
-}
-
-# Keep the logo and web icons available when this HTML is used on its own.
-$assetPattern = '(src|href)="(assets/brand-v1/[^"<>]+)"'
-$assetMatches = [regex]::Matches($html, $assetPattern)
-$assetMimeTypes = @{ ".svg" = "image/svg+xml"; ".png" = "image/png"; ".ico" = "image/x-icon" }
-foreach ($asset in $assetMatches) {
-  $path = $asset.Groups[2].Value
-  $extension = [System.IO.Path]::GetExtension($path)
-  $mime = $assetMimeTypes[$extension]
-  if (-not $mime) { throw ("Unsupported image type: " + $path) }
-  $bytes = [System.IO.File]::ReadAllBytes((Join-Path $here $path))
-  $data = [Convert]::ToBase64String($bytes)
-  $replacement = $asset.Groups[1].Value + '="data:' + $mime + ';base64,' + $data + '"'
-  $html = $html.Replace($asset.Value, $replacement)
 }
 
 $out = Join-Path $here "ShouYu-game.html"

@@ -1,13 +1,14 @@
 // 手语游戏网站数据：来源为《手语分社小游戏玩法手册》（2026 年 10 月）
 // 资料路径相对于“网站”文件夹的上一级（即“手语游戏整理”）
 window.SITE = {
-  title: "指间趣游",
-  subtitle: "手语分社 · 心创组 设计者：伍家阳 鸣谢：手语分社秘书处",
+  title: "手语小游戏手册",
+  subtitle: "手语分社 · 心创组资料汇总 · 2026 年 10 月",
   notice: "目前已整理 01–53 号游戏及部分新增游戏的玩法讲解；其余待补录的游戏见「待补充与反馈」页，完整玩法页面日后上线。",
-  // 源码预览与 GitHub Pages 的资料在上一级；服务器构建时替换为 ./resources/。
-  resourceBase: "../",
-  // 单独下载 HTML 打开时，从正式站点取得资料。
-  remoteBase: "https://shouyulove.cn/signplay/resources/",
+  updated: "资料更新于 2026 年 10 月",
+  // 线上地址（资料仓库根目录）：只下载 HTML 文件打开时，资料链接改用这个地址
+  remoteBase: "https://linzeyun37-sketch.github.io/ShouYu-game/",
+  // 在线题库（投稿、点赞）使用的 Firebase Realtime Database 地址；留空则题库只显示示例题目
+  dbUrl: "",
   // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
   feedbackEmail: "2500011719@stu.pku.edu.cn"
 };
@@ -105,7 +106,7 @@ window.GAMES = [
   { id: "53", title: "手语视频打卡", cat: "7", status: "完整规则", summary: "从句子卡中选内容，学习后拍摄打卡视频，属于体验项目，不设积分。", resources: ["七_出摊和手型体验/打卡视频内容.docx"] },
 
   // 八 待补充的游戏规则（原资料仅留名称与线索）
-  { id: "54", title: "抢数字", cat: "8", status: "待补充", summary: "再来一团第九次、雪团第一次出现；索引仅写“草莓诗和西兰花雨”。", resources: [] },
+  { id: "54", title: "抢数字", cat: "2", status: "复玩方案", summary: "每人起一个手语代号，轮流从 1 开始报数，同一个数字同时报出的人要把所有人的代号说并打出来。", resources: [] },
   { id: "55", title: "大坏蛋与守护者", cat: "8", status: "待补充", summary: "雪团第三次出现，索引说明为带机制的刷词游戏，完整规则仅留外部链接。", resources: [] },
   { id: "56", title: "天才笨笨碰", cat: "8", status: "待补充", summary: "雪团第六、七次出现，索引称芳老师首次改编，未留下规则正文。", resources: [] },
   { id: "57", title: "万里挑一", cat: "8", status: "待补充", summary: "雪团第九次出现，索引附黑板照片，但没有选择、轮次和胜负规则。", resources: [] },
