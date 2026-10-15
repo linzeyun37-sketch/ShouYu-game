@@ -71,7 +71,8 @@
 
   // 网页在线打开时用相对路径；单独下载 HTML 到本地打开时，改用线上地址
   function fileHref(path) {
-    var base = location.protocol === "file:" && window.SITE.remoteBase ? window.SITE.remoteBase : "../";
+    var isLocal = location.protocol === "file:";
+    var base = isLocal ? (window.SITE.githubBase || window.SITE.remoteBase || "../") : (window.SITE.resourceBase || "../");
     return base + encodeURI(path);
   }
 
@@ -107,57 +108,70 @@
   function gameLink(g) {
     var cat = catOf(g.cat);
     return '<a class="game-item" href="#/game/' + esc(g.id) + '">' +
-      '<div class="game-no" style="background:' + (cat ? cat.color : "#9C8C74") + '">' + esc(g.id) + '</div>' +
+      '<div class="game-no tone-' + (cat ? cat.key : '8') + '">' + esc(g.id) + '</div>' +
       '<div class="game-body"><h3>' + esc(g.title) + statusTag(g.status) + '</h3>' +
       '<p>' + esc(g.summary) + '</p>' +
       '<div class="chips">' + chips(g) + '</div></div></a>';
   }
 
+  function categoryIcon(key) {
+    var paths = {
+      "1": '<path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M8 9h8M8 13h5"/>',
+      "2": '<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v2"/>',
+      "3": '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/><path d="M17 3v8M13 7h8M3 17h8M7 13v8"/>',
+      "4": '<path d="M12 6C9 3 5 3 2 4v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-3-1-7-1-10 2Zm0 0v15M5 8h3M5 12h3M16 8h3M16 12h3"/>',
+      "5": '<path d="M9 3H4v6c4-2 5 0 5 2s-2 3-5 2v7h7c-1-4 1-5 3-5s3 2 2 5h5v-7c-4 1-5-1-5-3s2-3 5-2V3h-6c2 4 0 5-2 5s-3-2-2-5Z"/>',
+      "6": '<rect x="8" y="4" width="13" height="17" rx="3"/><path d="M5 18H4a2 2 0 0 1-2-2V5a3 3 0 0 1 3-3h10M14.5 9l3 3.5-3 3.5-3-3.5Z"/>',
+      "7": '<path d="M8 11V6a2 2 0 0 1 4 0v5-7a2 2 0 0 1 4 0v7-5a2 2 0 0 1 4 0v9c0 5-3 7-7 7-3 0-5-1-7-4l-3-4a2 2 0 0 1 3-3l2 2"/>'
+    };
+    return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (paths[key] || '') + '</svg>';
+  }
+
   function renderHome() {
     var scenes = window.SCENES.map(function (s) {
       var cat = catOf(s.cat);
-      return '<a class="card scene" href="#/cat/' + s.cat + '" style="border-top-color:' + cat.color + '">' +
-        '<h3>' + esc(cat.name) + '</h3>' +
-        '<p>活动需要：' + esc(s.name) + '</p>' +
-        '<p class="example">例：' + esc(s.example) + '</p></a>';
+      return '<a class="card scene tone-' + s.cat + '" href="#/cat/' + s.cat + '">' +
+        '<div class="scene-top"><span class="category-icon">' + categoryIcon(s.cat) + '</span>' +
+        '<span class="scene-count">' + gamesIn(s.cat).length + ' 个游戏</span></div>' +
+        '<h3>' + esc(cat.short) + '<span class="card-arrow" aria-hidden="true">↗</span></h3>' +
+        '<p class="example">' + esc(s.example) + '</p></a>';
     }).join("");
 
     var levels = LEVELS.map(function (l) {
-      var items = gamesAtLevel(l.level);
-      var preview = items.slice(0, 4).map(function (g) { return esc(g.title); }).join("、");
-      return '<a class="card level-card level-' + l.level + '" href="#/level/' + l.level + '">' +
-        '<div class="level-head"><span class="level-stars">' + stars(l.level) + '</span>' +
-        '<h3>' + esc(l.name) + '</h3></div>' +
-        '<p>' + esc(l.desc) + '</p>' +
-        '<p class="example">如：' + preview + ' 等</p>' +
-        '<div class="count">共 ' + items.length + ' 个游戏</div></a>';
+      return '<a class="level-card level-' + l.level + '" href="#/level/' + l.level + '">' +
+        '<div class="level-head"><span class="level-stars" aria-hidden="true">' + stars(l.level) + '</span>' +
+        '<h3>' + esc(l.name) + '</h3><span class="level-count">' + gamesAtLevel(l.level).length + ' 个</span></div>' +
+        '<p>' + esc(l.desc) + '</p></a>';
     }).join("");
 
     var todoCount = gamesIn("8").length;
-
     app.innerHTML =
       '<section class="hero">' +
-        '<h1 class="home-title">' + esc(window.SITE.title) + '</h1>' +
-        '<p>按活动需要或难度找到合适的游戏，每个游戏都附有简介、人数、时长、难度和原始资料。</p>' +
-        '<span class="notice">' + esc(window.SITE.notice) + '</span>' +
+        '<div class="hero-copy"><h1 class="home-title">手语小游戏手册</h1>' +
+        '<p class="hero-meta"><span><strong>' + window.GAMES.length + '</strong> 个游戏</span>' +
+          '<span><strong>' + window.SCENES.length + '</strong> 类活动</span>' +
+          '<a href="#/search">浏览全部 <span aria-hidden="true">↗</span></a></p></div>' +
+        '<div class="hero-art" aria-hidden="true"><img src="' + document.getElementById("brand-icon").src + '" alt="" width="176" height="176"></div>' +
       '</section>' +
-      '<h2 class="section-title">按活动需要选游戏</h2>' +
-      '<div class="grid">' + scenes + '</div>' +
-      '<h2 class="section-title">按难度选游戏</h2>' +
-      '<div class="grid">' + levels +
-        '<a class="card level-card level-0" href="#/level/0">' +
-          '<div class="level-head"><span class="level-stars">☆☆☆</span><h3>待定</h3></div>' +
-          '<p>难度尚未评估的游戏，多为 54–66 号待补充条目。</p>' +
-          '<div class="count">共 ' + gamesAtLevel(0).length + ' 个游戏</div></a>' +
-      '</div>' +
-      '<h2 class="section-title">待补充与反馈</h2>' +
-      '<div class="grid">' +
-        '<a class="card" href="#/todo"><h3>待补充的游戏</h3>' +
-          '<p>原始资料只留名称与线索，共 ' + todoCount + ' 条，欢迎补充规则。</p>' +
-          '<div class="count">查看列表</div></a>' +
-        '<a class="card" href="#/todo"><h3>意见反馈</h3>' +
-          '<p>发现规则有误、人数时长不合适，或想补充玩法，都可以在这里留言。</p>' +
-          '<div class="count">填写反馈</div></a>' +
+      '<div class="home-layout"><section aria-labelledby="scenes-title">' +
+        '<div class="section-heading"><h2 id="scenes-title">按活动需要</h2></div>' +
+        '<div class="scene-grid">' + scenes +
+          '<a class="card scene all-games" href="#/search"><div class="scene-top"><span class="category-icon" aria-hidden="true">⌕</span>' +
+          '<span class="scene-count">' + window.GAMES.length + ' 个游戏</span></div><h3>全部游戏<span class="card-arrow" aria-hidden="true">↗</span></h3>' +
+          '<p class="example">按关键词、分类与难度筛选</p></a>' +
+        '</div></section>' +
+        '<aside class="home-aside" aria-label="按难度与资料状态查找">' +
+          '<section class="difficulty-panel"><div class="section-heading"><h2>按难度选择</h2></div>' +
+          '<div class="level-list">' + levels +
+            '<a class="level-card level-0" href="#/level/0"><div class="level-head"><span class="level-stars" aria-hidden="true">☆☆☆</span>' +
+            '<h3>待定</h3><span class="level-count">' + gamesAtLevel(0).length + ' 个</span></div>' +
+            '<p>难度尚未评估，多为 54–66 号待补充条目。</p></a></div>' +
+          '<p class="level-note">人数、时长与难度为初步评估，带领前请结合规则确认。</p></section>' +
+          '<section class="contribute-panel"><h2>待补充与反馈</h2>' +
+            '<p>还有 ' + todoCount + ' 个游戏待补充规则。发现内容有误，或想分享玩法，欢迎告诉我们。</p>' +
+            '<a href="#/todo">补充规则或反馈 <span aria-hidden="true">↗</span></a></section>' +
+          '<details class="edition-note"><summary>资料收录说明</summary><p>' + esc(window.SITE.notice) + '</p></details>' +
+        '</aside>' +
       '</div>';
   }
 
@@ -170,9 +184,7 @@
     app.innerHTML =
       '<div class="crumb"><a href="#/">首页</a> / ' + esc(cat.name) + '</div>' +
       '<div class="page-head">' +
-        '<div class="cat-bar" style="background:' + cat.color + '"></div>' +
         '<h1 class="page-title">' + esc(cat.name) + '</h1>' +
-        '<p>' + esc(cat.intro) + '</p>' +
       '</div>' +
       '<div class="game-list">' + items + '</div>' +
       backButton("#/", "首页");
@@ -187,7 +199,6 @@
     app.innerHTML =
       '<div class="crumb"><a href="#/">首页</a> / 按难度：' + esc(lvl.name) + '</div>' +
       '<div class="page-head">' +
-        '<div class="cat-bar" style="background:var(--terra)"></div>' +
         '<h1 class="page-title">' + esc(lvl.name) + '游戏' + (lvl.level ? ' ' + stars(lvl.level) : '') + '</h1>' +
         '<p>' + esc(lvl.desc) + '</p>' +
       '</div>' +
@@ -212,7 +223,7 @@
 
     var pageBtn = g.page
       ? '<a class="btn" href="' + esc(g.page) + '">打开完整玩法页</a>'
-      : '<span class="btn disabled">完整玩法页：预留，待上线</span>';
+      : '';
 
     var guide = (window.GUIDES || {})[g.id];
     var guideHtml;
@@ -263,9 +274,7 @@
 
         '<h2 class="major-title">玩法讲解</h2>' + guideHtml + bankSection(g.id) +
 
-        '<h2 class="sec-title">完整页面</h2>' +
-        '<p>' + pageBtn + '</p>' +
-        '<p class="note">完整玩法页上线后，只需在数据中为本游戏填写 page 字段，此按钮即自动启用。</p>' +
+        (pageBtn ? '<h2 class="sec-title">完整页面</h2><p>' + pageBtn + '</p>' : '') +
 
         '<h2 class="sec-title">原始资料</h2>' + files +
 
@@ -381,7 +390,7 @@
   function renderTodo() {
     var todo = gamesIn("8").map(function (g) {
       return '<a class="game-item" href="#/game/' + g.id + '">' +
-        '<div class="game-no" style="background:#9C8C74">' + esc(g.id) + '</div>' +
+        '<div class="game-no tone-8">' + esc(g.id) + '</div>' +
         '<div class="game-body"><h3>' + esc(g.title) + statusTag(g.status) + '</h3>' +
         '<p>' + esc(g.summary) + '</p></div></a>';
     }).join("");
@@ -394,11 +403,8 @@
     }).join("");
 
     app.innerHTML =
-      '<div class="crumb"><a href="#/">首页</a> / 待补充与反馈</div>' +
       '<div class="page-head">' +
-        '<div class="cat-bar" style="background:#9C8C74"></div>' +
         '<h1 class="page-title">待补充与反馈</h1>' +
-        '<p>这里列出尚未补全规则的游戏，也可以提交意见，帮助我们完善手册。</p>' +
       '</div>' +
 
       '<h2 class="sec-title">一、待补充的游戏</h2>' +
@@ -422,7 +428,7 @@
       var f = e.target;
       var text = "游戏：" + f.game.value + "\n类型：" + f.type.value + "\n称呼：" + (f.name.value || "未填写") + "\n\n" + f.content.value;
       var email = window.SITE.feedbackEmail;
-      var subject = encodeURIComponent("手语小游戏手册反馈 · " + f.game.value);
+      var subject = encodeURIComponent(window.SITE.title + "反馈 · " + f.game.value);
       var body = encodeURIComponent(text);
       var mailBtn = email
         ? '<a class="btn" href="mailto:' + esc(email) + '?subject=' + subject + '&body=' + body + '">用邮件发送</a>'
@@ -495,9 +501,7 @@
     }).join("");
 
     app.innerHTML =
-      '<div class="crumb"><a href="#/">首页</a> / 搜索与筛选</div>' +
-      '<div class="page-head"><h1 class="page-title">搜索与筛选</h1>' +
-      '<p>可按游戏名、词语、玩法关键词搜索，也可以按分类、难度和状态筛选。</p></div>' +
+      '<div class="page-head"><h1 class="page-title">搜索与筛选</h1></div>' +
       '<div class="search-panel">' +
         '<input id="s-q" type="search" aria-label="搜索游戏关键词" placeholder="例如：数字、故事、拆弹、两人" value="' + esc(p.q || "") + '">' +
         '<div class="filters">' +
@@ -507,7 +511,7 @@
           '<button type="button" class="btn ghost" id="s-reset">清空条件</button>' +
         '</div>' +
       '</div>' +
-      '<p class="note" id="s-count"></p>' +
+      '<p class="note" id="s-count" role="status" aria-live="polite"></p>' +
       '<div class="game-list" id="s-results"></div>' +
       backButton("#/", "首页");
 
@@ -516,6 +520,7 @@
       var cat = document.getElementById("s-cat").value;
       var level = document.getElementById("s-level").value;
       var status = document.getElementById("s-status").value;
+      document.getElementById("header-search").elements.q.value = q;
       var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
 
       var results = window.GAMES.filter(function (g) {
@@ -578,9 +583,7 @@
     }).join("");
 
     app.innerHTML =
-      '<div class="crumb"><a href="#/">首页</a> / 资料下载</div>' +
-      '<div class="page-head"><h1 class="page-title">资料下载</h1>' +
-      '<p>以下文件均可下载。每个文件后标注了对应的游戏编号，同一文件可能对应多个游戏。</p></div>' +
+      '<div class="page-head"><h1 class="page-title">资料下载</h1></div>' +
       sections +
       backButton("#/", "首页");
   }
@@ -606,10 +609,21 @@
   function setTitle() {
     var h1 = app.querySelector("h1");
     document.title = (h1 ? h1.textContent + " · " : "") + window.SITE.title;
+    var section = location.hash.replace(/^#\/?/, "").split(/[/?]/)[0];
+    var active = section === "files" || section === "todo" ? "#/" + section :
+      (section ? "#/search" : "#/");
+    document.querySelectorAll(".top-nav a").forEach(function (link) {
+      if (link.getAttribute("href") === active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
   }
 
   document.getElementById("site-title").textContent = window.SITE.title;
-  document.getElementById("site-subtitle").textContent = window.SITE.subtitle + " · " + window.SITE.updated;
+  document.getElementById("site-subtitle").textContent = window.SITE.subtitle;
+  document.querySelector(".skip-link").addEventListener("click", function (e) {
+    e.preventDefault();
+    app.focus();
+  });
   document.getElementById("header-search").addEventListener("submit", function (e) {
     e.preventDefault();
     var q = this.q.value.trim();
@@ -622,7 +636,7 @@
     toTop.classList.toggle("show", window.scrollY > 400);
   });
   toTop.addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   });
 
   window.addEventListener("hashchange", function () {

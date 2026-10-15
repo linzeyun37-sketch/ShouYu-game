@@ -1,12 +1,16 @@
 // 手语游戏网站数据：来源为《手语分社小游戏玩法手册》（2026 年 10 月）
 // 资料路径相对于“网站”文件夹的上一级（即“手语游戏整理”）
 window.SITE = {
-  title: "手语小游戏手册",
-  subtitle: "手语分社 · 心创组资料汇总 · 2026 年 10 月",
+  title: "指间趣游",
+  subtitle: "手语分社 · 心创组 设计者：伍家阳 鸣谢：手语分社秘书处",
   notice: "目前已整理 01–53 号游戏及部分新增游戏的玩法讲解；其余待补录的游戏见「待补充与反馈」页，完整玩法页面日后上线。",
+  // 源码预览与 GitHub Pages 的资料在上一级；服务器构建时替换为 ./resources/。
+  resourceBase: "../",
+  // 单独下载 HTML 打开时，从正式站点取得资料。
+  remoteBase: "https://shouyulove.cn/signplay/resources/",
+  // 单独下载 HTML 打开时，从本仓库的 GitHub Pages 取得资料。
+  githubBase: "https://linzeyun37-sketch.github.io/ShouYu-game/",
   updated: "资料更新于 2026 年 10 月",
-  // 线上地址（资料仓库根目录）：只下载 HTML 文件打开时，资料链接改用这个地址
-  remoteBase: "https://linzeyun37-sketch.github.io/ShouYu-game/",
   // 在线题库（投稿、点赞）使用的 Firebase Realtime Database 地址；留空则题库只显示示例题目
   dbUrl: "",
   // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
