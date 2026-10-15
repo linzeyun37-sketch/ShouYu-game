@@ -133,7 +133,6 @@
         '<div class="scene-top"><span class="category-icon">' + categoryIcon(s.cat) + '</span>' +
         '<span class="scene-count">' + gamesIn(s.cat).length + ' 个游戏</span></div>' +
         '<h3>' + esc(cat.short) + '<span class="card-arrow" aria-hidden="true">↗</span></h3>' +
-        '<p class="scene-purpose">' + esc(s.name) + '</p>' +
         '<p class="example">' + esc(s.example) + '</p></a>';
     }).join("");
 
@@ -147,18 +146,18 @@
     var todoCount = gamesIn("8").length;
     app.innerHTML =
       '<section class="hero">' +
-        '<div class="hero-copy"><p class="eyebrow">指间趣游</p><h1 class="home-title">手语小游戏手册</h1>' +
+        '<div class="hero-copy"><h1 class="home-title">手语小游戏手册</h1>' +
         '<p class="hero-meta"><span><strong>' + window.GAMES.length + '</strong> 个游戏</span>' +
           '<span><strong>' + window.SCENES.length + '</strong> 类活动</span>' +
           '<a href="#/search">浏览全部 <span aria-hidden="true">↗</span></a></p></div>' +
         '<div class="hero-art" aria-hidden="true"><img src="' + document.getElementById("brand-icon").src + '" alt="" width="176" height="176"></div>' +
       '</section>' +
       '<div class="home-layout"><section aria-labelledby="scenes-title">' +
-        '<div class="section-heading"><h2 id="scenes-title">按活动需要</h2><span>找到适合这次小团的玩法</span></div>' +
+        '<div class="section-heading"><h2 id="scenes-title">按活动需要</h2></div>' +
         '<div class="scene-grid">' + scenes +
           '<a class="card scene all-games" href="#/search"><div class="scene-top"><span class="category-icon" aria-hidden="true">⌕</span>' +
           '<span class="scene-count">' + window.GAMES.length + ' 个游戏</span></div><h3>全部游戏<span class="card-arrow" aria-hidden="true">↗</span></h3>' +
-          '<p class="scene-purpose">按关键词、分类与难度筛选</p><p class="example">已有想玩的游戏？从这里找。</p></a>' +
+          '<p class="example">按关键词、分类与难度筛选</p></a>' +
         '</div></section>' +
         '<aside class="home-aside" aria-label="按难度与资料状态查找">' +
           '<section class="difficulty-panel"><div class="section-heading"><h2>按难度选择</h2></div>' +
@@ -167,7 +166,7 @@
             '<h3>待定</h3><span class="level-count">' + gamesAtLevel(0).length + ' 个</span></div>' +
             '<p>难度尚未评估，多为 54–66 号待补充条目。</p></a></div>' +
           '<p class="level-note">人数、时长与难度为初步评估，带领前请结合规则确认。</p></section>' +
-          '<section class="contribute-panel"><span class="mini-label">共同整理</span><h2>待补充与反馈</h2>' +
+          '<section class="contribute-panel"><h2>待补充与反馈</h2>' +
             '<p>还有 ' + todoCount + ' 个游戏待补充规则。发现内容有误，或想分享玩法，欢迎告诉我们。</p>' +
             '<a href="#/todo">补充规则或反馈 <span aria-hidden="true">↗</span></a></section>' +
           '<details class="edition-note"><summary>资料收录说明</summary><p>' + esc(window.SITE.notice) + '</p></details>' +
@@ -185,7 +184,6 @@
       '<div class="crumb"><a href="#/">首页</a> / ' + esc(cat.name) + '</div>' +
       '<div class="page-head">' +
         '<h1 class="page-title">' + esc(cat.name) + '</h1>' +
-        '<p>' + esc(cat.intro) + '</p>' +
       '</div>' +
       '<div class="game-list">' + items + '</div>' +
       backButton("#/", "首页");
@@ -518,7 +516,7 @@
   }
 
   document.getElementById("site-title").textContent = window.SITE.title;
-  document.getElementById("site-subtitle").textContent = window.SITE.subtitle + " · " + window.SITE.updated;
+  document.getElementById("site-subtitle").textContent = window.SITE.subtitle;
   document.querySelector(".skip-link").addEventListener("click", function (e) {
     e.preventDefault();
     app.focus();

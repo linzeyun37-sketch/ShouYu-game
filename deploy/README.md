@@ -18,7 +18,7 @@
 python3 deploy/build_release.py output/deployment/<新版本目录>
 ```
 
-构建不覆盖已有目录。`site/` 仅包含自带 CSS、JavaScript、Logo 的 `index.html`，以及游戏数据中实际引用的资料；`manifest.json` 记录文件大小和 SHA-256。当前清单为 47 个文件，其中 46 份游戏资料，共 10,173,622 字节。
+构建不覆盖已有目录。`site/` 仅包含自带 CSS、JavaScript、Logo 的 `index.html`，以及游戏数据中实际引用的资料；`manifest.json` 记录文件大小和 SHA-256。当前清单为 47 个文件，其中 46 份游戏资料，共 10,172,824 字节。
 
 源码预览及 GitHub Pages 保留上一级相对资料路径；服务器页面改用 `./resources/`。单独下载 HTML 后打开时，资料从正式站点加载。不要手工调整原始资料的目录与文件名，也不要把 Git、归档、审查记录或构建脚本放进公共目录。
 
@@ -31,6 +31,8 @@ python3 deploy/build_release.py output/deployment/<新版本目录>
 5. 从公网检查首页、搜索、资料下载和手机显示，并确认主站首页与 `/portfolio/` 都能打开正式地址。验证请求使用 `ShouYuLove-QA` 用户代理。
 
 2026-10-15 首次发布目录：`20261014T161917Z-signplay`。47 个公网文件均已按 SHA-256 核对，首页和手机显示已检查。配置与回滚记录位于服务器 `/var/backups/shouyulove-signplay/20261014T161917Z-signplay/`。
+
+2026-10-15 文案与字体更新：`20261015T104407Z-signplay`。去掉分类卡片副标题及类似重复提示，标题、正文与数字统一使用无衬线字体，页脚改为“手语分社 · 心创组 设计者：伍家阳 鸣谢：手语分社秘书处”。上一版本 `20261015T020134Z-signplay` 保留；本次回滚记录位于 `/var/backups/shouyulove-signplay/20261015T104407Z-signplay/`。
 
 ## 回滚
 
