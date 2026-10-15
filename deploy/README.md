@@ -18,21 +18,23 @@
 python3 deploy/build_release.py output/deployment/<新版本目录>
 ```
 
-构建不覆盖已有目录。`site/` 仅包含自带 CSS、JavaScript、Logo 的 `index.html`，以及游戏数据中实际引用的资料；`manifest.json` 记录文件大小和 SHA-256。当前清单为 47 个文件，其中 46 份游戏资料，共 10,172,824 字节。
+构建不覆盖已有目录。`site/` 仅包含自带 CSS、JavaScript、Logo 的 `index.html`，以及游戏数据中实际引用的资料；`manifest.json` 记录文件大小和 SHA-256。当前清单为 47 个文件，其中 46 份游戏资料，共 10,180,428 字节。
 
 源码预览及 GitHub Pages 保留上一级相对资料路径；服务器页面改用 `./resources/`。单独下载 HTML 后打开时，资料从正式站点加载。不要手工调整原始资料的目录与文件名，也不要把 Git、归档、审查记录或构建脚本放进公共目录。
 
 ## 发布与核验
 
-1. 核对当前公共链接、父级 Nginx 配置及仓库状态。用新版本名备份已有运行版本和配置。
+1. 核对当前公共链接、父级 Nginx 配置及仓库状态。用新版本名备份已有运行版本和配置。题库服务按 [题库部署说明](bank_api/README.md) 单独发布并验证回环接口，代码与数据库都不放入 `site/`。
 2. 将 `site/`、清单、`publish_release.py` 和 `nginx-signplay.conf` 上传到新的非公开暂存目录。
-3. 根据当时线上状态创建 `request.json`：填写唯一 `release`（格式为 UTC 时间加 `-signplay`）、`old_release`、`parent_sha256`、`manifest_sha256`、`snippet_sha256`。首次发布的 `old_release` 为 `null`；后续填写当前公共链接的真实目标。
-4. 在暂存目录执行 `sudo python3 publish_release.py`。脚本验证清单与旧配置，备份后切换链接，检查并重载 Nginx，再从本机 HTTP 校验全部文件；失败时恢复旧配置和链接。
+3. 根据当时线上状态创建 `request.json`：填写唯一 `release`（格式为 UTC 时间加 `-signplay`）、`old_release`、`parent_sha256`、`old_snippet_sha256`、`manifest_sha256`、`snippet_sha256`。首次发布的 `old_release` 为 `null`；后续填写当前公共链接的真实目标。
+4. 在暂存目录执行 `sudo python3 publish_release.py`。脚本验证清单与旧配置，备份后切换链接，检查并重载 Nginx，再从本机 HTTP 校验全部文件和三个题库接口；失败时恢复旧配置和链接。
 5. 从公网检查首页、搜索、资料下载和手机显示，并确认主站首页与 `/portfolio/` 都能打开正式地址。验证请求使用 `ShouYuLove-QA` 用户代理。
 
 2026-10-15 首次发布目录：`20261014T161917Z-signplay`。47 个公网文件均已按 SHA-256 核对，首页和手机显示已检查。配置与回滚记录位于服务器 `/var/backups/shouyulove-signplay/20261014T161917Z-signplay/`。
 
 2026-10-15 文案与字体更新：`20261015T104407Z-signplay`。去掉分类卡片副标题及类似重复提示，标题、正文与数字统一使用无衬线字体，页脚改为“手语分社 · 心创组 设计者：伍家阳 鸣谢：手语分社秘书处”。上一版本 `20261015T020134Z-signplay` 保留；本次回滚记录位于 `/var/backups/shouyulove-signplay/20261015T104407Z-signplay/`。
+
+2026-10-15 题库更新：静态版本 `20261015T153301Z-signplay`，题库服务版本 `20261015T152709Z-signplay`。同步 GitHub `c6d4d2f` 的三个游戏题库、投稿与点赞，以及“抢数字”和“闹钟炸弹”的规则调整；补上服务端示例题目校验、重复点赞并发处理和前端切换游戏的请求校验。题库常驻服务为 `signplay-bank.service`，数据库独立保存在 `/var/lib/signplay-bank/bank.sqlite`。上一静态版本 `20261015T104407Z-signplay` 保留，本次配置回滚记录位于 `/var/backups/shouyulove-signplay/20261015T153301Z-signplay/`。首次静态发布在 Nginx 重载期间遇到旧路由返回 404 并自动回滚；发布器增加接口就绪等待后重新发布通过，首次尝试的版本和日志继续保留。
 
 ## 回滚
 

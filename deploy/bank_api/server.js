@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // 题库服务：保存投稿与点赞，数据存放在本机 SQLite 文件中，不依赖任何外部服务。
-// 需要 Node.js 22.5 或以上（内置 node:sqlite）。
+// 需要支持直接加载 node:sqlite 的 Node.js（正式环境为 22.22.1）。
 //
 // 用法：
 //   node server.js --db /var/lib/signplay/bank.sqlite --port 8765
@@ -10,7 +10,7 @@
 // 接口（均以 /api 开头）：
 //   GET  /api/banks/:gid                    读取某游戏的全部题目
 //   POST /api/banks/:gid        {text}      投稿
-//   POST /api/banks/:gid/:key/like {text}   点赞（同一设备对同一题目只计一次）
+//   POST /api/banks/:gid/:key/like {}       点赞（同一访客对同一题目只计一次）
 
 const http = require("node:http");
 const fs = require("node:fs");
@@ -18,8 +18,9 @@ const path = require("node:path");
 const crypto = require("node:crypto");
 const { DatabaseSync } = require("node:sqlite");
 
-// 允许开放题库的游戏编号（与 网站/js/banks.js 保持一致）
-const ALLOWED_GIDS = new Set(["01", "02", "04"]);
+// 与网页共用示例题目，点赞请求不能改写题目文字。
+const BANKS = require("../../网站/js/banks.js");
+const ALLOWED_GIDS = new Set(Object.keys(BANKS));
 const MAX_TEXT = 40;
 const MAX_BODY = 4096;
 const SUBMIT_LIMIT = 5; // 每个访客每分钟最多投稿次数
@@ -118,7 +119,11 @@ function readJson(req) {
     req.on("end", () => {
       if (!chunks.length) return resolve({});
       try {
-        resolve(JSON.parse(Buffer.concat(chunks).toString("utf8")));
+        const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+          throw httpError(400, "请求格式不正确");
+        }
+        resolve(body);
       } catch (e) {
         reject(httpError(400, "请求格式不正确"));
       }
@@ -181,20 +186,27 @@ async function handleApi(req, res, pathname) {
   if (req.method === "POST" && parts.length === 5 && parts[4] === "like") {
     const key = parts[3];
     if (!/^[su][A-Za-z0-9]{1,24}$/.test(key)) throw httpError(400, "题目编号不正确");
+    await readJson(req);
     const voter = voterId(req);
-    if (stmt.hasVote.get(gid, key, voter)) {
-      const row = stmt.getItem.get(gid, key);
-      return json(res, 200, { likes: row ? row.likes : 0, already: true });
-    }
-    const body = await readJson(req);
     if (/^s\d+$/.test(key)) {
-      // 示例题目第一次被点赞时，才把题目文字写入数据库
-      stmt.insertSeed.run(gid, key, cleanText(body.text), Date.now());
+      const seed = BANKS[gid].seeds[Number(key.slice(1))];
+      if (!seed || key !== "s" + Number(key.slice(1))) throw httpError(404, "题目不存在");
+      stmt.insertSeed.run(gid, key, seed, Date.now());
     }
     const row = stmt.getItem.get(gid, key);
     if (!row) throw httpError(404, "题目不存在");
-    stmt.insertVote.run(gid, key, voter);
-    stmt.bumpLikes.run(gid, key);
+    if (stmt.hasVote.get(gid, key, voter)) {
+      return json(res, 200, { likes: row.likes, already: true });
+    }
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      stmt.insertVote.run(gid, key, voter);
+      stmt.bumpLikes.run(gid, key);
+      db.exec("COMMIT");
+    } catch (err) {
+      db.exec("ROLLBACK");
+      throw err;
+    }
     const updated = stmt.getItem.get(gid, key);
     return json(res, 200, { likes: updated.likes, already: false });
   }

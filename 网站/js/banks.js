@@ -1,6 +1,6 @@
 // 题库：按游戏编号列出示例题目。大家可以在网页上投稿、点赞（需要在线题库开通）。
 // seeds 为示例题目，不会因为投稿而改变。
-window.BANKS = {
+var BANKS = {
   "01": {
     title: "你划我猜题库",
     hint: "题目可以是成语、故事、人物、日常词，也可以是手语知识点。投稿时写清楚题目即可。",
@@ -37,3 +37,6 @@ window.BANKS = {
     ]
   }
 };
+
+if (typeof window !== "undefined") window.BANKS = BANKS;
+if (typeof module !== "undefined") module.exports = BANKS;

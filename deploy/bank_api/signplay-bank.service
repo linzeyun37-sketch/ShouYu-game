@@ -1,0 +1,25 @@
+[Unit]
+Description=SignPlay question bank
+After=network.target
+
+[Service]
+Type=simple
+User=signplay-bank
+Group=signplay-bank
+WorkingDirectory=/opt/signplay-bank/current
+ExecStart=/usr/bin/node /opt/signplay-bank/current/deploy/bank_api/server.js --db /var/lib/signplay-bank/bank.sqlite --port 8765 --trust-proxy
+EnvironmentFile=/etc/signplay-bank.env
+StateDirectory=signplay-bank
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=3
+Slice=system-shouyulove.slice
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/signplay-bank
+
+[Install]
+WantedBy=multi-user.target

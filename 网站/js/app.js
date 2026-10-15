@@ -314,7 +314,7 @@
     if (!b) return "";
     return '<h2 class="major-title">题库</h2>' +
       '<p class="bank-hint">' + esc(b.title) + '：' + esc(b.hint) + '</p>' +
-      '<div id="bank-box"><p class="note">加载中……</p></div>';
+      '<div id="bank-box" data-game="' + esc(gid) + '"><p class="note">加载中……</p></div>';
   }
 
   function loadBank(gid) {
@@ -329,7 +329,7 @@
 
   function renderBank(gid, b, data, online) {
     var box = document.getElementById("bank-box");
-    if (!box) return;
+    if (!box || box.getAttribute("data-game") !== gid) return;
     var items = b.seeds.map(function (t, i) {
       var rec = data["s" + i] || {};
       return { key: "s" + i, text: rec.text || t, likes: rec.likes || 0 };
@@ -348,7 +348,7 @@
     }).join("");
 
     var form = online
-      ? '<form class="bank-form" id="bank-form"><input type="text" id="bank-input" maxlength="40" placeholder="写下你想投稿的题目">' +
+      ? '<form class="bank-form" id="bank-form"><input type="text" id="bank-input" aria-label="投稿题目" maxlength="40" placeholder="写下你想投稿的题目">' +
         '<button type="submit" class="btn">投稿</button></form><p class="note" id="bank-msg"></p>'
       : '<p class="note">题库暂时无法连接，目前只显示示例题目。</p>';
 

@@ -43,6 +43,8 @@ def main():
     assert digest(parent) == request["parent_sha256"], "Parent configuration changed"
     assert digest(stage / "manifest.json") == request["manifest_sha256"]
     assert digest(stage / "nginx-signplay.conf") == request["snippet_sha256"]
+    if "old_snippet_sha256" in request:
+        assert (digest(snippet) if snippet.exists() else None) == request["old_snippet_sha256"], "SignPlay configuration changed"
     old_target = str(home.resolve()) if home.is_symlink() else None
     assert old_target == request.get("old_release")
     assert not home.exists() or home.is_symlink(), "Public path must be a release link"
@@ -76,17 +78,20 @@ def main():
         subprocess.run(["nginx", "-t"], check=True)
         subprocess.run(["systemctl", "reload", "nginx"], check=True)
         headers = {"Host": "shouyulove.cn", "User-Agent": "ShouYuLove-QA"}
-        # Old workers can briefly answer after reload; wait for the new page hash.
+        # Old workers see the new symlink before they load the new API route.
         for attempt in range(40):
             try:
                 with urlopen(Request("http://127.0.0.1/signplay/", headers=headers), timeout=10) as response:
                     if hashlib.sha256(response.read()).hexdigest() == manifest["files"]["index.html"]["sha256"]:
+                        for gid in ("01", "02", "04"):
+                            with urlopen(Request("http://127.0.0.1/signplay/api/banks/" + gid, headers=headers), timeout=10) as bank_response:
+                                assert bank_response.status == 200 and isinstance(json.load(bank_response), dict), "Bank API unavailable"
                         break
             except OSError:
                 pass
             time.sleep(0.25)
         else:
-            raise RuntimeError("The new signplay page did not become ready")
+            raise RuntimeError("The new signplay page and bank API did not become ready")
         for filename, record in manifest["files"].items():
             path = "/signplay/" + ("" if filename == "index.html" else quote(filename))
             with urlopen(Request("http://127.0.0.1" + path, headers=headers), timeout=30) as response:
