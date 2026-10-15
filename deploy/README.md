@@ -1,8 +1,14 @@
 # 指间趣游服务器发布
 
+## 2026-10-15 阿里云维护入口（流量已切换）
+
+维护 SSH 别名为 `shouyulove-aliyun`，固定连接 `root@101.37.209.227`（ECS `i-bp1hi3u3w5p3vg4owfl0`）。不用 `yanyuan-calendar` 作为本项目的发布入口。2026-10-15 已完成流量与可写服务切换，域名 @、www 已指向该 ECS；DNS、证书、最终页面验收和本站自动续期演练均已通过。
+
+公共链接仍为 `/var/www/shouyulove-signplay`，版本目录 `/var/www/shouyulove-signplay-releases`，Nginx 片段仍为 `/etc/nginx/snippets/signplay.conf`。构建和发布器路径不变；上传、生成 request 和执行发布器均以新机当前状态为准，不能复用旧机发布请求。
+
 正式地址：https://shouyulove.cn/signplay/ 。设计者：伍家阳。
 
-网站部署在 `ubuntu@49.232.193.175`，公共链接 `/var/www/shouyulove-signplay` 指向 `/var/www/shouyulove-signplay-releases/` 中的独立版本。Nginx 片段为 `/etc/nginx/snippets/signplay.conf`，由现有 shouyulove.cn 配置引用。
+迁移后通过 `shouyulove-aliyun` 维护网站，公共链接 `/var/www/shouyulove-signplay` 指向 `/var/www/shouyulove-signplay-releases/` 中的独立版本。Nginx 片段为 `/etc/nginx/snippets/signplay.conf`，由现有 shouyulove.cn 配置引用。
 
 ## 构建
 
