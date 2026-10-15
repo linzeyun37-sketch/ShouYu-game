@@ -8,11 +8,6 @@ window.SITE = {
   resourceBase: "../",
   // 单独下载 HTML 打开时，从正式站点取得资料。
   remoteBase: "https://shouyulove.cn/signplay/resources/",
-  // 单独下载 HTML 打开时，从本仓库的 GitHub Pages 取得资料。
-  githubBase: "https://linzeyun37-sketch.github.io/ShouYu-game/",
-  updated: "资料更新于 2026 年 10 月",
-  // 在线题库（投稿、点赞）使用的 Firebase Realtime Database 地址；留空则题库只显示示例题目
-  dbUrl: "",
   // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
   feedbackEmail: "2500011719@stu.pku.edu.cn"
 };
@@ -123,6 +118,7 @@ window.GAMES = [
   { id: "64", title: "不可或缺的句子", cat: "8", status: "待补充", summary: "纸团与爱团不团第七次材料中出现该标题，另有“猜句子”记录。", resources: ["八_待补充的游戏规则/纸团x爱团不团 第七次小团材料.pdf"] },
   { id: "65", title: "你画我猜猜歌名版", cat: "8", status: "待补充", summary: "2024 秋手随歌舞主持词提到该版本，歌名题库及独立计分未保留。", resources: ["八_待补充的游戏规则/手随歌舞主持词.pdf"] },
   { id: "66", title: "新闻联播和飞行棋", cat: "8", status: "待补充", summary: "哎哟团反馈提到实际玩过，但未留独立玩法，应向当时带领人补录。", resources: [] },
+
 
   // 新增（带领人口述补充，规则以现场确认为准）
   { id: "67", title: "闹钟炸弹", cat: "2", status: "复玩方案", summary: "主持人设定一个神秘时间的倒计时，手机在谁手上闹钟响了谁就输，每人提问后挑人传手机。", resources: [] }

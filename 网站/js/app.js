@@ -71,8 +71,7 @@
 
   // 网页在线打开时用相对路径；单独下载 HTML 到本地打开时，改用线上地址
   function fileHref(path) {
-    var isLocal = location.protocol === "file:";
-    var base = isLocal ? (window.SITE.githubBase || window.SITE.remoteBase || "../") : (window.SITE.resourceBase || "../");
+    var base = location.protocol === "file:" && window.SITE.remoteBase ? window.SITE.remoteBase : (window.SITE.resourceBase || "../");
     return base + encodeURI(path);
   }
 
@@ -272,7 +271,7 @@
         '</div>' +
         '<p class="note">人数、时长与难度为依据规则的初步评估，正式开团前请带领人确认。</p>' +
 
-        '<h2 class="major-title">玩法讲解</h2>' + guideHtml + bankSection(g.id) +
+        '<h2 class="major-title">玩法讲解</h2>' + guideHtml +
 
         (pageBtn ? '<h2 class="sec-title">完整页面</h2><p>' + pageBtn + '</p>' : '') +
 
@@ -283,108 +282,6 @@
         backButton(backHref, backLabel) +
         pager +
       '</article>';
-    loadBank(g.id);
-  }
-
-  // ===== 题库：示例题目 + 在线投稿与点赞（需要配置 SITE.dbUrl） =====
-  function dbUrl() {
-    return window.SITE.dbUrl || "";
-  }
-
-  function dbCall(path, method, body) {
-    var opts = { method: method || "GET", headers: { "Content-Type": "application/json" } };
-    if (body !== undefined) opts.body = JSON.stringify(body);
-    return fetch(dbUrl() + "/" + path + ".json", opts).then(function (r) {
-      if (!r.ok) throw new Error("数据库请求失败：" + r.status);
-      return r.json();
-    });
-  }
-
-  function hasVoted(gid, key) {
-    try { return localStorage.getItem("vote:" + gid + ":" + key) === "1"; } catch (e) { return false; }
-  }
-
-  function markVoted(gid, key) {
-    try { localStorage.setItem("vote:" + gid + ":" + key, "1"); } catch (e) {}
-  }
-
-  function bankSection(gid) {
-    var b = (window.BANKS || {})[gid];
-    if (!b) return "";
-    return '<h2 class="major-title">题库</h2>' +
-      '<p class="bank-hint">' + esc(b.title) + '：' + esc(b.hint) + '</p>' +
-      '<div id="bank-box"><p class="note">加载中……</p></div>';
-  }
-
-  function loadBank(gid) {
-    var b = (window.BANKS || {})[gid];
-    if (!b || !document.getElementById("bank-box")) return;
-    if (!dbUrl()) {
-      renderBank(gid, b, {}, false);
-      return;
-    }
-    dbCall("banks/" + gid, "GET").then(function (data) {
-      renderBank(gid, b, data || {}, true);
-    }).catch(function (e) {
-      document.getElementById("bank-box").innerHTML = '<p class="note">题库暂时无法加载：' + esc(e.message) + '</p>';
-    });
-  }
-
-  function renderBank(gid, b, data, online) {
-    var box = document.getElementById("bank-box");
-    if (!box) return;
-    var items = b.seeds.map(function (t, i) {
-      var rec = data["s" + i] || {};
-      return { key: "s" + i, text: t, likes: rec.likes || 0 };
-    });
-    Object.keys(data).filter(function (k) { return k.charAt(0) === "u" && data[k]; }).forEach(function (k) {
-      items.push({ key: k, text: data[k].text, likes: data[k].likes || 0 });
-    });
-    items.sort(function (x, y) { return y.likes - x.likes; });
-
-    var list = items.map(function (it) {
-      var voted = hasVoted(gid, it.key);
-      var disabled = !online || voted;
-      return '<li class="bank-item"><span class="bank-text">' + esc(it.text) + '</span>' +
-        '<button type="button" class="like-btn" data-key="' + esc(it.key) + '" data-text="' + esc(it.text) + '"' +
-        (disabled ? ' disabled' : '') + '>' + (voted ? '已点赞' : '点赞') + ' · ' + it.likes + '</button></li>';
-    }).join("");
-
-    var form = online
-      ? '<form class="bank-form" id="bank-form"><input type="text" id="bank-input" maxlength="40" placeholder="写下你想投稿的题目">' +
-        '<button type="submit" class="btn">投稿</button></form><p class="note" id="bank-msg"></p>'
-      : '<p class="note">在线题库尚未开通，目前只显示示例题目，暂不能投稿和点赞。</p>';
-
-    box.innerHTML = '<ul class="bank-list">' + list + '</ul>' + form;
-    if (!online) return;
-
-    box.querySelectorAll(".like-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        like(gid, btn.getAttribute("data-key"), btn.getAttribute("data-text"));
-      });
-    });
-    document.getElementById("bank-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      var text = document.getElementById("bank-input").value.trim();
-      var msg = document.getElementById("bank-msg");
-      if (!text) { msg.textContent = "请先写下题目。"; return; }
-      var key = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-      dbCall("banks/" + gid + "/" + key, "PUT", { text: text, likes: 0 }).then(function () {
-        loadBank(gid);
-      }).catch(function (err) { msg.textContent = err.message; });
-    });
-  }
-
-  function like(gid, key, text) {
-    if (hasVoted(gid, key)) return;
-    var path = "banks/" + gid + "/" + key;
-    dbCall(path, "GET").then(function (rec) {
-      var n = (rec && rec.likes) || 0;
-      return dbCall(path, "PUT", { text: (rec && rec.text) || text, likes: n + 1 });
-    }).then(function () {
-      markVoted(gid, key);
-      loadBank(gid);
-    }).catch(function () {});
   }
 
   function renderTodo() {
