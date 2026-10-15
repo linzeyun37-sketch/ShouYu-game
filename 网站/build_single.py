@@ -12,7 +12,7 @@ def build():
     if css_tag not in html:
         raise ValueError("Stylesheet tag not found in index.html")
     html = html.replace(css_tag, "<style>\n" + (root / "css/style.css").read_text(encoding="utf-8") + "\n</style>")
-    for name in ("data", "meta", "guides", "app"):
+    for name in ("data", "meta", "guides", "banks", "app"):
         tag = f'<script src="js/{name}.js"></script>'
         code = (root / f"js/{name}.js").read_text(encoding="utf-8")
         if tag not in html or "</script" in code.lower():

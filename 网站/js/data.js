@@ -8,8 +8,8 @@ window.SITE = {
   resourceBase: "../",
   // 单独下载 HTML 打开时，从正式站点取得资料。
   remoteBase: "https://shouyulove.cn/signplay/resources/",
-  // 在线题库（投稿、点赞）使用的 Firebase Realtime Database 地址；留空则题库只显示示例题目
-  dbUrl: "",
+  // 题库接口地址（本站服务，见 deploy/bank_api）；网页无法连接时题库只显示示例题目
+  apiBase: "api",
   // 反馈邮箱：填写后，反馈表单会生成发送到该邮箱的邮件；留空则只显示反馈内容供复制
   feedbackEmail: "2500011719@stu.pku.edu.cn"
 };

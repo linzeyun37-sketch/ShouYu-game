@@ -285,17 +285,19 @@
     loadBank(g.id);
   }
 
-  // ===== 题库：示例题目 + 在线投稿与点赞（需要配置 SITE.dbUrl） =====
-  function dbUrl() {
-    return window.SITE.dbUrl || "";
+  // ===== 题库：示例题目 + 投稿与点赞（由本站题库服务提供，见 deploy/bank_api） =====
+  function apiBase() {
+    return window.SITE.apiBase || "api";
   }
 
-  function dbCall(path, method, body) {
+  function apiCall(path, method, body) {
     var opts = { method: method || "GET", headers: { "Content-Type": "application/json" } };
     if (body !== undefined) opts.body = JSON.stringify(body);
-    return fetch(dbUrl() + "/" + path + ".json", opts).then(function (r) {
-      if (!r.ok) throw new Error("数据库请求失败：" + r.status);
-      return r.json();
+    return fetch(apiBase() + "/" + path, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        if (!r.ok) throw new Error(data.error || ("请求失败：" + r.status));
+        return data;
+      });
     });
   }
 
@@ -318,14 +320,10 @@
   function loadBank(gid) {
     var b = (window.BANKS || {})[gid];
     if (!b || !document.getElementById("bank-box")) return;
-    if (!dbUrl()) {
-      renderBank(gid, b, {}, false);
-      return;
-    }
-    dbCall("banks/" + gid, "GET").then(function (data) {
+    apiCall("banks/" + gid, "GET").then(function (data) {
       renderBank(gid, b, data || {}, true);
-    }).catch(function (e) {
-      document.getElementById("bank-box").innerHTML = '<p class="note">题库暂时无法加载：' + esc(e.message) + '</p>';
+    }).catch(function () {
+      renderBank(gid, b, {}, false);
     });
   }
 
@@ -334,7 +332,7 @@
     if (!box) return;
     var items = b.seeds.map(function (t, i) {
       var rec = data["s" + i] || {};
-      return { key: "s" + i, text: t, likes: rec.likes || 0 };
+      return { key: "s" + i, text: rec.text || t, likes: rec.likes || 0 };
     });
     Object.keys(data).filter(function (k) { return k.charAt(0) === "u" && data[k]; }).forEach(function (k) {
       items.push({ key: k, text: data[k].text, likes: data[k].likes || 0 });
@@ -352,7 +350,7 @@
     var form = online
       ? '<form class="bank-form" id="bank-form"><input type="text" id="bank-input" maxlength="40" placeholder="写下你想投稿的题目">' +
         '<button type="submit" class="btn">投稿</button></form><p class="note" id="bank-msg"></p>'
-      : '<p class="note">在线题库尚未开通，目前只显示示例题目，暂不能投稿和点赞。</p>';
+      : '<p class="note">题库暂时无法连接，目前只显示示例题目。</p>';
 
     box.innerHTML = '<ul class="bank-list">' + list + '</ul>' + form;
     if (!online) return;
@@ -367,8 +365,7 @@
       var text = document.getElementById("bank-input").value.trim();
       var msg = document.getElementById("bank-msg");
       if (!text) { msg.textContent = "请先写下题目。"; return; }
-      var key = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-      dbCall("banks/" + gid + "/" + key, "PUT", { text: text, likes: 0 }).then(function () {
+      apiCall("banks/" + gid, "POST", { text: text }).then(function () {
         loadBank(gid);
       }).catch(function (err) { msg.textContent = err.message; });
     });
@@ -376,16 +373,11 @@
 
   function like(gid, key, text) {
     if (hasVoted(gid, key)) return;
-    var path = "banks/" + gid + "/" + key;
-    dbCall(path, "GET").then(function (rec) {
-      var n = (rec && rec.likes) || 0;
-      return dbCall(path, "PUT", { text: (rec && rec.text) || text, likes: n + 1 });
-    }).then(function () {
+    apiCall("banks/" + gid + "/" + key + "/like", "POST", { text: text }).then(function () {
       markVoted(gid, key);
       loadBank(gid);
     }).catch(function () {});
   }
-
   function renderTodo() {
     var todo = gamesIn("8").map(function (g) {
       return '<a class="game-item" href="#/game/' + g.id + '">' +
