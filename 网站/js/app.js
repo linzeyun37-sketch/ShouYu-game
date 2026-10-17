@@ -99,8 +99,9 @@
     }).join("") + "</" + tag + ">";
   }
 
-  function backButton(href, label) {
-    return '<p class="back-row"><a class="btn ghost" href="' + href + '">← 返回 ' + esc(label) + '</a></p>';
+  function backButton(href, label, contextual) {
+    return '<p class="back-row"><a class="btn ghost" href="' + esc(href) + '"' +
+      (contextual ? ' data-return="true"' : '') + '>← 返回 ' + esc(label) + '</a></p>';
   }
 
   // 资料文件 → 对应的游戏编号
@@ -218,7 +219,6 @@
     var g = window.GAMES[idx];
     var cat = catOf(g.cat);
     var m = metaOf(g);
-    var idmap = fileIndex();
 
     var files = g.resources.length
       ? '<ul class="file-list">' + g.resources.map(function (p) {
@@ -255,6 +255,7 @@
 
     var backHref = cat ? "#/cat/" + cat.key : "#/todo";
     var backLabel = cat ? cat.name : "待补充与反馈";
+    var returnTo = (history.state || {}).signplayReturn;
 
     var prev = idx > 0 ? window.GAMES[idx - 1] : null;
     var next = idx < window.GAMES.length - 1 ? window.GAMES[idx + 1] : null;
@@ -285,7 +286,7 @@
 
         (related ? '<h2 class="sec-title">相关游戏</h2><ul class="related-list">' + related + '</ul>' : '') +
 
-        backButton(backHref, backLabel) +
+        backButton(returnTo ? returnTo.href : backHref, returnTo ? returnTo.label : backLabel, !!returnTo) +
         pager +
       '</article>';
     loadBank(g.id);
@@ -297,14 +298,21 @@
   }
 
   function apiCall(path, method, body) {
-    var opts = { method: method || "GET", headers: { "Content-Type": "application/json" } };
+    var controller = new AbortController();
+    var timeout = setTimeout(function () { controller.abort(); }, 10000);
+    var opts = { method: method || "GET", signal: controller.signal, cache: "no-store", headers: { "Content-Type": "application/json" } };
     if (body !== undefined) opts.body = JSON.stringify(body);
     return fetch(apiBase() + "/" + path, opts).then(function (r) {
-      return r.json().catch(function () { return {}; }).then(function (data) {
+      return r.json().catch(function () { throw new Error("题库返回异常，请稍后重试。"); }).then(function (data) {
+        if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("题库返回异常，请稍后重试。");
         if (!r.ok) throw new Error(data.error || ("请求失败：" + r.status));
         return data;
       });
-    });
+    }).catch(function (err) {
+      if (err.name === "AbortError") throw new Error("连接超时，请稍后重试。");
+      if (err instanceof TypeError) throw new Error("题库暂时无法连接，请稍后重试。");
+      throw err;
+    }).finally(function () { clearTimeout(timeout); });
   }
 
   function hasVoted(gid, key) {
@@ -325,64 +333,103 @@
 
   function loadBank(gid) {
     var b = (window.BANKS || {})[gid];
-    if (!b || !document.getElementById("bank-box")) return;
+    var box = document.getElementById("bank-box");
+    if (!b || !box) return;
+    if (location.protocol === "file:") return renderBank(gid, b, {}, false, box);
     apiCall("banks/" + gid, "GET").then(function (data) {
-      renderBank(gid, b, data || {}, true);
+      renderBank(gid, b, data, true, box);
     }).catch(function () {
-      renderBank(gid, b, {}, false);
+      renderBank(gid, b, {}, false, box);
     });
   }
 
-  function renderBank(gid, b, data, online) {
-    var box = document.getElementById("bank-box");
-    if (!box || box.getAttribute("data-game") !== gid) return;
+  function bankItem(gid, it, online) {
+    var voted = hasVoted(gid, it.key);
+    var likes = Math.max(0, Number(it.likes) || 0);
+    return '<li class="bank-item" data-likes="' + likes + '"><span class="bank-text">' + esc(it.text) + '</span>' +
+      '<button type="button" class="like-btn" data-key="' + esc(it.key) + '"' +
+      (!online || voted ? ' disabled' : '') + '>' + (voted ? '已点赞' : '点赞') + ' · ' + likes + '</button></li>';
+  }
+
+  function renderBank(gid, b, data, online, box) {
+    // 只更新发起请求时的节点，避免离开后返回同一游戏时旧请求覆盖新页面。
+    if (!box.isConnected) return;
     var items = b.seeds.map(function (t, i) {
       var rec = data["s" + i] || {};
-      return { key: "s" + i, text: rec.text || t, likes: rec.likes || 0 };
+      return { key: "s" + i, text: t, likes: rec.likes || 0 };
     });
     Object.keys(data).filter(function (k) { return k.charAt(0) === "u" && data[k]; }).forEach(function (k) {
       items.push({ key: k, text: data[k].text, likes: data[k].likes || 0 });
     });
     items.sort(function (x, y) { return y.likes - x.likes; });
 
-    var list = items.map(function (it) {
-      var voted = hasVoted(gid, it.key);
-      var disabled = !online || voted;
-      return '<li class="bank-item"><span class="bank-text">' + esc(it.text) + '</span>' +
-        '<button type="button" class="like-btn" data-key="' + esc(it.key) + '" data-text="' + esc(it.text) + '"' +
-        (disabled ? ' disabled' : '') + '>' + (voted ? '已点赞' : '点赞') + ' · ' + it.likes + '</button></li>';
-    }).join("");
+    var list = items.map(function (it) { return bankItem(gid, it, online); }).join("");
 
     var form = online
       ? '<form class="bank-form" id="bank-form"><input type="text" id="bank-input" aria-label="投稿题目" maxlength="40" placeholder="写下你想投稿的题目">' +
-        '<button type="submit" class="btn">投稿</button></form><p class="note" id="bank-msg"></p>'
-      : '<p class="note">题库暂时无法连接，目前只显示示例题目。</p>';
+        '<button type="submit" class="btn">投稿</button></form><p class="note" id="bank-msg" role="status" aria-live="polite"></p>'
+      : '<p class="note">题库暂时无法连接，目前只显示示例题目。</p>' +
+        (location.protocol !== "file:" ? '<button type="button" class="btn ghost" id="bank-retry">重新连接</button>' : '');
 
     box.innerHTML = '<ul class="bank-list">' + list + '</ul>' + form;
-    if (!online) return;
+    if (!online) {
+      var retry = box.querySelector("#bank-retry");
+      if (retry) retry.addEventListener("click", function () {
+        retry.disabled = true;
+        retry.textContent = "连接中……";
+        loadBank(gid);
+      });
+      return;
+    }
 
-    box.querySelectorAll(".like-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        like(gid, btn.getAttribute("data-key"), btn.getAttribute("data-text"));
+    var bankList = box.querySelector(".bank-list");
+    var msg = box.querySelector("#bank-msg");
+    bankList.addEventListener("click", function (e) {
+      var btn = e.target.closest(".like-btn");
+      if (!btn || btn.disabled) return;
+      var key = btn.getAttribute("data-key");
+      var label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "点赞中……";
+      msg.textContent = "";
+      apiCall("banks/" + gid + "/" + key + "/like", "POST", {}).then(function (data) {
+        markVoted(gid, key);
+        if (!box.isConnected) return;
+        btn.textContent = "已点赞 · " + data.likes;
+        btn.closest("li").dataset.likes = data.likes;
+        Array.from(bankList.children).sort(function (a, b) {
+          return Number(b.dataset.likes) - Number(a.dataset.likes);
+        }).forEach(function (item) { bankList.appendChild(item); });
+      }).catch(function (err) {
+        if (!box.isConnected) return;
+        btn.disabled = false;
+        btn.textContent = label;
+        msg.textContent = err.message;
       });
     });
-    document.getElementById("bank-form").addEventListener("submit", function (e) {
+    var bankForm = box.querySelector("#bank-form");
+    var input = box.querySelector("#bank-input");
+    var submit = bankForm.querySelector("button");
+    bankForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      var text = document.getElementById("bank-input").value.trim();
-      var msg = document.getElementById("bank-msg");
+      if (submit.disabled) return;
+      var text = input.value.trim();
       if (!text) { msg.textContent = "请先写下题目。"; return; }
-      apiCall("banks/" + gid, "POST", { text: text }).then(function () {
-        loadBank(gid);
-      }).catch(function (err) { msg.textContent = err.message; });
+      submit.disabled = true;
+      input.readOnly = true;
+      msg.textContent = "投稿中……";
+      apiCall("banks/" + gid, "POST", { text: text }).then(function (data) {
+        if (!box.isConnected) return;
+        bankList.insertAdjacentHTML("beforeend", bankItem(gid, data, true));
+        input.value = "";
+        msg.textContent = "投稿成功。";
+      }).catch(function (err) {
+        if (box.isConnected) msg.textContent = err.message;
+      }).finally(function () {
+        submit.disabled = false;
+        input.readOnly = false;
+      });
     });
-  }
-
-  function like(gid, key, text) {
-    if (hasVoted(gid, key)) return;
-    apiCall("banks/" + gid + "/" + key + "/like", "POST", { text: text }).then(function () {
-      markVoted(gid, key);
-      loadBank(gid);
-    }).catch(function () {});
   }
   function renderTodo() {
     var todo = gamesIn("8").map(function (g) {
@@ -413,17 +460,25 @@
         '<label>反馈类型<select name="type">' +
           '<option>补充规则</option><option>修正内容</option><option>人数、时长或难度</option><option>其他建议</option>' +
         '</select></label>' +
-        '<label>反馈内容<textarea name="content" rows="5" placeholder="请写下你的意见或补充的规则"></textarea></label>' +
+        '<label>反馈内容<textarea name="content" rows="5" required placeholder="请写下你的意见或补充的规则"></textarea></label>' +
         '<label>您的称呼（可不填）<input name="name" type="text"></label>' +
         '<div class="form-actions"><button type="submit" class="btn">生成反馈</button></div>' +
       '</form>' +
       '<div id="feedback-result"></div>' +
       backButton("#/", "首页");
 
-    document.getElementById("feedback-form").addEventListener("submit", function (e) {
+    var feedbackForm = document.getElementById("feedback-form");
+    feedbackForm.elements.content.addEventListener("input", function () { this.setCustomValidity(""); });
+    feedbackForm.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = e.target;
-      var text = "游戏：" + f.game.value + "\n类型：" + f.type.value + "\n称呼：" + (f.name.value || "未填写") + "\n\n" + f.content.value;
+      var content = f.elements.content;
+      if (!content.value.trim()) {
+        content.setCustomValidity("请写下反馈内容。");
+        content.reportValidity();
+        return;
+      }
+      var text = "游戏：" + f.elements.game.value + "\n类型：" + f.elements.type.value + "\n称呼：" + (f.elements.name.value.trim() || "未填写") + "\n\n" + content.value.trim();
       var email = window.SITE.feedbackEmail;
       var subject = encodeURIComponent(window.SITE.title + "反馈 · " + f.game.value);
       var body = encodeURIComponent(text);
@@ -432,14 +487,16 @@
         : '<span class="note">尚未设置接收邮箱，请复制下方内容发送给负责人。</span>';
       document.getElementById("feedback-result").innerHTML =
         '<div class="feedback-result"><h3 class="sub-title">反馈内容</h3>' +
-        '<textarea readonly rows="7" id="feedback-text">' + esc(text) + '</textarea>' +
+        '<textarea readonly rows="7" id="feedback-text" aria-label="生成的反馈内容">' + esc(text) + '</textarea>' +
+        '<p class="note">请用邮件发送，或复制给负责人。</p>' +
         '<p class="form-actions">' + mailBtn + ' <button type="button" class="btn ghost" id="copy-btn">复制内容</button>' +
-        ' <button type="button" class="btn ghost" id="refill-btn">重新填写</button></p></div>';
+        ' <button type="button" class="btn ghost" id="refill-btn">继续修改</button></p></div>';
       f.style.display = "none";
+      document.getElementById("feedback-text").focus();
       document.getElementById("refill-btn").addEventListener("click", function () {
         document.getElementById("feedback-result").innerHTML = "";
-        f.reset();
         f.style.display = "";
+        content.focus();
       });
       document.getElementById("copy-btn").addEventListener("click", function () {
         var btn = this;
@@ -462,11 +519,7 @@
 
   function parseQuery(qs) {
     var out = {};
-    (qs || "").split("&").forEach(function (pair) {
-      if (!pair) return;
-      var kv = pair.split("=");
-      out[decodeURIComponent(kv[0])] = decodeURIComponent((kv[1] || "").replace(/\+/g, " "));
-    });
+    new URLSearchParams(qs || "").forEach(function (value, key) { out[key] = value; });
     return out;
   }
 
@@ -539,7 +592,7 @@
       if (level !== "") qs.push("level=" + level);
       if (status) qs.push("status=" + encodeURIComponent(status));
       try {
-        history.replaceState(null, "", "#/search" + (qs.length ? "?" + qs.join("&") : ""));
+        history.replaceState(history.state, "", "#/search" + (qs.length ? "?" + qs.join("&") : ""));
       } catch (err) {
         // 本地 file:// 打开时浏览器可能禁止修改地址，此时忽略即可
       }
@@ -589,15 +642,15 @@
 
   function route() {
     var hash = location.hash.replace(/^#\/?/, "");
-    var parts = hash.split("/");
     if (!hash) return renderHome();
     var search = hash.match(/^search(?:\?(.*))?$/);
     if (search) return renderSearch(search[1] || "");
-    if (parts[0] === "cat" && parts[1]) return renderCategory(parts[1]);
-    if (parts[0] === "level" && parts[1]) return renderLevel(parts[1]);
-    if (parts[0] === "game" && parts[1]) return renderGame(parts[1]);
-    if (parts[0] === "todo") return renderTodo();
-    if (parts[0] === "files") return renderFiles();
+    var detail = hash.match(/^(cat|level|game)\/([^/?]+)$/);
+    if (detail && detail[1] === "cat") return renderCategory(detail[2]);
+    if (detail && detail[1] === "level") return renderLevel(detail[2]);
+    if (detail && detail[1] === "game") return renderGame(detail[2]);
+    if (hash === "todo") return renderTodo();
+    if (hash === "files") return renderFiles();
     renderNotFound();
   }
 
@@ -613,6 +666,54 @@
     });
   }
 
+  function renderRoute() {
+    route();
+    setTitle();
+    var state = history.state || {};
+    var focus = Array.from(app.querySelectorAll(".game-item")).filter(function (link) {
+      return link.getAttribute("href") === state.signplayFocus;
+    })[0];
+    (focus || app).focus({ preventScroll: true });
+    window.scrollTo(0, state.signplayScroll || 0);
+  }
+
+  function navigate(href, state) {
+    try {
+      history.pushState(state, "", href);
+    } catch (err) {
+      location.hash = href;
+      return;
+    }
+    renderRoute();
+  }
+
+  // 详情的返回入口保留原来的分类、筛选条件和阅读位置；直接打开详情仍返回所属分类。
+  app.addEventListener("click", function (e) {
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    var link = e.target.closest("a");
+    if (!link) return;
+    var returnTo = (history.state || {}).signplayReturn;
+    if (link.hasAttribute("data-return") && returnTo) {
+      e.preventDefault();
+      navigate(returnTo.href, { signplayScroll: returnTo.scroll, signplayFocus: returnTo.focus });
+      return;
+    }
+    var href = link.getAttribute("href") || "";
+    if (!/^#\/game\/[^/?]+$/.test(href)) return;
+    if (link.closest(".game-list")) {
+      returnTo = {
+        href: location.hash,
+        label: location.hash.indexOf("#/search") === 0 ? "搜索结果" : app.querySelector("h1").textContent,
+        scroll: window.scrollY,
+        focus: href
+      };
+      try { history.replaceState({ signplayScroll: returnTo.scroll, signplayFocus: href }, ""); } catch (err) {}
+    }
+    if (!returnTo) return;
+    e.preventDefault();
+    navigate(href, { signplayReturn: returnTo });
+  });
+
   document.getElementById("site-title").textContent = window.SITE.title;
   document.getElementById("site-subtitle").textContent = window.SITE.subtitle;
   document.querySelector(".skip-link").addEventListener("click", function (e) {
@@ -623,7 +724,7 @@
     e.preventDefault();
     var q = this.q.value.trim();
     var target = "#/search" + (q ? "?q=" + encodeURIComponent(q) : "");
-    if (location.hash === target) { route(); setTitle(); } else { location.hash = target; }
+    if (location.hash === target) { renderRoute(); window.scrollTo(0, 0); } else { location.hash = target; }
   });
 
   var toTop = document.getElementById("to-top");
@@ -634,11 +735,7 @@
     window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   });
 
-  window.addEventListener("hashchange", function () {
-    route();
-    setTitle();
-    window.scrollTo(0, 0);
-  });
+  window.addEventListener("hashchange", renderRoute);
   route();
   setTitle();
 })();
