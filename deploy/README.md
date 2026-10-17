@@ -40,6 +40,8 @@ python3 deploy/build_release.py output/deployment/<新版本目录>
 
 2026-10-17 阅读字号修订：`20261017T022045Z-signplay`。标题改为端正的加粗圆体，正文为桌面 20px / 手机 19px，资料名称为 22px / 20px，资料说明为 17px，数量与状态标签最小 16px。当前发布包仅内嵌圆体；旧装饰字体资产和上一版本 `20261017T021302Z-signplay` 保留。本次配置备份位于 `/var/backups/shouyulove-signplay/20261017T022045Z-signplay/`。
 
+2026-10-17 字号回调：`20261017T022549Z-signplay`。保留端正圆体，正文统一为 18px，资料名称为桌面 20px / 手机 19px，资料说明为 16px，标题与控件字号同步缩小一档。上一静态版本 `20261017T022045Z-signplay` 保留，本次配置备份位于 `/var/backups/shouyulove-signplay/20261017T022549Z-signplay/`。
+
 ## 回滚
 
 保留所有历史版本。先读取对应备份中的 `previous.json`、`parent.conf` 和可选 `snippet.conf`，再恢复父级配置、独立片段及公共链接。首次发布前没有本站链接和片段；回滚首版时只撤下这两个本次创建的入口。恢复后运行 `nginx -t` 并重载 Nginx，核验主站与其他子站。
