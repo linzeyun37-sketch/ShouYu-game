@@ -4,6 +4,8 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import shutil
+import subprocess
 from urllib.request import Request, urlopen
 
 from fontTools import subset
@@ -12,7 +14,7 @@ from fontTools.ttLib import TTFont
 
 def build(source_dir):
     root = Path(__file__).resolve().parent
-    assets = root / "assets/type-v1"
+    assets = root / "assets/type-v2"
     text = "".join(path.read_text() for path in [root / "index.html", *sorted((root / "js").glob("*.js"))])
     text += "".join(chr(n) for n in range(32, 127))
     codepoints = set(map(ord, text))
@@ -20,10 +22,17 @@ def build(source_dir):
     report = []
     for source in json.loads((assets / "sources.json").read_text()):
         key = source["key"]
-        cached = source_dir / (key + ".ttf")
+        cached = source_dir / source["path"]
         if not cached.exists():
-            with urlopen(Request(source["source_url"], headers={"User-Agent": "SignPlay-font-build"}), timeout=60) as response:
-                cached.write_bytes(response.read())
+            archive = source_dir / source["archive"]
+            if not archive.exists():
+                with urlopen(Request(source["source_url"], headers={"User-Agent": "SignPlay-font-build"}), timeout=60) as response:
+                    archive.write_bytes(response.read())
+            if hashlib.sha256(archive.read_bytes()).hexdigest() != source["archive_sha256"]:
+                raise ValueError("Font archive checksum mismatch: " + key)
+            # macOS tar and bsdtar can extract the upstream 7z package.
+            extractor = shutil.which("bsdtar") or shutil.which("tar")
+            subprocess.run([extractor, "-xf", str(archive), "-C", str(source_dir), source["path"]], check=True)
         if hashlib.sha256(cached.read_bytes()).hexdigest() != source["sha256"]:
             raise ValueError("Font source checksum mismatch: " + key)
         font = TTFont(cached)
@@ -36,8 +45,8 @@ def build(source_dir):
         sub.populate(unicodes=codepoints & available)
         sub.subset(font)
         family = "SignPlay " + key.title()
-        names = {1: family, 2: "Regular", 3: family + " 1.0", 4: family,
-                 6: "SignPlay" + key.title(), 16: family, 17: "Regular", 18: family}
+        names = {1: family, 3: family + " " + source["release"], 4: family,
+                 6: "SignPlay" + key.title(), 16: family, 18: family}
         for record in font["name"].names:
             if record.nameID in names:
                 record.string = names[record.nameID].encode(record.getEncoding())

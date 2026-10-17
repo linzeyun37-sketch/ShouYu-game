@@ -1,0 +1,30 @@
+[
+  {
+    "key": "resource",
+    "repo": "CyanoHao/Resource-Han-Rounded",
+    "release": "v1.910",
+    "path": "ResourceHanRoundedCN-VF.otf",
+    "archive": "RHR-CFF2-CN-1.910.7z",
+    "source_url": "https://github.com/CyanoHao/Resource-Han-Rounded/releases/download/v1.910/RHR-CFF2-CN-1.910.7z",
+    "license_url": "https://raw.githubusercontent.com/CyanoHao/Resource-Han-Rounded/be90fee7a031c1297da5a260ccfb91756088d51c/OFL-License.txt",
+    "license_revision": "be90fee7a031c1297da5a260ccfb91756088d51c",
+    "sha256": "ee3f276c9f9ee77c726d4e9c88350a3de73fb297633c54d510971ee636dceb1e",
+    "archive_sha256": "4ad7b141535a1f11831287b0a6f71ddcec8daa92dc1d82c59892068f8ae5df09",
+    "weight": [
+      200,
+      900
+    ],
+    "axes": {
+      "wght": [
+        200,
+        200,
+        900
+      ],
+      "ROND": [
+        0,
+        100,
+        100
+      ]
+    }
+  }
+]

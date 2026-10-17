@@ -156,10 +156,7 @@
     var todoCount = gamesIn("8").length;
     app.innerHTML =
       '<section class="hero">' +
-        '<div class="hero-copy"><h1 class="home-title">手语小游戏手册</h1>' +
-        '<p class="hero-meta"><span><strong>' + window.GAMES.length + '</strong> 个游戏</span>' +
-          '<span><strong>' + window.SCENES.length + '</strong> 类活动</span>' +
-          '<a href="#/search">浏览全部 <span aria-hidden="true">↗</span></a></p></div>' +
+        '<div class="hero-copy"><h1 class="home-title">手语小游戏手册</h1></div>' +
         '<div class="hero-art" aria-hidden="true"><img src="' + document.getElementById("brand-icon").src + '" alt="" width="176" height="176"></div>' +
       '</section>' +
       '<div class="home-layout"><section aria-labelledby="scenes-title">' +
@@ -169,7 +166,7 @@
           '<span class="scene-count">' + window.GAMES.length + ' 个游戏</span></div><h3>全部游戏<span class="card-arrow" aria-hidden="true">↗</span></h3>' +
           '<p class="example">按关键词、分类与难度筛选</p></a>' +
         '</div></section>' +
-        '<aside class="home-aside" aria-label="按难度与资料状态查找">' +
+        '<div class="home-followup">' +
           '<section class="difficulty-panel"><div class="section-heading"><h2>按难度选择</h2></div>' +
           '<div class="level-list">' + levels +
             '<a class="level-card level-0" href="#/level/0"><div class="level-head"><span class="level-stars" aria-hidden="true">☆☆☆</span>' +
@@ -180,7 +177,7 @@
             '<p>还有 ' + todoCount + ' 个游戏待补充规则。发现内容有误，或想分享玩法，欢迎告诉我们。</p>' +
             '<a href="#/todo">补充规则或反馈 <span aria-hidden="true">↗</span></a></section>' +
           '<details class="edition-note"><summary>资料收录说明</summary><p>' + esc(window.SITE.notice) + '</p></details>' +
-        '</aside>' +
+        '</div>' +
       '</div>';
   }
 
