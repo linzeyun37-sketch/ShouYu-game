@@ -79,6 +79,16 @@
     return path.split("/").pop();
   }
 
+  function fileEntry(path, ids) {
+    var format = path.split(".").pop().toLowerCase();
+    var label = { doc: "DOC", docx: "DOC", pdf: "PDF", pptx: "PPT" }[format] || "FILE";
+    return '<li><span class="file-type file-type-' + format + '" aria-hidden="true">' + label + '</span>' +
+      '<div class="file-copy"><a class="file-name" href="' + fileHref(path) + '">' + esc(fileName(path)) + '</a>' +
+      (ids ? '<span class="file-ids">对应游戏：' + esc(ids) + '</span>' : '') + '</div>' +
+      '<a class="dl" href="' + fileHref(path) + '" download aria-label="下载 ' + esc(fileName(path)) + '">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>下载</a></li>';
+  }
+
   function statusTag(status) {
     return '<span class="status ' + STATUS_CLASS[status] + '">' + esc(status) + "</span>";
   }
@@ -215,8 +225,7 @@
 
     var files = g.resources.length
       ? '<ul class="file-list">' + g.resources.map(function (p) {
-          return '<li><a class="dl" href="' + fileHref(p) + '" download aria-label="下载 ' + esc(fileName(p)) + '">下载</a>' +
-            '<a href="' + fileHref(p) + '">' + esc(fileName(p)) + '</a></li>';
+          return fileEntry(p);
         }).join("") + '</ul>'
       : '<p class="empty">暂未找到对应的原始文件，待补充。</p>';
 
@@ -565,12 +574,10 @@
       var body = files.length
         ? '<ul class="file-list">' + files.map(function (p) {
             var ids = (idmap[p] || []).join("、");
-            return '<li><a class="dl" href="' + fileHref(p) + '" download aria-label="下载 ' + esc(fileName(p)) + '">下载</a>' +
-              '<a href="' + fileHref(p) + '">' + esc(fileName(p)) + '</a>' +
-              '<span class="file-ids">对应游戏：' + esc(ids) + '</span></li>';
+            return fileEntry(p, ids);
           }).join("") + '</ul>'
         : '<p class="empty">暂无文件</p>';
-      return '<h2 class="sec-title">' + esc(c.name) + '</h2>' + body;
+      return '<section class="files-section"><h2 class="sec-title">' + esc(c.name) + '</h2>' + body + '</section>';
     }).join("");
 
     app.innerHTML =

@@ -18,7 +18,7 @@
 python3 deploy/build_release.py output/deployment/<新版本目录>
 ```
 
-构建不覆盖已有目录。`site/` 仅包含自带 CSS、JavaScript、Logo 的 `index.html`，以及游戏数据中实际引用的资料；`manifest.json` 记录文件大小和 SHA-256。当前清单为 47 个文件，其中 46 份游戏资料，共 10,180,428 字节。
+构建不覆盖已有目录。`site/` 仅包含自带 CSS、JavaScript、Logo 与字体的 `index.html`，以及游戏数据中实际引用的资料；`manifest.json` 记录文件大小和 SHA-256。当前清单为 47 个文件，其中 46 份游戏资料，共 10,594,150 字节。字体许可证已包含在内嵌字体的元数据中，源字体和构建缓存不进入公共目录。
 
 源码预览及 GitHub Pages 保留上一级相对资料路径；服务器页面改用 `./resources/`。单独下载 HTML 后打开时，资料从正式站点加载。不要手工调整原始资料的目录与文件名，也不要把 Git、归档、审查记录或构建脚本放进公共目录。
 
@@ -35,6 +35,8 @@ python3 deploy/build_release.py output/deployment/<新版本目录>
 2026-10-15 文案与字体更新：`20261015T104407Z-signplay`。去掉分类卡片副标题及类似重复提示，标题、正文与数字统一使用无衬线字体，页脚改为“手语分社 · 心创组 设计者：伍家阳 鸣谢：手语分社秘书处”。上一版本 `20261015T020134Z-signplay` 保留；本次回滚记录位于 `/var/backups/shouyulove-signplay/20261015T104407Z-signplay/`。
 
 2026-10-15 题库更新：静态版本 `20261015T153301Z-signplay`，题库服务版本 `20261015T152709Z-signplay`。同步 GitHub `c6d4d2f` 的三个游戏题库、投稿与点赞，以及“抢数字”和“闹钟炸弹”的规则调整；补上服务端示例题目校验、重复点赞并发处理和前端切换游戏的请求校验。题库常驻服务为 `signplay-bank.service`，数据库独立保存在 `/var/lib/signplay-bank/bank.sqlite`。上一静态版本 `20261015T104407Z-signplay` 保留，本次配置回滚记录位于 `/var/backups/shouyulove-signplay/20261015T153301Z-signplay/`。首次静态发布在 Nginx 重载期间遇到旧路由返回 404 并自动回滚；发布器增加接口就绪等待后重新发布通过，首次尝试的版本和日志继续保留。
+
+2026-10-17 字体与界面更新：`20261017T021302Z-signplay`。内嵌圆体正文和游戏标题字体，增大正文、文件名与控件字号；资料页桌面双列、手机单列，下载按钮及筛选菜单同步调整。上一静态版本 `20261015T153301Z-signplay` 保留，本次配置回滚记录位于 `/var/backups/shouyulove-signplay/20261017T021302Z-signplay/`。本次只发布静态页面，题库服务代码与数据库沿用原版本。
 
 ## 回滚
 

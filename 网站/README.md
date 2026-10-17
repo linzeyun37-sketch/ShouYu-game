@@ -38,7 +38,7 @@
 GitHub Pages 源码版：https://linzeyun37-sketch.github.io/ShouYu-game/网站/ShouYu-game.html
 单独下载 `ShouYu-game.html` 到电脑或手机上打开时，资料下载需要联网（链接会指向线上的资料文件）。
 
-修改内容后，在“网站”文件夹中运行 `python3 build_single.py`，重新生成 `ShouYu-game.html`。Windows 也可以继续使用 `build_single.ps1`。两种构建方式都会内嵌 CSS、JavaScript、Logo 和网页图标，单独打开 HTML 时不依赖同目录的图片。
+修改内容后，在“网站”文件夹中运行 `python3 build_single.py`，重新生成 `ShouYu-game.html`。Windows 也可以继续使用 `build_single.ps1`。两种构建方式都会内嵌 CSS、JavaScript、Logo、网页图标与 WOFF2 字体，单独打开 HTML 时不依赖同目录的图片或字体。
 
 本地预览：在项目根目录运行 `python3 -m http.server 8765 --bind 127.0.0.1`，打开 `http://127.0.0.1:8765/网站/ShouYu-game.html`。也可打开 `网站/index.html` 检查多文件源码版；资料文件仍需保持原有目录关系。
 
@@ -48,7 +48,9 @@ Logo 用浅暖米色手掌托起雾蓝骰子，延续以手予爱图标的灰绿
 
 网页引用 `assets/brand-v1/` 中的 SVG、favicon 和 Apple 触屏图标。该目录同时保留透明 PNG、明暗底及小尺寸预览。以后更换图案时使用新的版本目录，并同步修改 HTML 引用和两份构建脚本中的资源路径。
 
-网站沿用原来的奶油底色、陶土橙、芥末黄和橄榄绿配色。首页按活动与难度分组，桌面并排展示，手机顺序阅读。分类颜色由 `css/style.css` 中的 `.tone-1` 至 `.tone-8` 统一管理；卡片使用完整边框，列表和详情页沿用相同配色。标题、正文和数字统一使用无衬线字体，优先苹方、微软雅黑及本机 Noto Sans，不加载远程字体。分类入口保留标题、数量和游戏示例，省去重复副标题。
+网站沿用奶油底色、陶土橙、芥末黄和橄榄绿配色，使用完整细边框和柔和阴影。首页按活动与难度分组，桌面并排展示，手机使用横向排布的单列分类卡片；资料页桌面双列、手机单列。分类颜色由 `css/style.css` 中的 `.tone-1` 至 `.tone-8` 统一管理。分类入口保留标题、数量和游戏示例，省去重复副标题。
+
+标题使用站酷快乐体，正文、控件与数字使用寒蝉全圆体的网页子集。正文为桌面 18px / 手机 17px，资料名称为 20px / 18px，辅助信息最小 14px。字体内嵌于发布页，不向外部字体服务发请求；来源、许可证和子集构建方式见 `assets/type-v1/README.md`。支持 `appearance: base-select` 的浏览器使用同主题筛选菜单，其余浏览器保留原生选择功能。
 
 正式站点已部署到用户服务器。游戏数据与规则沿用原仓库，设计者署名为伍家阳。服务器使用独立发布包，构建和回滚方式见 `../deploy/README.md`。
 

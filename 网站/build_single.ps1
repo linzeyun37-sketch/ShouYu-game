@@ -12,6 +12,11 @@ $html = [System.IO.File]::ReadAllText((Join-Path $here "index.html"), $utf8)
 $cssTag = '<link rel="stylesheet" href="css/style.css">'
 if ($html.IndexOf($cssTag) -lt 0) { throw "stylesheet tag not found in index.html" }
 $css = [System.IO.File]::ReadAllText((Join-Path $here "css\style.css"), $utf8)
+foreach ($name in @("round", "play")) {
+  $fontPath = "assets/type-v1/signplay-" + $name + ".woff2"
+  $fontData = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes((Join-Path $here $fontPath)))
+  $css = $css.Replace("../" + $fontPath, "data:font/woff2;base64," + $fontData)
+}
 $html = $html.Replace($cssTag, "<style>`n" + $css + "`n</style>")
 
 $scripts = @("js/data.js", "js/meta.js", "js/guides.js", "js/banks.js", "js/app.js")

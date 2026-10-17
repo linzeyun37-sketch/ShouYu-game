@@ -11,7 +11,12 @@ def build():
     css_tag = '<link rel="stylesheet" href="css/style.css">'
     if css_tag not in html:
         raise ValueError("Stylesheet tag not found in index.html")
-    html = html.replace(css_tag, "<style>\n" + (root / "css/style.css").read_text(encoding="utf-8") + "\n</style>")
+    css = (root / "css/style.css").read_text(encoding="utf-8")
+    for name in ("round", "play"):
+        path = "assets/type-v1/signplay-" + name + ".woff2"
+        data = base64.b64encode((root / path).read_bytes()).decode("ascii")
+        css = css.replace("../" + path, "data:font/woff2;base64," + data)
+    html = html.replace(css_tag, "<style>\n" + css + "\n</style>")
     for name in ("data", "meta", "guides", "banks", "app"):
         tag = f'<script src="js/{name}.js"></script>'
         code = (root / f"js/{name}.js").read_text(encoding="utf-8")

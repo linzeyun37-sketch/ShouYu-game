@@ -1,0 +1,26 @@
+[
+  {
+    "key": "round",
+    "repo": "Warren2060/ChillRound",
+    "revision": "46dda1602729b58de96e3fdee9f918d7aaa64727",
+    "path": "ChillRoundF v3.0.ttf",
+    "source_url": "https://raw.githubusercontent.com/Warren2060/ChillRound/46dda1602729b58de96e3fdee9f918d7aaa64727/ChillRoundF%20v3.0.ttf",
+    "license_url": "https://raw.githubusercontent.com/Warren2060/ChillRound/46dda1602729b58de96e3fdee9f918d7aaa64727/LICENSE",
+    "sha256": "7dae804b344f7bc1a1c8426b9515e9b54d7baac3e123263d0bae94d0a305a732",
+    "name": "_____",
+    "weight": 400,
+    "axes": []
+  },
+  {
+    "key": "play",
+    "repo": "googlefonts/zcool-kuaile",
+    "revision": "577cd45e035fa0cd27f74579de6ff47db62fde8c",
+    "path": "fonts/ttf/ZCOOLKuaiLe-Regular.ttf",
+    "source_url": "https://raw.githubusercontent.com/googlefonts/zcool-kuaile/577cd45e035fa0cd27f74579de6ff47db62fde8c/fonts/ttf/ZCOOLKuaiLe-Regular.ttf",
+    "license_url": "https://raw.githubusercontent.com/googlefonts/zcool-kuaile/577cd45e035fa0cd27f74579de6ff47db62fde8c/OFL.txt",
+    "sha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+    "name": "ZCOOL KuaiLe",
+    "weight": 400,
+    "axes": []
+  }
+]
