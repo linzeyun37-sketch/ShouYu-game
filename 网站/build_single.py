@@ -12,7 +12,7 @@ def build():
     if css_tag not in html:
         raise ValueError("Stylesheet tag not found in index.html")
     css = (root / "css/style.css").read_text(encoding="utf-8")
-    for name in ("round", "play"):
+    for name in ("round",):
         path = "assets/type-v1/signplay-" + name + ".woff2"
         data = base64.b64encode((root / path).read_bytes()).decode("ascii")
         css = css.replace("../" + path, "data:font/woff2;base64," + data)
