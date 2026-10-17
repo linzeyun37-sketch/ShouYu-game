@@ -291,6 +291,7 @@ select { appearance: none; padding-right: 36px; background-image: url("data:imag
   .pager a { max-width: 100%; }
   .to-top { bottom: 12px; right: 10px; width: 44px; height: 44px; }
   .site-footer { padding-bottom: 64px; }
+  .site-footer .footer-line { display: block; }
   .bank-item { padding: 10px; gap: 8px; flex-wrap: wrap; }
   .like-btn { margin-left: auto; }
   .bank-form .btn { flex-grow: 1; }
@@ -2098,7 +2099,9 @@ if (typeof module !== "undefined") module.exports = BANKS;
   });
 
   document.getElementById("site-title").textContent = window.SITE.title;
-  document.getElementById("site-subtitle").textContent = window.SITE.subtitle;
+  document.getElementById("site-subtitle").innerHTML = window.SITE.subtitle.split(/ (?=设计者：|鸣谢：)/).map(function (part) {
+    return '<span class="footer-line">' + esc(part) + '</span>';
+  }).join(" ");
   document.querySelector(".skip-link").addEventListener("click", function (e) {
     e.preventDefault();
     app.focus();

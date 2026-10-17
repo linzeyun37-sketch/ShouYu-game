@@ -715,7 +715,9 @@
   });
 
   document.getElementById("site-title").textContent = window.SITE.title;
-  document.getElementById("site-subtitle").textContent = window.SITE.subtitle;
+  document.getElementById("site-subtitle").innerHTML = window.SITE.subtitle.split(/ (?=设计者：|鸣谢：)/).map(function (part) {
+    return '<span class="footer-line">' + esc(part) + '</span>';
+  }).join(" ");
   document.querySelector(".skip-link").addEventListener("click", function (e) {
     e.preventDefault();
     app.focus();
