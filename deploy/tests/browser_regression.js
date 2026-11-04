@@ -71,6 +71,36 @@ async page => {
   await page.locator('#header-search button').click(); await settle();
   assert(await page.locator('#s-results a[href="#/game/54"]').count() === 1, 'Header search');
 
+  // Vocabulary tags are searchable, exactly filterable and preserved in URLs.
+  const resultIds = () => page.locator('#s-results .game-item').evaluateAll(links => links.map(a => a.getAttribute('href').split('/').pop()));
+  await go('#/search?vocab=' + encodeURIComponent('生活'));
+  assert(await page.locator('#s-vocab').inputValue() === '生活', 'Vocabulary filter round-trip');
+  assert(JSON.stringify(await resultIds()) === JSON.stringify(['22', '30', '36', '38']), 'Life vocabulary filter');
+  await go('#/search?q=' + encodeURIComponent('生活'));
+  const lifeIds = (await resultIds()).filter(id => ['22', '30', '36', '38'].includes(id)).sort();
+  assert(JSON.stringify(lifeIds) === JSON.stringify(['22', '30', '36', '38']), 'Vocabulary tags missing from full-text search');
+  assert(await page.locator('#s-vocab-hint a').getAttribute('href') === '#/search?vocab=' + encodeURIComponent('生活'), 'Exact vocabulary shortcut');
+  await page.locator('#s-vocab-hint a').click(); await settle();
+  assert(JSON.stringify(await resultIds()) === JSON.stringify(['22', '30', '36', '38']), 'Vocabulary shortcut results');
+  for (const [tag, ids] of [['颜色', ['06', '32']], ['蔬果', ['19']], ['家具', ['40', '41']]]) {
+    await go('#/search?vocab=' + encodeURIComponent(tag));
+    assert(JSON.stringify(await resultIds()) === JSON.stringify(ids), 'Wrong vocabulary results: ' + tag);
+  }
+  await go('#/search?q=' + encodeURIComponent('复习特定词块'));
+  assert(await page.locator('#s-results .game-item').count() === 21, 'Tagged game count');
+  await go('#/search?vocab=__all__');
+  assert(await page.locator('#s-vocab').inputValue() === '__all__', 'All vocabulary games filter round-trip');
+  assert(await page.locator('#s-results .game-item').count() === 21, 'All vocabulary games count');
+  assert(await page.locator('#s-results .vocab-tags').count() === 21, 'Untagged game included in all vocabulary games');
+  assert((await page.locator('#s-count').innerText()).includes('全部复习类游戏'), 'All vocabulary games label');
+  assert(await page.evaluate(() => GAMES.every(g => (g.vocab || []).every(tag => VOCAB_ORDER.includes(tag)))), 'Unknown vocabulary name');
+  await page.locator('#s-reset').click();
+  assert(await page.locator('#s-vocab').inputValue() === '' && await page.locator('#s-results .game-item').count() === 67, 'Vocabulary reset');
+  await go('#/game/23');
+  assert((await page.locator('.vocab-note').innerText()).includes('神秘家族'), 'Version-specific vocabulary note');
+  await go('#/game/43');
+  assert(await page.locator('.vocab-tags').count() === 0, 'Mechanic color incorrectly tagged as vocabulary');
+
   // Detail return and browser history preserve the chosen list, filters and scroll.
   for (const hash of ['#/search?level=1', '#/level/2', '#/cat/2', '#/todo']) {
     await go(hash);

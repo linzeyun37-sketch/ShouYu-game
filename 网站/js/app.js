@@ -1,6 +1,7 @@
 (function () {
   var app = document.getElementById("app");
   var STATUS_CLASS = { "完整规则": "complete", "复玩方案": "replay", "待补充": "todo" };
+  var ALL_VOCAB = "__all__";
   var TODO_NOTE = {
     "完整规则": "原始资料有完整规则",
     "复玩方案": "由索引整理的复玩方案，使用前请带领人确认",
@@ -41,6 +42,34 @@
 
   function metaOf(g) {
     return (window.META || {})[g.id] || { players: "待补充", duration: "待补充", level: 0 };
+  }
+
+  function vocabOf(g) {
+    return Array.isArray(g.vocab) ? g.vocab : [];
+  }
+
+  function allVocabTags() {
+    var tags = [];
+    var order = window.VOCAB_ORDER || [];
+    window.GAMES.forEach(function (g) {
+      vocabOf(g).forEach(function (tag) {
+        if (tags.indexOf(tag) === -1) tags.push(tag);
+      });
+    });
+    return tags.sort(function (a, b) {
+      var ai = order.indexOf(a), bi = order.indexOf(b);
+      ai = ai === -1 ? order.length : ai;
+      bi = bi === -1 ? order.length : bi;
+      return ai - bi || a.localeCompare(b, "zh-CN");
+    });
+  }
+
+  function vocabTags(g) {
+    var tags = vocabOf(g);
+    if (!tags.length) return "";
+    return '<div class="vocab-tags"><span class="vocab-label">复习特定词块</span>' + tags.map(function (tag) {
+      return '<span class="vocab-tag">' + esc(tag) + '</span>';
+    }).join("") + (g.vocabNote ? '<span class="vocab-note">' + esc(g.vocabNote) + '</span>' : '') + '</div>';
   }
 
   function gamesAtLevel(level) {
@@ -120,7 +149,7 @@
     return '<a class="game-item" href="#/game/' + esc(g.id) + '">' +
       '<div class="game-no tone-' + (cat ? cat.key : '8') + '">' + esc(g.id) + '</div>' +
       '<div class="game-body"><h3>' + esc(g.title) + statusTag(g.status) + '</h3>' +
-      '<p>' + esc(g.summary) + '</p>' +
+      '<p>' + esc(g.summary) + '</p>' + vocabTags(g) +
       '<div class="chips">' + chips(g) + '</div></div></a>';
   }
 
@@ -165,7 +194,7 @@
         '<div class="scene-grid">' + scenes +
           '<a class="card scene all-games" href="#/search"><div class="scene-top"><span class="category-icon" aria-hidden="true">⌕</span>' +
           '<span class="scene-count">' + window.GAMES.length + ' 个游戏</span></div><h3>全部游戏<span class="card-arrow" aria-hidden="true">↗</span></h3>' +
-          '<p class="example">按关键词、分类与难度筛选</p></a>' +
+          '<p class="example">按关键词、分类、难度与复习词块筛选</p></a>' +
         '</div></section>' +
         '<div class="home-followup">' +
           '<section class="difficulty-panel"><div class="section-heading"><h2>按难度选择</h2></div>' +
@@ -269,7 +298,7 @@
       '<article class="detail">' +
         '<span class="status ' + STATUS_CLASS[g.status] + '">' + esc(g.status) + '</span>' +
         '<h1 class="page-title">' + esc(g.id) + ' ' + esc(g.title) + '</h1>' +
-        '<p class="summary">' + esc(g.summary) + '</p>' +
+        '<p class="summary">' + esc(g.summary) + '</p>' + vocabTags(g) +
 
         '<div class="info-grid">' +
           '<div class="info-cell"><span>人数</span><strong>' + esc(m.players) + '</strong></div>' +
@@ -531,7 +560,8 @@
       g.id, g.title, g.summary, g.status,
       cat ? cat.name : "", m.players, m.duration, m.level ? levelName(m.level) : "待定",
       guide.scene || "", (guide.prep || []).join(" "), (guide.steps || []).join(" "),
-      guide.scoring || "", (guide.notes || []).join(" "), (guide.versions || []).join(" ")
+      guide.scoring || "", (guide.notes || []).join(" "), (guide.versions || []).join(" "),
+      vocabOf(g).join(" "), vocabOf(g).length ? "复习特定词块" : ""
     ];
     return parts.join(" ").toLowerCase();
   }
@@ -549,17 +579,24 @@
     var statusOptions = '<option value="">全部状态</option>' + ["完整规则", "复玩方案", "待补充"].map(function (s) {
       return '<option value="' + s + '"' + (p.status === s ? " selected" : "") + '>' + s + '</option>';
     }).join("");
+    var vocabNames = allVocabTags();
+    var vocabOptions = '<option value="">全部游戏</option>' +
+      '<option value="' + ALL_VOCAB + '"' + (p.vocab === ALL_VOCAB ? " selected" : "") + '>全部复习类游戏</option>' + vocabNames.map(function (tag) {
+      return '<option value="' + esc(tag) + '"' + (p.vocab === tag ? " selected" : "") + '>' + esc(tag) + '</option>';
+    }).join("");
 
     app.innerHTML =
       '<div class="page-head"><h1 class="page-title">搜索与筛选</h1></div>' +
       '<div class="search-panel">' +
-        '<input id="s-q" type="search" aria-label="搜索游戏关键词" placeholder="例如：数字、故事、拆弹、两人" value="' + esc(p.q || "") + '">' +
+        '<input id="s-q" type="search" aria-label="搜索游戏关键词" placeholder="例如：数字、故事、生活、颜色" value="' + esc(p.q || "") + '">' +
         '<div class="filters">' +
           '<label>分类<select id="s-cat">' + catOptions + '</select></label>' +
           '<label>难度<select id="s-level">' + levelOptions + '</select></label>' +
           '<label>状态<select id="s-status">' + statusOptions + '</select></label>' +
+          '<label>复习特定词块<select id="s-vocab">' + vocabOptions + '</select></label>' +
           '<button type="button" class="btn ghost" id="s-reset">清空条件</button>' +
         '</div>' +
+        '<p class="vocab-search-hint" id="s-vocab-hint"></p>' +
       '</div>' +
       '<p class="note" id="s-count" role="status" aria-live="polite"></p>' +
       '<div class="game-list" id="s-results"></div>' +
@@ -570,6 +607,7 @@
       var cat = document.getElementById("s-cat").value;
       var level = document.getElementById("s-level").value;
       var status = document.getElementById("s-status").value;
+      var vocab = document.getElementById("s-vocab").value;
       document.getElementById("header-search").elements.q.value = q;
       var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
 
@@ -577,20 +615,29 @@
         if (cat && g.cat !== cat) return false;
         if (level !== "" && String(metaOf(g).level) !== level) return false;
         if (status && g.status !== status) return false;
+        if (vocab === ALL_VOCAB) {
+          if (!vocabOf(g).length) return false;
+        } else if (vocab && vocabOf(g).indexOf(vocab) === -1) return false;
         var h = haystack(g);
         return terms.every(function (t) { return h.indexOf(t) !== -1; });
       });
 
-      document.getElementById("s-count").textContent = "共找到 " + results.length + " 个游戏";
+      document.getElementById("s-count").textContent = vocab === ALL_VOCAB
+        ? "全部复习类游戏：共找到 " + results.length + " 个游戏"
+        : (vocab ? '复习特定词块“' + vocab + '”：共找到 ' + results.length + ' 个游戏' : "共找到 " + results.length + " 个游戏");
       document.getElementById("s-results").innerHTML = results.length
         ? results.map(function (g) { return gameLink(g); }).join("")
         : '<p class="empty">没有符合条件的游戏，换个关键词或放宽筛选条件试试。</p>';
+      document.getElementById("s-vocab-hint").innerHTML = !vocab && vocabNames.indexOf(q) !== -1
+        ? '全文搜索可能包含其他结果。<a class="vocab-quick" href="#/search?vocab=' + encodeURIComponent(q) + '">只看标签为“' + esc(q) + '”的游戏 →</a>'
+        : "";
 
       var qs = [];
       if (q) qs.push("q=" + encodeURIComponent(q));
       if (cat) qs.push("cat=" + cat);
       if (level !== "") qs.push("level=" + level);
       if (status) qs.push("status=" + encodeURIComponent(status));
+      if (vocab) qs.push("vocab=" + encodeURIComponent(vocab));
       try {
         history.replaceState(history.state, "", "#/search" + (qs.length ? "?" + qs.join("&") : ""));
       } catch (err) {
@@ -598,7 +645,7 @@
       }
     }
 
-    ["s-q", "s-cat", "s-level", "s-status"].forEach(function (id) {
+    ["s-q", "s-cat", "s-level", "s-status", "s-vocab"].forEach(function (id) {
       var el = document.getElementById(id);
       el.addEventListener(id === "s-q" ? "input" : "change", refresh);
     });
@@ -607,6 +654,7 @@
       document.getElementById("s-cat").value = "";
       document.getElementById("s-level").value = "";
       document.getElementById("s-status").value = "";
+      document.getElementById("s-vocab").value = "";
       refresh();
     });
     refresh();
