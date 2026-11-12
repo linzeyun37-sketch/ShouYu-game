@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>水果炸弹 · 玩家技能表（不含触发词）</title>
+<style>
+:root{
+  --bg:#fbf5ea; --card:#fffdf8; --ink:#433326; --muted:#685542; --line:#e4d3b9;
+  --accent:#954225; --terra:#d8704a; --mustard:#e9b44c; --olive:#8aa35e;
+  --soft:#f3e5cd; --radius:16px;
+  --shadow:0 5px 20px rgba(99,71,34,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;padding:16px;max-width:980px;margin:0 auto}
+.topbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+h1{font-size:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h1 .tag{font-size:12px;font-weight:600;color:#fff;background:var(--accent);border-radius:99px;padding:3px 10px;letter-spacing:.5px}
+.spacer{flex:1}
+button{font-family:inherit;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px;font-size:14px;cursor:pointer;transition:.15s}
+button:hover{background:var(--soft)}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.primary:hover{background:#7e361e}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
+.note{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.note b{color:var(--accent)}
+.rules{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.rulechip{background:var(--soft);border:1px dashed var(--terra);color:#8d3a37;font-size:12.5px;padding:3px 10px;border-radius:99px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--soft);color:var(--ink);font-weight:700;text-align:left;padding:9px 10px;border-bottom:2px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px dashed var(--line);vertical-align:top;line-height:1.65}
+tr:nth-child(even) td{background:rgba(243,229,205,.35)}
+.no{font-weight:800;color:var(--accent);white-space:nowrap}
+.cname{font-weight:800;font-size:14.5px;white-space:nowrap}
+.badge{display:inline-block;font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;margin-left:4px;vertical-align:1px}
+.b-act{background:#eef3e2;color:#5c6f33;border:1px solid #a9bb7f}
+.b-pas{background:#f0eaf6;color:#5d427c;border:1px solid #b49dd0}
+.u{white-space:nowrap;color:var(--muted);font-weight:600}
+.txt{min-width:220px}
+.foot{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 14px}
+@media print{
+  body{background:#fff;padding:0;max-width:none}
+  .card{box-shadow:none;border-color:#ccc}
+  .noprint{display:none}
+  th{background:#f3e5cd}
+  tr:nth-child(even) td{background:#faf6ec}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar noprint">
+  <h1>🍅 隐藏技能水果炸弹<span class="tag">19 · 玩家技能表</span></h1>
+  <div class="spacer"></div>
+  <button class="primary" onclick="window.print()">🖨 打印 / 存为 PDF</button>
+</div>
+
+<div class="card">
+  <div class="note">
+    每人开局随机获得一张技能卡，打出自己的触发词即可发动（<b>触发词印在你的卡上，请勿让他人知道</b>，本表仅列效果）。
+    次数用完后技能卡失效。<b>实际本局技能池由主持人开局时确定（可能不是全部 18 张）</b>；玩家选卡请用主持人发来的链接。
+  </div>
+  <div class="rules">
+    <span class="rulechip">🍅 红 ×2 → 总数 ×1.5</span>
+    <span class="rulechip">🍌 黄自选 1–10 加</span>
+    <span class="rulechip">🥬 绿 +5</span>
+    <span class="rulechip">💥 总数 ≥100 或 &lt;1 立即爆炸</span>
+    <span class="rulechip">🔢 总数从 1 开始</span>
+  </div>
+  <table>
+    <thead>
+      <tr><th style="width:46px">编号</th><th style="width:150px">技能卡</th><th style="width:64px">类型</th><th style="width:56px">次数</th><th class="txt">效果说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="no">#01</td><td class="cname">顺序逆转</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>跳过自己回合，同时逆转打手语顺序。</td></tr>
+      <tr><td class="no">#02</td><td class="cname">运算反转</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>不跳过回合：自己本轮的加法变减法、乘法变除法（仅对自己生效）。</td></tr>
+      <tr><td class="no">#03</td><td class="cname">红色预支</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>先默认替自己打出一次红色（会计入红组累计），再继续自己的手语运算。</td></tr>
+      <tr><td class="no">#04</td><td class="cname">打探虚实</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>总数字不加五，可以得知当前数字，并跳过自己回合。</td></tr>
+      <tr><td class="no">#05</td><td class="cname">数字冻结</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>下个自己的回合，总数字不变，但不能跳过自己回合。</td></tr>
+      <tr><td class="no">#06</td><td class="cname">炸弹转手</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>把炸弹传递给任一玩家，跳过自己回合。</td></tr>
+      <tr><td class="no">#07</td><td class="cname">谎报军情</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>不跳过自己回合：下一次报数时，主持人报出的是真实数字 −10，共两次生效次数。</td></tr>
+      <tr><td class="no">#08</td><td class="cname">替死鬼</td><td><span class="badge b-act">主动</span></td><td class="u">1 次</td><td>选一名替身：两回合内自己被炸，替身代为淘汰；出手后炸弹若立刻爆炸，技能失效。</td></tr>
+      <tr><td class="no">#09</td><td class="cname">技能封印</td><td><span class="badge b-act">主动</span></td><td class="u">1 次</td><td>选一名玩家，其下一个技能失效。</td></tr>
+      <tr><td class="no">#10</td><td class="cname">拉人垫背</td><td><span class="badge b-pas">被动</span></td><td class="u">1 次</td><td>被动：自己被淘汰后，可强制带走一名玩家。</td></tr>
+      <tr><td class="no">#11</td><td class="cname">技能复制</td><td><span class="badge b-act">主动</span></td><td class="u">1 次</td><td>选一名玩家，复制其技能（含剩余次数）；之后仍以本卡触发词发动。</td></tr>
+      <tr><td class="no">#12</td><td class="cname">禁手令</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>跳过自己回合，并选一名玩家本回合禁止打手语（不选则默认下一名）。</td></tr>
+      <tr><td class="no">#13</td><td class="cname">加改乘</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>下一名打出黄色的玩家：加法改为乘法，若超 100 则自动调整为乘以更小的整数。</td></tr>
+      <tr><td class="no">#14</td><td class="cname">黄改红</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>下一名打出黄色的玩家，改为按红色结算。</td></tr>
+      <tr><td class="no">#15</td><td class="cname">绿色加重</td><td><span class="badge b-act">主动</span></td><td class="u">2 次</td><td>下一名打出绿色的玩家，默认数字加 10 再报出（替代 +5）。</td></tr>
+      <tr><td class="no">#16</td><td class="cname">复活术</td><td><span class="badge b-pas">被动</span></td><td class="u">1 次</td><td>被动：自己被淘汰后，可复活自己和上一位被淘汰的玩家。</td></tr>
+      <tr><td class="no">#17</td><td class="cname">个十调换</td><td><span class="badge b-act">主动</span></td><td class="u">1 次</td><td>自己回合结束后，总数字的个位与十位调换。</td></tr>
+      <tr><td class="no">#18</td><td class="cname">加改减</td><td><span class="badge b-act">主动</span></td><td class="u">3 次</td><td>下一个打出黄色的玩家，加法变为减法。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="foot">指间趣游 · 隐藏技能水果炸弹（游戏 19）玩家技能表 · 本表不含触发词</div>
+
+</body>
+</html>

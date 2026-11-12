@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>19 · 隐藏技能水果炸弹 · 主持人台</title>
+<style>
+:root{
+  --bg:#fbf5ea; --card:#fffdf8; --ink:#433326; --muted:#685542; --line:#e4d3b9;
+  --accent:#954225; --terra:#d8704a; --mustard:#e9b44c; --olive:#8aa35e;
+  --soft:#f3e5cd; --radius:16px;
+  --shadow:0 5px 20px rgba(99,71,34,.08);
+  --red:#c0524d; --yellow:#d9a441; --green:#7d9a53;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;padding:16px;max-width:1180px;margin:0 auto}
+h1{font-size:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h1 .tag{font-size:12px;font-weight:600;color:#fff;background:var(--accent);border-radius:99px;padding:3px 10px;letter-spacing:.5px}
+h2{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:14px}
+button{font-family:inherit;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px;font-size:14px;cursor:pointer;transition:.15s}
+button:hover{background:var(--soft)}
+button:active{transform:scale(.97)}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.primary:hover{background:#7e361e}
+button.danger{background:#8d3a37;color:#fff;border-color:#8d3a37}
+button.ghost{background:transparent}
+button:disabled{opacity:.4;cursor:not-allowed}
+.topbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.topbar .spacer{flex:1}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--line);border-radius:99px;padding:4px 10px;font-size:13px}
+.stage{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+@media(max-width:820px){.stage{grid-template-columns:1fr}}
+.bigcard{text-align:center;padding:22px 14px}
+.bigcard .cur{font-size:15px;color:var(--muted)}
+.bigcard .name{font-size:30px;font-weight:800;color:var(--accent);margin:2px 0 6px}
+.bigcard .num{font-size:84px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-2px}
+.bigcard .num.hidden{color:var(--muted)}
+.bigcard .sub{margin-top:10px;font-size:14px;color:var(--muted)}
+.bigcard .dir{font-size:14px;margin-top:6px}
+.bigcard.danger .num{color:#8d3a37;animation:shake .4s infinite}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.pendwrap{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
+.pendchip{font-size:13px;font-weight:600;border-radius:99px;padding:5px 12px;border:1.5px solid transparent;display:inline-flex;gap:6px;align-items:center;line-height:1.4}
+.pendchip .x{cursor:pointer;font-weight:700;opacity:.75}
+.pendchip .x:hover{opacity:1}
+.pc-y{background:#fdf3dd;border-color:#e0b65c;color:#8a6412}
+.pc-g{background:#eef3e2;border-color:#a9bb7f;color:#5c6f33}
+.pc-r{background:#fbe9e7;border-color:#d98a84;color:#93372f}
+.pc-o{background:#fdeee6;border-color:#e09378;color:#8d3a37}
+.pc-i{background:#f0eaf6;border-color:#b49dd0;color:#5d427c}
+.pc-b{background:#e8f0fb;border-color:#9db4d6;color:#3d5c8f}
+.pc-gy{background:#eceff1;border-color:#b0bec5;color:#455a64}
+.pc-ol{background:#eef3e2;border-color:#a9bb7f;color:#5c6f33}
+@keyframes pendGlow{0%{box-shadow:0 0 0 0 rgba(216,112,74,.55)}70%{box-shadow:0 0 0 16px rgba(216,112,74,0)}100%{box-shadow:0 0 0 0 rgba(216,112,74,0)}}
+.pendwrap.flash{animation:pendGlow 1s ease 2}
+.players{display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.prow.cur{border-color:var(--terra);background:#fdf6f0;box-shadow:0 0 0 3px rgba(216,112,74,.15)}
+.prow.dead{opacity:.55;background:#f5efe6}
+.prow .seat{width:30px;height:30px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.prow.cur .seat{background:var(--terra);color:#fff}
+.pinfo{flex:1;min-width:0}
+.pname{font-weight:700;font-size:15px}
+.pskill{font-size:12px;color:var(--muted);line-height:1.55}
+.mark{font-size:11.5px;font-weight:600;border-radius:6px;padding:2px 8px;margin:3px 4px 0 0;display:inline-block}
+.mk-ban{background:#fbe9e7;color:#93372f}
+.mk-frz{background:#e8f0fb;color:#3d5c8f}
+.mk-inv{background:#f0eaf6;color:#5d427c}
+.mk-blk{background:#eceff1;color:#455a64}
+.mk-ex{background:#eef3e2;color:#5c6f33}
+.mk-note{background:#fdeee6;color:#8d3a37}
+.mk-swp{background:#fdf3dd;color:#8a6412}
+.pbtns{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.pbtns button{padding:5px 8px;font-size:12px;border-radius:8px}
+.actions{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:680px){.actions{grid-template-columns:repeat(3,1fr)}}
+.actioncard{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;text-align:center}
+.actioncard h3{font-size:15px;margin-bottom:2px}
+.actioncard .hint{font-size:12px;color:var(--muted);min-height:32px}
+.ynum{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}
+.ynum button{padding:7px 0;border-radius:8px;font-weight:700}
+.span3{grid-column:1/-1}
+.hbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.hbtns button{padding:6px 10px;font-size:13px}
+.logbox{max-height:230px;overflow:auto;font-size:13px;line-height:1.75}
+.logbox .r{color:var(--red)} .logbox .y{color:#a37513} .logbox .g{color:var(--green)}
+.logbox .exp{color:#8d3a37;font-weight:700}
+.tablewrap{overflow:auto}
+table.ref{width:100%;font-size:13px;border-collapse:collapse;margin-top:6px}
+table.ref td{border-top:1px dashed var(--line);padding:4px 6px;vertical-align:top;line-height:1.7}
+tr.rd td:first-child{color:var(--red);font-weight:700;white-space:nowrap}
+tr.yd td:first-child{color:#a37513;font-weight:700;white-space:nowrap}
+tr.gd td:first-child{color:var(--green);font-weight:700;white-space:nowrap}
+.badge{display:inline-block;font-size:11px;background:var(--accent);color:#fff;border-radius:6px;padding:2px 6px;margin-left:6px}
+.overlay{position:fixed;inset:0;background:rgba(60,40,20,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.overlay .box{background:var(--card);border-radius:20px;padding:24px 28px;text-align:center;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:86vh;overflow:auto}
+.overlay h3{font-size:20px;color:var(--accent);margin-bottom:10px}
+.overlay .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.hiddenpanel{display:none}
+.floatbtn{position:fixed;left:14px;bottom:14px;z-index:40}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 18px;border-radius:99px;font-size:14px;z-index:60;opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1}
+.help{font-size:13px;line-height:1.8;color:var(--muted)}
+.help b{color:var(--ink)}
+.pnames{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+.pnames .nm{display:flex;gap:5px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.pnames input{flex:1;min-width:0;font-size:15px;padding:8px 10px;border-radius:8px}
+.pnames select{max-width:190px;font-size:12.5px}
+.pnames .no{font-weight:800;color:var(--accent);font-size:15px;min-width:26px;text-align:right;flex-shrink:0}
+.setuprules{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
+.rulechip{background:#fff;border:1px dashed var(--terra);color:#8d3a37;font-size:12px;padding:3px 10px;border-radius:99px}
+.setupGrid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:780px){.setupGrid{grid-template-columns:1.05fr .95fr}}
+.subhead{font-weight:700;font-size:13px;color:var(--muted);margin:2px 0 8px}
+.subhead .muted{font-weight:400;color:var(--muted);opacity:.85}
+.deckgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:6px}
+.deckchip{text-align:left;font-size:12.5px;padding:7px 9px;line-height:1.5;border-radius:10px;transition:.15s;background:#fff;border:1px solid var(--line);cursor:pointer}
+.deckchip:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(99,71,34,.14);background:#fff}
+.deckchip b{font-size:13.5px}
+.deckchip .h{color:var(--muted);display:block;font-size:11.5px;margin-top:2px}
+.deckchip.held{border-color:var(--terra);background:#fdf6f0}
+.deckchip .trigrow{display:flex;gap:4px;align-items:center;margin-top:5px;font-size:11.5px;color:var(--muted)}
+.deckchip .trigIn{flex:1;min-width:0;padding:4px 7px;font-size:12.5px;border-radius:7px}
+.deckchip .rst{padding:2px 7px;font-size:11px;border-radius:7px;flex-shrink:0;cursor:pointer}
+.ref.compact td{font-size:12px;padding:5px 7px}
+.adjrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.adjrow button{padding:7px 10px;font-size:13px}
+.adjlab{font-weight:700;min-width:64px;font-size:13.5px}
+#adjTotal{padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-family:inherit;flex:1;min-width:90px;font-size:15px;text-align:center}
+.deckchip.nopool{opacity:.45;filter:grayscale(.5)}
+.poolRow{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--muted);margin-top:5px;cursor:pointer}
+.poolRow input{cursor:pointer}
+#joinView .deckchip{cursor:pointer}
+#joinView .deckchip.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(149,66,37,.18);background:#fdf6f0}
+#joinName{font-size:15px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);flex:1;min-width:160px}
+#importText{width:100%;height:130px;font-family:inherit;font-size:13.5px;padding:9px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.joinfoot{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 14px}
+.setupTop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.setupTop h2{margin:0 8px 0 0}
+.setupTop select{font-size:13.5px;padding:7px 10px}
+.setupTop .primary{padding:8px 20px;font-size:14px;flex-shrink:0}
+dt{font-weight:700;color:var(--ink);margin-top:6px}
+dd{margin:2px 0 0;color:var(--muted)}
+.deckintro{margin-top:8px}
+.deckintro .dk{display:flex;gap:8px;padding:6px 8px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65}
+.deckintro .dk b{white-space:nowrap}
+.deckintro .dk .u{color:var(--muted);white-space:nowrap}
+.bigHint{font-size:12px;color:var(--muted);margin-top:4px}
+/* 浮动触发词小窗 */
+.floatpanel{position:fixed;right:16px;bottom:16px;width:330px;max-height:64vh;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 32px rgba(60,40,20,.22);z-index:45;display:flex;flex-direction:column;overflow:hidden}
+.floatpanel.size-s{width:252px}
+.floatpanel.size-l{width:440px}
+.floatpanel.collapsed .panelbody{display:none}
+.panelhead{display:flex;align-items:center;gap:5px;padding:8px 10px;background:var(--soft);border-bottom:1px solid var(--line);cursor:grab;user-select:none;touch-action:none}
+.panelhead:active{cursor:grabbing}
+.panelhead .ptitle{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.panelhead .pbtn{padding:2px 7px;font-size:12px;border-radius:8px;flex-shrink:0}
+.panelbody{overflow:auto;padding:8px 12px 10px}
+@media(max-width:640px){.floatpanel{left:12px;right:12px;width:auto}}
+.triggerRow{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:6px;align-items:center;border-top:1px dashed var(--line);padding:6px 0;font-size:12.5px}
+.floatpanel.size-l .triggerRow{grid-template-columns:36px minmax(0,1fr) auto;font-size:13px}
+.triggerRow .tno{font-weight:800;color:var(--accent)}
+.triggerRow .tname b{white-space:nowrap}
+.triggerRow .tval{color:var(--ink);font-weight:600;white-space:nowrap;justify-self:end}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🍅 隐藏技能水果炸弹<span class="tag">19 · 主持人台</span></h1>
+  <div class="spacer"></div>
+  <span class="topbar-actions" id="topActions" style="display:none">
+    <button id="btnTriggers">🗂 技能卡</button>
+    <button id="btnTogglePanel">🙈 隐藏控制台（投影）</button>
+    <button id="btnOpenNum">👁 公开真实数字：<b id="showState">隐藏</b></button>
+    <button id="btnUndo">↩ 悔棋</button>
+    <button class="danger" id="btnRestart">⟲ 重新开始</button>
+  </span>
+</div>
+
+<div id="hostPanel">
+
+<div class="card" id="setupCard">
+  <div class="setupTop">
+    <h2>开局设置</h2>
+    <span style="flex:1"></span>
+    <span style="font-size:13px;color:var(--muted)">初始玩家</span>
+    <select id="startSel"></select>
+    <button class="primary" id="btnStart">🚀 开始游戏</button>
+  </div>
+  <div class="setuprules">
+    <span class="rulechip">🍅 红 ×2 → 总数 ×1.5</span>
+    <span class="rulechip">🍌 黄自选 1–10 加</span>
+    <span class="rulechip">🥬 绿 +5</span>
+    <span class="rulechip">💥 ≥100 或 &lt;1 爆炸</span>
+    <span class="rulechip">🔢 总数从 1 开始</span>
+  </div>
+  <div class="setupGrid">
+    <div>
+      <div class="subhead">参赛者 <span class="muted">（可直接改名字）</span></div>
+      <div class="pnames" id="nameList"></div>
+      <div class="hbtns">
+        <button id="btnAddP">＋ 加一人</button>
+        <button id="btnDelP">－ 减一人</button>
+        <button id="btnAutoDeal">🎲 每人随机一张</button>
+        <button id="btnUndoDeal">⟲ 撤销分卡</button>
+      </div>
+      <div class="hbtns">
+        <button id="btnJoinLink">🔗 玩家选卡链接</button>
+        <button id="btnImportJoin">📥 导入选卡结果</button>
+      </div>
+      <div class="subhead" style="margin-top:14px">🥕 蔬果词速查</div>
+      <table class="ref compact">
+        <tr class="rd"><td style="width:42px">红色</td><td>番茄 · 辣椒 · 胡萝卜 · 苹果 · 草莓 · 荔枝 · 火龙果 · 葡萄 · 石榴 · 西瓜</td></tr>
+        <tr class="yd"><td>黄色</td><td>土豆 · 南瓜 · 花生 · 姜 · 桃 · 梨 · 芒果 · 菠萝 · 香蕉 · 哈密瓜</td></tr>
+        <tr class="gd"><td>绿色</td><td>白菜 · 西兰花 · 包菜 · 芹菜 · 香菜 · 西葫芦 · 苦瓜 · 豇豆 · 葱 · 猕猴桃</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="subhead">技能卡 <span class="muted">（点卡片看详情；触发词在输入框里改，开始前确定；技能池 <b id="poolCount" style="color:var(--accent)">18/18</b> 张）</span></div>
+      <div class="deckgrid" id="deckGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <div>
+    <div class="card" id="opCard">
+      <h2 style="display:flex;align-items:center;gap:8px">当前玩家操作 <span id="curNameInline" style="color:var(--accent);font-weight:800"></span></h2>
+      <div class="actions">
+        <div class="actioncard">
+          <h3 style="color:var(--red)">🍅 红色蔬果</h3>
+          <div class="hint">全程累计两次 → 总数 ×1.5<br>当前已出 <b id="redCount">0</b> 次</div>
+          <button class="primary" style="width:100%;background:var(--red);border-color:var(--red)" onclick="playRed()">打出红色</button>
+        </div>
+        <div class="actioncard">
+          <h3 style="color:#a37513">🍌 黄色蔬果</h3>
+          <div class="hint">自选 1–10 加进总数</div>
+          <div class="ynum" id="yNums"></div>
+        </div>
+        <div class="actioncard">
+          <h3 style="color:var(--green)">🥬 绿色蔬果</h3>
+          <div class="hint">总数 +5（下一名绿效果时 +10）<br>出绿者可得知当前数字</div>
+          <button class="primary" style="width:100%;background:var(--green);border-color:var(--green)" onclick="playGreen()">打出绿色</button>
+        </div>
+        <div class="actioncard span3">
+          <h3>✨ 本回合技能</h3>
+          <div class="hint" id="skillHint"></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+            <button id="btnUseSkill">发动技能</button>
+            <button id="btnSkipTurn">⏭ 跳过该回合</button>
+          </div>
+        </div>
+      </div>
+      <h2 style="margin-top:12px">主持人快捷</h2>
+      <div class="hbtns">
+        <button onclick="reverseDir()">🔁 逆转方向</button>
+        <button onclick="openAdjPanel()">🛠 调数平台</button>
+        <button onclick="openLie()">🤥 下次报数撒谎 −10</button>
+        <button onclick="consumeLie()">已按假数报出</button>
+        <button onclick="hostTarget('transferBomb')">💣 手动指定被传炸弹者</button>
+        <button onclick="hostTarget('forceOut')">⚡ 强制淘汰某人</button>
+        <button onclick="openNumericInput()">✏ 手动改总数</button>
+        <button onclick="adjustRed(-1)">红 count −1</button>
+        <button onclick="adjustRed(1)">红 count +1</button>
+        <button onclick="openChooseCard()">🎴 给当前玩家换卡</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📜 过程记录（最新在上）</h2>
+      <div class="logbox" id="logBox"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card bigcard" id="bigCard">
+      <div class="cur">现在是</div>
+      <div class="name" id="curBigName">—</div>
+      <div class="num" id="bigNum">1</div>
+      <div class="sub" id="bigSub"></div>
+      <div class="dir" id="bigDir"></div>
+      <div class="pendwrap" id="pendWrap"></div>
+    </div>
+
+    <div class="card" id="wordCard">
+      <h2>🥕 蔬果词表参考</h2>
+      <table class="ref">
+        <tr class="rd"><td style="width:48px">红色</td><td>番茄 · 辣椒 · 胡萝卜 · 苹果 · 草莓 · 荔枝 · 火龙果 · 葡萄 · 石榴 · 西瓜</td></tr>
+        <tr class="yd"><td>黄色</td><td>土豆 · 南瓜 · 花生 · 姜 · 桃 · 梨 · 芒果 · 菠萝 · 香蕉 · 哈密瓜</td></tr>
+        <tr class="gd"><td>绿色</td><td>白菜 · 西兰花 · 包菜 · 芹菜 · 香菜 · 西葫芦 · 苦瓜 · 豇豆 · 葱 · 猕猴桃</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>👥 座位与状态</h2>
+      <div class="players" id="playerBox"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="helpCard">
+  <h2>📖 规则速查（出自 19 号游戏设计文档）</h2>
+  <div class="help">
+    <b>基本</b>：个人战。总数字从 <b>1</b> 开始；轮到谁，谁打一个蔬果手语，主持人按颜色结算。<br>
+    <b>红色</b>：全程每累计 <b>两次</b>红色，总数 ×1.5；只出一次时无效。<br>
+    <b>黄色</b>：出的人自选 <b>1–10</b> 加进总数。<br>
+    <b>绿色</b>：总数 +5，出绿色的人可以得知当前（加 5 后）的总数字。<br>
+    <b>爆炸</b>：总数字 <b>≥100</b> 或 <b>&lt;1</b> 时爆炸，本回合出手的玩家（或此前被传炸弹的裁定者）被淘汰。<br>
+    <b>技能</b>：每人一张职业卡，打出对应触发词可发动；次数用完卡就失效。<br>
+    <b>本台装饰</b>：红组自动累计；黄/绿/撒谎等「待生效」效果自动挂在右上角，触发后自动扣除；爆炸自动弹窗，可一键悔棋或确认。
+  </div>
+</div>
+
+</div><!-- /hostPanel -->
+
+<button class="floatbtn primary hiddenpanel" id="btnShowPanel">🖥 返回控制台</button>
+
+<div class="overlay" id="boomOverlay" style="display:none">
+  <div class="box">
+    <h3 id="boomTitle">💥</h3>
+    <div id="boomBody" style="font-size:14px;line-height:1.8"></div>
+    <div class="row" id="boomRow"></div>
+  </div>
+</div>
+
+<!-- 主持人调数平台 -->
+<div class="overlay" id="adjOverlay" style="display:none">
+  <div class="box" style="max-width:440px;text-align:left">
+    <h3>🛠 主持人调数平台</h3>
+    <div id="adjHint" style="font-size:13px;color:var(--muted);margin-bottom:10px"></div>
+    <div class="adjrow">
+      <span class="adjlab">总数</span>
+      <button onclick="adjTotalBump(-10)">−10</button>
+      <button onclick="adjTotalBump(-1)">−1</button>
+      <input id="adjTotal">
+      <button onclick="adjTotalBump(1)">＋1</button>
+      <button onclick="adjTotalBump(10)">＋10</button>
+      <button class="primary" onclick="adjTotalApply()">应用</button>
+    </div>
+    <div class="adjrow">
+      <span class="adjlab">红色累计</span>
+      <button onclick="adjRedSet(S.redN-1)">−</button>
+      <b id="adjRedVal" style="font-size:16px;min-width:24px;text-align:center">0</b>
+      <button onclick="adjRedSet(S.redN+1)">＋</button>
+      <button onclick="adjRedSet(0)">归零</button>
+      <span style="font-size:12px;color:var(--muted)">成对即 ×1.5</span>
+    </div>
+    <div class="row"><button class="ghost" style="margin:0 auto" onclick="closeAdjPanel()">关闭</button></div>
+  </div>
+</div>
+
+<!-- 导入玩家选卡 -->
+<div class="overlay" id="importOverlay" style="display:none">
+  <div class="box" style="max-width:540px;text-align:left">
+    <h3>📥 导入玩家选卡结果</h3>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">把玩家发来的选卡码或明文整段粘贴到下面（每行一条，识别「名字 → #编号」或选卡码）。已被别人选走的卡默认跳过；勾选裁定覆盖则由你决定改判。导入后仍可随时换卡或撤销分卡——最终分配以主持人为准。</div>
+    <textarea id="importText" placeholder="【水果炸弹·选卡】小明 → eyJjIjozfQ=="></textarea>
+    <label style="display:flex;gap:6px;align-items:center;font-size:13px;margin:8px 0 0;cursor:pointer"><input type="checkbox" id="chkOverride"> 冲突时按主持人裁定覆盖现有持有人</label>
+    <div class="row" style="margin-top:10px">
+      <button class="primary" onclick="doImport()">导入</button>
+      <button class="ghost" onclick="$id('importOverlay').style.display='none'">取消</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="targetOverlay" style="display:none">
+  <div class="box">
+    <h3 id="targetTitle">选择一位玩家</h3>
+    <div id="targetList" style="display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto"></div>
+    <div class="row"><button class="ghost" onclick="closeTarget()">取消</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="cardOverlay" style="display:none">
+  <div class="box" style="max-width:540px;text-align:left">
+    <h3 style="text-align:center">🎴 为玩家分配技能卡</h3>
+    <div id="cardList" style="display:flex;flex-direction:column;gap:6px;max-height:380px;overflow:auto"></div>
+    <div class="row"><button class="ghost" style="margin:0 auto" onclick="closeChooseCard()">取消</button></div>
+  </div>
+</div>
+
+<!-- 技能卡详情 -->
+<div class="overlay" id="detailOverlay" style="display:none">
+  <div class="box" style="max-width:470px;text-align:left">
+    <h3 id="detailTitle" style="margin-bottom:8px"></h3>
+    <div id="detailBody" style="font-size:13px;line-height:1.85"></div>
+    <div class="row"><button class="primary" style="margin:0 auto" onclick="closeDetail()">知道了</button></div>
+  </div>
+</div>
+
+<!-- 玩家选卡视角（#join= 链接进入） -->
+<div id="joinView" style="display:none">
+  <div class="topbar">
+    <h1>🍅 水果炸弹 · 玩家选卡<span class="tag">玩家视角</span></h1>
+  </div>
+  <div class="card">
+    <div class="note">请先<b>输入名字</b>，再从本局技能池里<b>点选一张</b>，生成<b>选卡码</b>私聊发给主持人（就算发到群里也看不出你的技能）。主持人导入后为你登记；每人一张，最终是否采纳由主持人裁定。</div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <input id="joinName" placeholder="你的名字">
+    </div>
+    <div class="subhead">本局技能池（点击选择）</div>
+    <div class="deckgrid" id="joinGrid"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="primary" id="btnJoinConfirm" style="margin:0 auto">✅ 确认选择</button>
+    </div>
+    <div id="joinResult" style="display:none;margin-top:12px">
+      <div class="subhead">选卡码 · 私聊发给主持人</div>
+      <div id="joinResultText" style="background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6;word-break:break-all"></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">码中不含技能名，群里发也不会暴露隐藏技能；主持人导入时自动解码。</div>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="btnJoinCopy">📋 复制结果</button>
+        <button id="btnJoinRepick">↩ 重新选择</button>
+      </div>
+    </div>
+  </div>
+  <div class="joinfoot">技能效果详情见《水果炸弹技能表玩家版》；触发词由主持人开局发放，注意保密。</div>
+  <div style="text-align:center;padding-bottom:20px"><button class="ghost" onclick="exitJoin()">我是主持人 · 返回主持人台</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 技能卡触发词浮动小窗 -->
+<div class="floatpanel hiddenpanel size-m" id="triggerPanel">
+  <div class="panelhead" id="triggerHead">
+    <span class="ptitle">🗂 技能卡</span>
+    <span style="flex:1"></span>
+    <button class="pbtn" id="btnTriggerSize" title="切换宽度">⤢ 中</button>
+    <button class="pbtn" id="btnTriggerCollapse" title="收起 / 展开">▾</button>
+    <button class="pbtn" id="btnTriggerClose" title="关闭">✕</button>
+  </div>
+  <div class="panelbody">
+    <div class="help" style="padding:0 0 4px">触发词已在开局设置中确定；点卡片名可看详情。</div>
+    <div id="triggerBox"></div>
+  </div>
+</div>
+
+<script>
+/* =============== 数据 =============== */
+const DECK=[
+ {k:'inv',name:'顺序逆转',w:'滑稽',uses:2,fx:'reverse',txt:'跳过自己回合，同时逆转打手语顺序。'},
+ {k:'sub',name:'运算反转',w:'于沣林',uses:2,fx:'selfInvert',txt:'不跳过回合：自己本轮的加法变减法、乘法变除法（仅对自己生效）。'},
+ {k:'pre',name:'红色预支',w:'茄子',uses:2,fx:'redPreload',txt:'先默认替自己打出一次红色（会计入红组累计），再继续自己的手语运算。'},
+ {k:'n5',name:'打探虚实',w:'萝卜',uses:2,fx:'revealNoAdd',txt:'总数字不加五，可以得知当前数字，并跳过自己回合。'},
+ {k:'frz',name:'数字冻结',w:'冬瓜',uses:2,fx:'freezeNext',txt:'下个自己的回合，总数字不变，但不能跳过自己回合。'},
+ {k:'trn',name:'炸弹转手',w:'洋葱',uses:2,fx:'transferBomb',txt:'把炸弹传递给任一玩家，跳过自己回合。'},
+ {k:'lie',name:'谎报军情',w:'蒜',uses:2,fx:'lie',txt:'不跳过自己回合：下一次报数时，主持人报出的是真实数字 −10，共两次生效次数。'},
+ {k:'dye',name:'替死鬼',w:'水果',uses:1,fx:'substitute',txt:'选一名替身：两回合内自己被炸，替身代为淘汰；出手后炸弹若立刻爆炸，技能失效。'},
+ {k:'blk',name:'技能封印',w:'蔬菜',uses:1,fx:'skillBlock',txt:'选一名玩家，其下一个技能失效。'},
+ {k:'out',name:'拉人垫背',w:'三万一千四百一十五',uses:1,fx:'forceOutP',txt:'被动：自己被淘汰后，可强制带走一名玩家。'},
+ {k:'cpy',name:'技能复制',w:'老阿姨',uses:1,fx:'copySkill',txt:'选一名玩家，复制其技能（含剩余次数）；之后仍以本卡触发词发动。'},
+ {k:'ban',name:'禁手令',w:'干净朋友',uses:2,fx:'banPlayer',txt:'跳过自己回合，并选一名玩家本回合禁止打手语（不选则默认下一名）。'},
+ {k:'mul',name:'加改乘',w:'羊肉饺子',uses:2,fx:'mulNextYellow',txt:'下一名打出黄色的玩家：加法改为乘法，若超 100 则自动调整为乘以更小的整数。'},
+ {k:'y2r',name:'黄改红',w:'熊猫睡觉',uses:2,fx:'redNextYellow',txt:'下一名打出黄色的玩家，改为按红色结算。'},
+ {k:'g10',name:'绿色加重',w:'危险妹妹',uses:2,fx:'greenPlus10',txt:'下一名打出绿色的玩家，默认数字加 10 再报出（替代 +5）。'},
+ {k:'rev',name:'复活术',w:'粉色咖啡',uses:1,fx:'reviveP',txt:'被动：自己被淘汰后，可复活自己和上一位被淘汰的玩家。'},
+ {k:'swp',name:'个十调换',w:'明天安全',uses:1,fx:'swapDigits',txt:'自己回合结束后，总数字的个位与十位调换。'},
+ {k:'ynu',name:'加改减',w:'你是明月清风',uses:3,fx:'subNextYellow',txt:'下一个打出黄色的玩家，加法变为减法。'},
+];
+function pad(n){return String(n).padStart(2,'0');}
+function effTrig(i){ const t=S&&S.triggers&&S.triggers[i]; return (t&&t.trim())?t.trim():DECK[i].w; }
+const PEND_LABEL={yMul:'下一黄→乘法（≤100自动调小）',yRed:'下一黄→视作红',ySub:'下一黄→加改减',g10:'下一绿→+10'};
+
+let S=null, undoStack=[], showTrue=false;
+let pendTarget=null, pendSrc=null, pendFromSkill=false, pendSpend=false;
+const LS_KEY='shouyu-fruitbomb-v1';
+
+function deep(o){return JSON.parse(JSON.stringify(o));}
+function pushUndo(){ undoStack.push(deep(S)); if(undoStack.length>80)undoStack.shift(); }
+function undo(){ if(!undoStack.length){toast('没有可撤销的步骤');return;} S=undoStack.pop(); save(); render(); toast('已撤销上一步'); }
+function newPlayer(id){return {id,name:'玩家'+(id+1),card:null,uses:0,alive:true,banned:false,frozen:0,blocked:false,inverted:false,exchange:null,swapPending:false,note:null};}
+function defaultState(){
+  const names=['玩家1','玩家2','玩家3','玩家4','玩家5','玩家6'];
+  return {started:false,players:names.map((_,i)=>newPlayer(i)),cur:0,dir:1,total:1,redN:0,lies:0,
+    pend:{yMul:0,yRed:0,ySub:0,g10:0},elimStack:[],logs:[],usedPassive:{rev:{},out:{}},
+    triggers:DECK.map(d=>d.w),pool:DECK.map(()=>true)};
+}
+function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){} }
+
+/* =============== 初始化 =============== */
+const JOIN_MATCH=(location.hash||'').match(/^#join=([\d\-]+)$/);
+if(JOIN_MATCH){ startJoin(JOIN_MATCH[1]); }
+else {
+  (function init(){
+    try{
+      const saved=localStorage.getItem(LS_KEY);
+      if(saved){ const s=JSON.parse(saved);
+        if(s&&s.started){ if(confirm('检测到上一局的自动保存记录。\n确定=继续这一局；取消=清除记录重新开始。')){ S=s; afterLoad(); return; } }
+        else if(s){ S=s; afterLoad(); return; }
+      }
+    }catch(e){}
+    S=defaultState(); afterLoad();
+  })();
+}
+function afterLoad(){
+  if(!Array.isArray(S.triggers)||S.triggers.length!==DECK.length){S.triggers=DECK.map(d=>d.w);}
+  if(!Array.isArray(S.pool)||S.pool.length!==DECK.length){S.pool=DECK.map(()=>true);}
+  render();
+}
+
+/* =============== 玩家选卡视角（#join= 链接） =============== */
+function b64code(cardNo){ try{ return btoa(unescape(encodeURIComponent(JSON.stringify({c:cardNo})))); }catch(e){ return '#'+cardNo; } }
+function b64decode(tok){ try{ return JSON.parse(decodeURIComponent(escape(atob(tok)))); }catch(e){ return null; } }
+function startJoin(poolStr){
+  const pool=poolStr.split('-').map(Number).filter(i=>i>=0&&i<DECK.length);
+  if(!pool.length){ location.hash=''; location.reload(); return; }
+  $id('hostPanel').style.display='none';
+  $id('joinView').style.display='';
+  const grid=$id('joinGrid'); let sel=null;
+  function renderGrid(){
+    grid.innerHTML='';
+    pool.forEach(i=>{
+      const d=DECK[i];
+      const b=document.createElement('div'); b.className='deckchip'+(sel===i?' sel':'');
+      b.innerHTML='#'+pad(i+1)+' <b>'+d.name+'</b><div class="h">'+d.uses+' 次 · '+(d.k==='out'||d.k==='rev'?'被动':'主动')+'</div>'+
+        '<div style="font-size:12px;color:var(--muted);margin-top:3px">'+d.txt+'</div>';
+      b.onclick=()=>{ sel=i; renderGrid(); };
+      grid.appendChild(b);
+    });
+  }
+  renderGrid();
+  $id('btnJoinConfirm').onclick=()=>{
+    const name=($id('joinName').value||'').trim();
+    if(!name){ toast('先输入你的名字'); return; }
+    if(sel==null){ toast('先点选一张技能卡'); return; }
+    $id('joinResultText').textContent='【水果炸弹·选卡】'+name+' → '+b64code(sel+1);
+    $id('joinResult').style.display='';
+    grid.style.display='none'; $id('btnJoinConfirm').style.display='none';
+  };
+  $id('btnJoinCopy').onclick=()=>copyText($id('joinResultText').textContent,'结果已复制，发到群里吧');
+  $id('btnJoinRepick').onclick=()=>{
+    $id('joinResult').style.display='none';
+    grid.style.display=''; $id('btnJoinConfirm').style.display='';
+  };
+}
+function exitJoin(){ location.hash=''; location.reload(); }
+
+/* =============== 工具 =============== */
+function $id(x){return document.getElementById(x);}
+function toast(msg){const t=$id('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800);}
+function fmt(n){return (Math.round(n*100)/100+'').replace(/\.0+$/,'');}
+function log(html){S.logs.push(html); if(S.logs.length>300)S.logs.shift();}
+function curP(){return S.players[S.cur]||null;}
+
+/* =============== 渲染 =============== */
+function render(){
+  save();
+  $id('setupCard').style.display = S.started?'none':'';
+  $id('opCard').style.display = S.started?'':'none';
+  $id('helpCard').style.display = S.started?'':'none';
+  $id('topActions').style.display = S.started?'flex':'none';
+  $id('wordCard').style.display = S.started?'':'none';
+  if(!S.started){ $id('triggerPanel').classList.add('hiddenpanel'); }
+  renderTriggers();
+  if(S.started){ renderBig(); renderOps(); } else { buildSetup(); }
+  renderPlayers(); renderLog();
+}
+function renderTriggers(){
+  const box=$id('triggerBox'); if(!box)return; box.innerHTML='';
+  DECK.forEach((d,i)=>{
+    const row=document.createElement('div'); row.className='triggerRow';
+    row.innerHTML='<div class="tno">#'+pad(i+1)+'</div>'+
+      '<div class="tname" style="cursor:pointer" title="点击查看详情" onclick="openCardDetail('+i+')"><b>'+d.name+'</b> <span style="color:var(--muted)">'+d.uses+' 次 · '+(d.k==='out'||d.k==='rev'?'被动':'主动')+'</span></div>'+
+      '<div class="tval" title="触发词（开局设置中确定）">「'+effTrig(i)+'」</div>';
+    box.appendChild(row);
+  });
+}
+function resetTrigger(i){ S.triggers[i]=DECK[i].w; save(); renderTriggers(); renderPlayers(); if(S.started){renderOps();} else { buildDeckGrid(); refreshSetupSelects(); } }
+function resetTriggers(){ S.triggers=DECK.map(d=>d.w); save(); renderTriggers(); renderPlayers(); if(S.started){renderOps();} else { buildDeckGrid(); refreshSetupSelects(); } toast('已恢复全部默认触发词'); }
+function buildSetup(){
+  const box=$id('nameList'); box.innerHTML='';
+  S.players.forEach((p,i)=>{
+    const d=document.createElement('div'); d.className='nm';
+    d.innerHTML='<span class="no">'+(i+1)+'.</span>';
+    const inp=document.createElement('input'); inp.value=p.name; inp.oninput=e=>{p.name=e.target.value;refreshSetupNames();};
+    const sel=document.createElement('select');
+    sel.innerHTML='<option value="">-- 无技能卡 --</option>' + DECK.map((c,ci)=>'<option value="'+ci+'">#'+pad(ci+1)+' '+c.name+'（'+effTrig(ci)+'）</option>').join('');
+    sel.value=p.card==null?'':p.card;
+    sel.onchange=e=>{const v=e.target.value; if(v===''){p.card=null;p.uses=0;} else {p.card=+v;p.uses=DECK[+v].uses;} buildDeckGrid();};
+    d.appendChild(inp); d.appendChild(sel); box.appendChild(d);
+  });
+  const sel=$id('startSel');
+  const selHtml=S.players.map((p,i)=>'<option value="'+i+'">'+(i+1)+'. '+p.name+'</option>').join('');
+  sel.innerHTML=selHtml; sel.value=String(S.curSelIndex||0);
+  buildDeckGrid();
+}
+function buildDeckGrid(){
+  const grid=$id('deckGrid'); if(!grid)return; grid.innerHTML='';
+  DECK.forEach((d,i)=>{
+    const holders=S.players.filter(p=>p.card===i).map(p=>p.name).join('、');
+    const b=document.createElement('div'); b.className='deckchip'+(holders?' held':'')+(S.pool[i]?'':' nopool');
+    b.innerHTML='#'+pad(i+1)+' <b>'+d.name+'</b>'+((d.k==='out'||d.k==='rev')?' <span class="badge">被动</span>':'')+
+      '<div class="h">'+d.uses+' 次'+(holders?' · 已分：'+holders:'')+'</div>'+
+      '<div class="trigrow">触发词 <input class="trigIn" value="'+effTrig(i).replace(/"/g,'&quot;')+'" title="触发词（留空用默认「'+d.w+'」）"><button class="rst" title="恢复本卡默认">↺</button></div>'+
+      '<label class="poolRow" title="勾选后才会进入「每人随机一张」的技能池"><input type="checkbox" '+(S.pool[i]?'checked':'')+'> 入池</label>';
+    b.title='点卡片空白处查看详情';
+    b.onclick=()=>openCardDetail(i);
+    const inp=b.querySelector('.trigIn');
+    inp.onclick=e=>e.stopPropagation();
+    inp.oninput=e=>{ S.triggers[i]=e.target.value; save(); refreshSetupSelects(); };
+    const rst=b.querySelector('.rst');
+    rst.onclick=e=>{ e.stopPropagation(); resetTrigger(i); };
+    const pl=b.querySelector('.poolRow');
+    pl.onclick=e=>e.stopPropagation();
+    pl.querySelector('input').onchange=e=>{ S.pool[i]=e.target.checked; b.classList.toggle('nopool',!e.target.checked); save(); updatePoolCount(); };
+    grid.appendChild(b);
+  });
+  updatePoolCount();
+}
+function updatePoolCount(){
+  const el=$id('poolCount'); if(!el)return;
+  el.textContent=S.pool.filter(Boolean).length+'/'+DECK.length;
+}
+function refreshSetupSelects(){
+  document.querySelectorAll('#nameList select').forEach(sel=>{
+    Array.from(sel.options).forEach((o,oi)=>{
+      if(oi===0)return;
+      o.textContent='#'+pad(oi)+' '+DECK[oi-1].name+'（'+effTrig(oi-1)+'）';
+    });
+  });
+}
+function openCardDetail(i){
+  const d=DECK[i];
+  const holders=S.players.filter(p=>p.card===i).map(p=>p.name).join('、');
+  $id('detailTitle').innerHTML='#'+pad(i+1)+' · '+d.name;
+  $id('detailBody').innerHTML=
+    '<dl style="margin:0">'+
+    '<dt>效果</dt><dd>'+d.txt+'</dd>'+
+    '<dt>类型</dt><dd>'+(d.k==='out'||d.k==='rev'?'被动技能（满足条件自动触发面板）':'主动技能（打出触发词后点「发动」）')+'</dd>'+
+    '<dt>发动次数</dt><dd>'+d.uses+' 次</dd>'+
+    '<dt>当前触发词</dt><dd>「'+effTrig(i)+'」'+'（默认「'+d.w+'」，开始前在开局设置中修改）</dd>'+
+    (holders?'<dt>当前持有者</dt><dd>'+holders+'</dd>':'')+
+    '</dl>';
+  $id('detailOverlay').style.display='flex';
+}
+function closeDetail(){ $id('detailOverlay').style.display='none'; }
+function refreshSetupNames(){
+  const sel=$id('startSel'); const val=sel.value;
+  sel.innerHTML=S.players.map((p,i)=>'<option value="'+i+'">'+(i+1)+'. '+p.name+'</option>').join('');
+  sel.value=val||String(S.curSelIndex||0);
+}
+function renderBig(){
+  const c=curP(); if(!c)return;
+  $id('curBigName').textContent=c.name;
+  $id('curNameInline').textContent='—— '+c.name;
+  const num=$id('bigNum'), sub=$id('bigSub');
+  if(S.lies>0){ num.textContent=fmt(S.total-10); num.classList.remove('hidden'); sub.innerHTML='🤥 假数（真实 '+fmt(S.total)+'）· 报出后点「已按假数报出」扣减'; }
+  else if(showTrue){ num.textContent=fmt(S.total); num.classList.remove('hidden'); sub.textContent='真实数字公开中'; }
+  else { num.textContent='??'; num.classList.add('hidden'); sub.textContent='总数字已隐藏，需公开时点右上按钮'; }
+  $id('bigCard').classList.toggle('danger', S.total>=100||S.total<1);
+  $id('bigDir').textContent = S.dir===1?'方向 ➡ 顺行（编号递增）':'方向 ⬅ 逆行（编号递减）';
+  const w=$id('pendWrap'); w.innerHTML='';
+  const chips=[];
+  const PEND_CLS={yMul:'pc-y',yRed:'pc-r',ySub:'pc-y',g10:'pc-g'};
+  Object.keys(PEND_LABEL).forEach(k=>{ if(S.pend[k]>0) chips.push([PEND_LABEL[k]+' ×'+S.pend[k],k,PEND_CLS[k]||'pc-o']); });
+  if(S.redN>0) chips.push(['红累计 '+S.redN+' 次（下一次成对即×1.5）',null,'pc-r']);
+  if(S.lies>0) chips.push(['撒谎剩 '+S.lies+' 次',null,'pc-o']);
+  chips.forEach(([t,key,cls])=>{
+    const d=document.createElement('div'); d.className='pendchip '+cls;
+    d.innerHTML=t+(key?' <span class="x" onclick="clearPend(\''+key+'\')">✕</span>':'');
+    w.appendChild(d);
+  });
+  if(c.banned)chipAdd(w,c.name+' 本回合被禁止打手语','pc-r');
+  if(c.frozen>0)chipAdd(w,c.name+' 本人下回合数字不变 ×'+c.frozen,'pc-b');
+  if(c.inverted)chipAdd(w,c.name+' 本人此举 加↔减 乘↔除','pc-i');
+  if(c.blocked)chipAdd(w,c.name+' 的下个技能已被封印','pc-gy');
+  if(c.exchange!=null)chipAdd(w,'替死鬼：'+S.players[c.exchange].name,'pc-ol');
+  if(c.note)chipAdd(w,c.note,'pc-o');
+  if(c.swapPending)chipAdd(w,c.name+' 本回合后 个十位调换','pc-y');
+}
+function chipAdd(w,t,cls){const d=document.createElement('div');d.className='pendchip '+(cls||'pc-o');d.textContent=t;w.appendChild(d);}
+function flashPend(){ const w=$id('pendWrap'); if(!w)return; w.classList.remove('flash'); void w.offsetWidth; w.classList.add('flash');
+  clearTimeout(w._fh); w._fh=setTimeout(()=>w.classList.remove('flash'),2400); }
+function renderPlayers(){
+  const box=$id('playerBox'); box.innerHTML='';
+  S.players.forEach((p,i)=>{
+    const row=document.createElement('div'); row.className='prow'+(p.alive?'':' dead')+(i===S.cur?' cur':'');
+    const card=p.card!=null?DECK[p.card]:null;
+    let marks='';
+    if(p.banned)marks+='<span class="mark mk-ban">🚫 本回合禁手</span>';
+    if(p.frozen>0)marks+='<span class="mark mk-frz">🧊 下回合数字不变 ×'+p.frozen+'</span>';
+    if(p.inverted)marks+='<span class="mark mk-inv">🔄 本人运算反转</span>';
+    if(p.blocked)marks+='<span class="mark mk-blk">🔇 下个技能失效</span>';
+    if(p.exchange!=null)marks+='<span class="mark mk-ex">🛡 替身：'+S.players[p.exchange].name+'</span>';
+    if(p.note)marks+='<span class="mark mk-note">'+p.note+'</span>';
+    if(p.swapPending)marks+='<span class="mark mk-swp">🔁 本回合后 个十位调换</span>';
+    row.innerHTML='<div class="seat">'+(i+1)+'</div>'+
+      '<div class="pinfo">'+
+      '<div class="pname">'+p.name+(p.alive?'':' · <i>已淘汰</i>')+(card&&(card.k==='out'||card.k==='rev')?'<span class="badge">被动技能</span>':'')+'</div>'+
+      '<div class="pskill">'+(card?'#'+pad(p.card+1)+' · 触发词「'+effTrig(p.card)+'」·【'+card.name+'】剩 '+p.uses+' 次':'未分配技能卡')+'</div>'+marks+'</div>'+
+      '<div class="pbtns">'+
+      '<button onclick="setCurrent('+i+')">设为当前</button>'+
+      (p.alive?'<button onclick="doEliminate('+i+')">淘汰</button>':'<button onclick="reviveOne('+i+')">复活</button>')+
+      '<button onclick="zeroNote('+i+')">清备注</button>'+
+      '</div>';
+    box.appendChild(row);
+  });
+  $id('redCount').textContent=S.redN;
+}
+function renderLog(){
+  const b=$id('logBox'); b.innerHTML='';
+  S.logs.slice().reverse().forEach(l=>{const d=document.createElement('div');d.innerHTML=l;b.appendChild(d);});
+}
+function renderOps(){
+  const c=curP(); if(!c)return;
+  const yBox=$id('yNums');
+  if(!yBox.dataset.init){ yBox.dataset.init='1';
+    for(let i=1;i<=10;i++){const b=document.createElement('button');b.textContent=i;b.onclick=()=>playYellow(i);yBox.appendChild(b);}
+  }
+  const card=c.card!=null?DECK[c.card]:null;
+  const trig=card?effTrig(c.card):'';
+  const trigHtml=card?'<b>#'+pad(c.card+1)+'·「'+trig+'」</b> ':'';
+  $id('skillHint').innerHTML = card ? trigHtml+'【'+card.name+'】· 剩 '+c.uses+' 次<br>'+card.txt : '该玩家未分配技能卡（可在开局设置里分配，或用「给当前玩家换卡」）';
+  const bb=$id('btnUseSkill');
+  if(!card){ bb.textContent='发动技能'; bb.disabled=true; }
+  else if(c.blocked){ bb.textContent='🔇 已被封印，点击确认失效'; bb.disabled=false; }
+  else if(c.uses<=0){ bb.textContent='次数已用完'; bb.disabled=true; }
+  else { bb.textContent='发动 #'+pad(c.card+1)+' '+trig; bb.disabled=false; }
+}
+
+/* =============== 主持按钮 =============== */
+$id('btnTogglePanel').onclick=()=>{ $id('hostPanel').style.display='none'; $id('btnShowPanel').classList.remove('hiddenpanel'); };
+$id('btnShowPanel').onclick=()=>{ $id('hostPanel').style.display=''; $id('btnShowPanel').classList.add('hiddenpanel'); };
+$id('btnOpenNum').onclick=()=>{ showTrue=!showTrue; $id('showState').textContent=showTrue?'公开':'隐藏'; render(); };
+$id('btnUndo').onclick=()=>undo();
+$id('btnRestart').onclick=()=>{ if(confirm('清空本局所有数据并重新开始？')){ S=defaultState(); undoStack=[]; showTrue=false; $id('showState').textContent='隐藏'; render(); } };
+$id('btnUseSkill').onclick=useSkill;
+$id('btnSkipTurn').onclick=()=>{ const c=curP(); pushUndo(); log('⏭ '+c.name+' 本回合跳过（未打手语）'); advance(); render(); };
+
+/* =============== 触发词浮窗 =============== */
+function toggleTriggerPanel(){ const p=$id('triggerPanel'); p.classList.toggle('hiddenpanel');
+  if(!p.classList.contains('hiddenpanel')) renderTriggers();
+}
+$id('btnTriggers').onclick=toggleTriggerPanel;
+$id('btnTriggerClose').onclick=()=>{ $id('triggerPanel').classList.add('hiddenpanel'); };
+$id('btnTriggerCollapse').onclick=()=>{ const c=$id('triggerPanel').classList.toggle('collapsed'); $id('btnTriggerCollapse').textContent=c?'▴':'▾'; };
+const TRIG_SIZES=['size-s','size-m','size-l'];
+const TRIG_SIZE_LABELS={'size-s':'⤢ 窄','size-m':'⤢ 中','size-l':'⤢ 宽'};
+$id('btnTriggerSize').onclick=()=>{
+  const p=$id('triggerPanel');
+  let i=TRIG_SIZES.findIndex(s=>p.classList.contains(s)); if(i<0)i=1;
+  i=(i+1)%TRIG_SIZES.length;
+  p.classList.remove('size-s','size-m','size-l'); p.classList.add(TRIG_SIZES[i]);
+  $id('btnTriggerSize').textContent=TRIG_SIZE_LABELS[TRIG_SIZES[i]];
+};
+(function initDrag(){
+  const head=$id('triggerHead'), panel=$id('triggerPanel'); let drag=null;
+  head.addEventListener('pointerdown',e=>{ if(e.target.closest('button'))return;
+    const r=panel.getBoundingClientRect(); drag={dx:e.clientX-r.left,dy:e.clientY-r.top};
+    head.setPointerCapture(e.pointerId); });
+  head.addEventListener('pointermove',e=>{ if(!drag)return;
+    panel.style.left=(e.clientX-drag.dx)+'px'; panel.style.top=(e.clientY-drag.dy)+'px';
+    panel.style.right='auto'; panel.style.bottom='auto'; });
+  const end=()=>{ drag=null; };
+  head.addEventListener('pointerup',end); head.addEventListener('pointercancel',end);
+})();
+
+/* =============== 出手运算 =============== */
+function playRed(){
+  pushUndo(); const p=curP(); const pre=S.total;
+  log('<span class="r">'+p.name+' 打出红色 🍅</span>');
+  applyRed(p,true);
+  afterOp(p,pre);
+}
+function applyRed(p,count){
+  S.redN++;
+  if(S.redN%2===0){ const t=S.total; S.total=(p.inverted? Math.round(t/1.5*100)/100 : Math.round(t*1.5*100)/100);
+    log('<span class="r">🔴 红第 '+S.redN+' 次 →'+(p.inverted?'÷1.5（本人反转）':'×1.5')+'：'+fmt(t)+' → '+fmt(S.total)+'</span>');
+  } else { log('<span class="r">🔴 红第 '+S.redN+' 次（单次无效）</span>'); }
+}
+function playYellow(n){
+  pushUndo(); const p=curP(); const pre=S.total;
+  log('<span class="y">'+p.name+' 打出黄色（选 '+n+'）🍌</span>');
+  applyYellow(p,n);
+  afterOp(p,pre);
+}
+function applyYellow(p,n){
+  if(S.pend.yRed>0){ S.pend.yRed--; log('🌾 黄改红效果：本次黄改为按红结算'); applyYellowAsRed(p); return; }
+  const t=S.total;
+  if(p.inverted && S.pend.yMul>0){ // 本人反转 + 乘
+    S.pend.yMul--; log('🧑‍🏫 加改乘 + 本人反转：本次加 '+n+' 改为 除 '+n);
+    S.total=Math.round(t/n*100)/100; log('总数 ÷'+n+'：'+fmt(t)+' → '+fmt(S.total));
+  } else if(S.pend.yMul>0){
+    S.pend.yMul--; log('🧑‍🏫 加改乘效果：本次加 '+n+' 改为乘 '+n);
+    let f=n; const t0=t;
+    if(t0*f>=100){ while(f>1 && t0*f>=100) f-=1; log('⚠ 结果会 ≥100，乘数自动调为 '+f); }
+    S.total=Math.round(t0*f*100)/100; log('总数 ×'+f+'：'+fmt(t0)+' → '+fmt(S.total));
+  } else if(p.inverted){
+    S.total=t-n; log('🔄 本人反转：加 '+n+' 改减 '+n+'：'+fmt(t)+' → '+fmt(S.total));
+  } else if(S.pend.ySub>0){
+    S.pend.ySub--; S.total=t-n; log('🩺 加改减效果：加 '+n+' 改减 '+n+'：'+fmt(t)+' → '+fmt(S.total));
+  } else {
+    S.total=t+n; log('总数 +'+n+'：'+fmt(t)+' → '+fmt(S.total));
+  }
+}
+function applyYellowAsRed(p){ S.redN++;
+  if(S.redN%2===0){ const t=S.total; S.total=Math.round(t*1.5*100)/100; log('<span class="r">🔴 红第 '+S.redN+' 次 →×1.5：'+fmt(t)+' → '+fmt(S.total)+'</span>'); }
+  else log('<span class="r">🔴 红第 '+S.redN+' 次（单次无效）</span>'); }
+function playGreen(){
+  pushUndo(); const p=curP(); const pre=S.total;
+  log('<span class="g">'+p.name+' 打出绿色 🥬</span>');
+  let add=5, note='';
+  if(S.pend.g10>0){ add=10; S.pend.g10--; note='（绿色加重效果 +10）'; }
+  const t=S.total;
+  S.total = p.inverted ? Math.round((t-add)*100)/100 : Math.round((t+add)*100)/100;
+  log('<span class="g">总数 '+(p.inverted?'−':'+')+add+'：'+fmt(t)+' → '+fmt(S.total)+'</span>'+note+'；'+p.name+' 可得知当前数字 '+fmt(S.total));
+  afterOp(p,pre);
+}
+function afterOp(p,pre){
+  if(p.frozen>0){ p.frozen--; if(S.total!==pre){ S.total=pre; log('🧊 '+p.name+' 本回合数字不变，恢复为 '+fmt(pre)); } }
+  if(p.swapPending){ p.swapPending=false; const s=String(Math.trunc(Math.abs(S.total)));
+    if(s.length>1){ const rev=Number(s[1]+s[0]); log('🔁 个十调换效果：个十位调换 '+fmt(S.total)+' → '+fmt(rev)); S.total=rev; }
+  }
+  if(p.inverted){ p.inverted=false; log('🔄 '+p.name+' 本人反运算已消耗'); }
+  if(S.total>=100||S.total<1){ render(); prepBoom(p); return; }
+  advance(); render();
+}
+function adjustRed(d){ pushUndo(); S.redN=Math.max(0,S.redN+d); log('主持人手调红色累计 → '+S.redN); render(); }
+
+/* =============== 主持人调数平台 =============== */
+let adjPending=false;
+function openAdjPanel(hint){
+  $id('adjHint').textContent=hint||'手动微调总数与红色累计（红色成对即 ×1.5）。所有调整都会记入过程记录并可悔棋。';
+  $id('adjTotal').value=fmt(S.total);
+  $id('adjRedVal').textContent=S.redN;
+  $id('adjOverlay').style.display='flex';
+}
+function closeAdjPanel(){ $id('adjOverlay').style.display='none'; }
+function adjTotalBump(d){
+  const inp=$id('adjTotal'); const v=parseFloat(inp.value);
+  const base=isNaN(v)?S.total:v;
+  inp.value=fmt(base+d);
+}
+function adjTotalApply(){
+  const inp=$id('adjTotal'); const v=parseFloat(inp.value);
+  if(isNaN(v)){ toast('请输入数字'); return; }
+  pushUndo(); const t=S.total; S.total=Math.round(v*100)/100;
+  log('🛠 主持人调整总数：'+fmt(t)+' → '+fmt(S.total));
+  save(); $id('adjTotal').value=fmt(S.total); render();
+}
+function adjRedSet(n){
+  n=Math.max(0,Math.min(99,Math.round(n)));
+  if(n===S.redN){ $id('adjRedVal').textContent=n; return; }
+  pushUndo(); const t=S.redN; S.redN=n;
+  log('🛠 主持人调整红色累计：'+t+' → '+n);
+  save(); $id('adjRedVal').textContent=n; render();
+}
+function openNumericInput(){
+  const v=prompt('将总数字手动改为：',String(S.total)); if(v==null)return;
+  const n=parseFloat(v); if(isNaN(n)){toast('无效数字');return;}
+  pushUndo(); const t=S.total; S.total=n; log('✏ 手动调整总数：'+fmt(t)+' → '+fmt(n));
+  const p=curP();
+  if(S.total>=100||S.total<1){ render(); prepBoom(p); return; }
+  render();
+}
+function clearPend(k){ if(!k)return; if(S.pend[k]<=0)return; pushUndo(); S.pend[k]--; log('主持人提前清掉一条待生效：'+PEND_LABEL[k]); render(); }
+
+/* =============== 撒谎 =============== */
+function openLie(){ pushUndo(); S.lies++; log('🤥 撒谎效果已挂上：下次报数时显示 −10'); render(); }
+function consumeLie(){ if(S.lies<=0){toast('当前没有待扣的假数');return;} pushUndo(); S.lies--; log('已按假数报出（剩 '+S.lies+' 次）'); render(); }
+
+/* =============== 技能 =============== */
+function useSkill(){
+  const c=curP(); const card=c.card!=null?DECK[c.card]:null;
+  if(!card)return;
+  if(c.blocked){ pushUndo(); c.blocked=false;
+    log('🔇 '+c.name+' 尝试发动【'+card.name+'】，但技能已被封印，本次未生效。');
+    render(); return; }
+  if(c.uses<=0){ toast('次数已用完'); return; }
+  pushUndo();
+  pendSpend=true;
+  toast('✨ 已发动 '+card.name);
+  switch(card.fx){
+    case 'reverse': c.uses--; S.dir*=-1; log('↩ '+c.name+' 发动【'+card.name+'】：顺序逆转，跳过自己回合'); advance(); break;
+    case 'selfInvert': c.uses--; c.inverted=true; log('🔄 '+c.name+' 发动【'+card.name+'】（不跳过）：接下来自己的加↔减、乘↔除反转，打色时生效'); break;
+    case 'redPreload': c.uses--; const pr=S.total; log('🔴 '+c.name+' 发动【'+card.name+'】：先替自己名义打出一次红色，随后还会继续打色'); applyRed(c,false);
+      if(S.total>=100||S.total<1){ render(); prepBoom(c); return; }
+      // 不要推进回合，让玩家继续打色。
+      break;
+    case 'revealNoAdd': c.uses--; log('ℹ '+c.name+' 发动【'+card.name+'】：未加 5，本人已得知当前真实数字 '+fmt(S.total)+'；并跳过自己回合'); advance(); break;
+    case 'freezeNext': c.uses--; c.frozen++; log('🧊 '+c.name+' 发动【'+card.name+'】（不跳过）：本人下个回合数字不变且不能跳过'); break;
+    case 'transferBomb': c.uses--; log('💣 '+c.name+' 发动【'+card.name+'】：请选择把炸弹传给谁'); openTargetUI(c, 'transferBomb'); return;
+    case 'lie': c.uses--; S.lies++; log('🤥 '+c.name+' 发动【'+card.name+'】（不跳过）：下次报数 −10'); break;
+    case 'substitute': c.uses--; log('🛡 '+c.name+' 发动【'+card.name+'】：请指定替死鬼'); openTargetUI(c,'substitute'); return;
+    case 'skillBlock': c.uses--; log('🔇 '+c.name+' 发动【'+card.name+'】：请指定要封印技能的人'); openTargetUI(c,'skillBlock'); return;
+    case 'forceOutP': log('✦ '+c.name+' 的【拉人垫背】是被动技能：本人被淘汰后才能带走一人。'); pendSpend=true; break;
+    case 'copySkill': c.uses--; log('🎴 '+c.name+' 发动【'+card.name+'】：请选择要复制谁（含剩余次数）'); openTargetUI(c,'copySkill'); return;
+    case 'banPlayer': c.uses--; log('🚫 '+c.name+' 发动【'+card.name+'】：可选择本回合禁手的人（取消则默认下一名）'); openTargetUI(c,'banPlayer'); return;
+    case 'mulNextYellow': c.uses--; S.pend.yMul++; log('🧑‍🏫 '+c.name+' 发动【'+card.name+'】（不跳过）：下一名打黄 → 加改乘'); break;
+    case 'redNextYellow': c.uses--; S.pend.yRed++; log('🌾 '+c.name+' 发动【'+card.name+'】（不跳过）：下一名打黄 → 改按红'); break;
+    case 'greenPlus10': c.uses--; S.pend.g10++; log('⚖ '+c.name+' 发动【'+card.name+'】（不跳过）：下一名打绿 → +10'); break;
+    case 'reviveP': log('✦ '+c.name+' 的【复活术】是被动技能：本人被淘汰后，才会触发复活效果。'); pendSpend=true; break;
+    case 'swapDigits': c.uses--; c.swapPending=true; log('🔁 '+c.name+' 发动【'+card.name+'】（不跳过）：本回合结束后个十位调换'); break;
+    case 'subNextYellow': c.uses--; S.pend.ySub++; log('🩺 '+c.name+' 发动【'+card.name+'】（不跳过）：下一名打黄 → 加改减'); break;
+    default: break;
+  }
+  pendSpend=false;
+  flashPend();
+  render();
+}
+
+/* =============== 进程 =============== */
+function reverseDir(){ pushUndo(); S.dir*=-1; log('🔁 主持人手动逆转方向，现在 '+(S.dir===1?'➡ 顺行':'⬅ 逆行')); render(); }
+function setCurrent(i){ if(!S.players[i].alive){toast('不能选已淘汰的玩家');return;} S.cur=i; log('➡ 主持人手动把当前玩家切到 '+S.players[i].name); render(); }
+function zeroNote(i){ pushUndo(); S.players[i].note=null; render(); }
+function advance(){
+  let steps=0, lim=S.players.length*4;
+  let i=S.cur;
+  while(steps++<lim){
+    i=(i+S.dir+S.players.length*10)%S.players.length;
+    const p=S.players[i];
+    if(p.banned){ log('🚫 '+p.name+' 本回合禁手，自动跳过'); p.banned=false; continue; }
+    if(!p.alive) continue;
+    break;
+  }
+  S.cur=i; log('→ 下一位：'+S.players[i].name);
+  return i;
+}
+
+/* =============== 淘汰 & 复活 =============== */
+function doEliminate(pid){
+  const p=S.players[pid]; if(!p.alive){toast('该玩家已被淘汰');return;}
+  pushUndo();
+  if(p.note){p.note=null;}
+  p.alive=false; const idx=S.elimStack.indexOf(pid); if(idx<0)S.elimStack.push(pid);
+  log('💥 <span class="exp"><b>'+p.name+' 被淘汰</b></span>');
+  adjPending=true;
+  render();
+  // 触发其被动技能面板
+  setTimeout(()=>{ openPassivePanel(pid); },50);
+}
+function reviveOne(pid){ pushUndo(); const p=S.players[pid]; p.alive=true;
+  const idx=S.elimStack.indexOf(pid); if(idx>=0)S.elimStack.splice(idx,1);
+  log('🙏 '+p.name+' 被主持人复活，重新回到游戏'); render(); }
+
+function prepBoom(p){
+  $id('boomTitle').textContent='💥 炸弹爆炸！';
+  $id('boomBody').innerHTML='总数字 '+fmt(S.total)+' 触发阈值（≥100 或 &lt;1）。<br>'+
+    '<b style="color:var(--accent)">'+p.name+'</b>'+' 此回合出手，通常由本人被淘汰。'+
+    (p.note?'<div>ℹ 此前 '+p.note+'</div>':'')+
+    '<div>如主张炸弹在此前被传递到他人，主持人可在下一步手动裁定。</div>';
+  const row=$id('boomRow'); row.innerHTML='';
+  const bU=document.createElement('button'); bU.textContent='↩ 撤回这一步（先别淘汰）';
+  bU.onclick=()=>{ closeBoom(); undo(); }; row.appendChild(bU);
+  const bE=document.createElement('button'); bE.className='danger'; bE.textContent='确认 · 由 '+p.name+' 淘汰';
+  bE.onclick=()=>{ closeBoom(); doEliminate(p.id); }; row.appendChild(bE);
+  const bC=document.createElement('button'); bC.className='ghost'; bC.textContent='先不管，我自己处理';
+  bC.onclick=()=>{ closeBoom(); }; row.appendChild(bC);
+  $id('boomOverlay').style.display='flex';
+}
+function closeBoom(){ $id('boomOverlay').style.display='none'; if(adjPending){ adjPending=false; openAdjPanel('淘汰处理完毕：可按玩法需要调整总数与红色累计'); } }
+
+function openPassivePanel(pid){
+  const p=S.players[pid];
+  const rows=[];
+  if(p.card!=null && DECK[p.card].k==='rev' && !S.usedPassive.rev[pid]){
+    rows.push({t:'🙏 复活术（被动）：复活自己 + 上一位被淘汰者',a:()=>{ passiveRevive(pid); }});
+  }
+  // 被刚淘汰者本人，或其他在场者，持有未用之人助教
+  const outs=[];
+  if(p.card!=null && DECK[p.card].k==='out' && !S.usedPassive.out[pid]) outs.push(p);
+  if(p.alive === false) {} else {}
+  S.players.forEach((x,i)=>{ if(x.id!==pid && x.alive && x.card!=null && DECK[x.card].k==='out' && !S.usedPassive.out[x.id]) outs.push(x); });
+  if(outs.length){
+    rows.push({t:'⚡ 拉人垫背（被动）：'+outs.map(x=>x.name).join(' / ')+' 强制带走一人？',a:()=>{ pendSrc=outs[0].id; pendTarget='forceOut'; openTargetUI(null,'forceOut'); }});
+  }
+  if(rows.length===0){
+    if(adjPending){ adjPending=false; openAdjPanel('已淘汰 '+p.name+'：可按玩法需要调整总数与红色累计'); }
+    return;
+  }
+  rows.push({t:'跳过（主持人另行处理）',a:()=>{}});
+  $id('boomTitle').textContent='✦ 被动技能触发？';
+  $id('boomBody').innerHTML=S.players[pid].name+' 已被淘汰，其被动技能可继续使用或放弃。';
+  const row=$id('boomRow'); row.innerHTML='';
+  rows.forEach(r=>{ const b=document.createElement('button');
+    b.textContent=r.t; b.onclick=()=>{ closeBoom(); r.a(); save(); render(); };
+    row.appendChild(b); });
+  setTimeout(()=>{ $id('boomOverlay').style.display='flex'; },80);
+}
+function passiveRevive(pid){
+  pushUndo();
+  S.usedPassive.rev[pid]=true;
+  const p=S.players[pid]; p.alive=true;
+  const i=S.elimStack.indexOf(pid); if(i>=0)S.elimStack.splice(i,1);
+  log('🙏 <b>复活术</b>：'+p.name+' 复活自己');
+  const last=S.elimStack.pop();
+  if(last!=null){ S.players[last].alive=true; log('🙏 <b>复活术</b>：上一位被淘汰的 '+S.players[last].name+' 也被复活'); }
+  render();
+}
+
+/* =============== 选人弹窗 =============== */
+const TIDY_TITLES={transferBomb:'选择要把炸弹传给谁',substitute:'选择要作为替死鬼的玩家',skillBlock:'选择要封印其技能的玩家',copySkill:'选择要复制其技能的玩家（含次数）',banPlayer:'选择本回合禁手的人（取消则默认下一名）',forceOut:'选择要强制淘汰的人'};
+function openTargetUI(src,kind){
+  pendTarget=kind; pendSrc=src?src.id:null;
+  const list=$id('targetList'); list.innerHTML='';
+  $id('targetTitle').textContent=TIDY_TITLES[kind]||'选择一位玩家';
+  S.players.forEach((p,i)=>{
+    if(src&&i===src.id)return;
+    if(!p.alive && kind!=='forceOut')return;
+    let suffix='';
+    if(kind==='transferBomb'&&p.note)suffix='<span class="badge">已有备注</span>';
+    if(kind==='copySkill'&&p.card==null)suffix='<span class="badge">无技能卡</span>';
+    const b=document.createElement('button');
+    b.innerHTML='<b>'+(i+1)+'. '+p.name+'</b>'+(p.card!=null?' · #'+pad(p.card+1)+'·「'+effTrig(p.card)+'」·【'+DECK[p.card].name+'】':' ')+suffix;
+    if(kind==='copySkill' && p.card==null) b.disabled=true;
+    b.onclick=()=>closeTarget(i);
+    list.appendChild(b);
+  });
+  $id('targetOverlay').style.display='flex';
+}
+function closeTarget(chosen){ $id('targetOverlay').style.display='none';
+  const fromSkill = pendSrc!=null;
+  if(!chosen && chosen!==0 && pendTarget==='banPlayer'){ // 取消 → 默认下一名
+    let i=(S.cur+1)%S.players.length;
+    let tries=0; while(!S.players[i].alive&&tries<S.players.length){i=(i+1)%S.players.length;tries++;}
+    chosen=i; toast('未选择，默认下一名 → '+S.players[chosen].name);
+  }
+  if(chosen==null||chosen===undefined||(!chosen && chosen!==0)){
+    if(pendSpend && pendSrc!=null){ S.players[pendSrc].uses++; log('已取消，'+S.players[pendSrc].name+' 的技能次数已返还'); }
+    pendTarget=null; pendSpend=false; pendSrc=null; save(); render(); return;
+  }
+  const src=pendSrc!=null?S.players[pendSrc]:null;
+  switch(pendTarget){
+    case 'transferBomb': S.players[chosen].note='💣 被指为传炸弹者'; if(src){ log('💣 '+src.name+' 把炸弹传给 '+S.players[chosen].name+'，并跳过自己回合'); advance(); } else log('💣 主持人手动指定 '+S.players[chosen].name+' 为传炸弹者'); break;
+    case 'substitute': if(src){src.exchange=chosen; log('🛡 替死鬼定为 '+S.players[chosen].name+'（替死鬼生效）');} break;
+    case 'skillBlock': S.players[chosen].blocked=true; log('🔇 '+S.players[chosen].name+' 的下个技能被封印'); break;
+    case 'copySkill': { const t=S.players[chosen]; const c=src;
+      if(c){ c.card=t.card; c.uses=t.uses; c.blocked=false; c.inverted=false;
+        log('🎴 '+c.name+' 复制了 '+t.name+' 的技能卡——现在持有【'+(t.card!=null?DECK[t.card].name:'无')+'】，剩 '+c.uses+' 次'); } break; }
+    case 'banPlayer': S.players[chosen].banned=true; log('🚫 '+S.players[chosen].name+' 本回合被禁止打手语'+(pendSrc!=null?'；同时出手者跳过自己回合':''));
+      if(pendSrc!=null)advance(); break;
+    case 'forceOut': { if(pendSrc!=null)S.usedPassive.out[pendSrc]=true;
+      const tp=S.players[chosen]; log('⚡ 拉人垫背发动，'+(pendSrc!=null?S.players[pendSrc].name+' ':'')+'强制带走 '+tp.name);
+      doEliminate(chosen); } break;
+  }
+  pendTarget=null; pendSpend=false; pendSrc=null; save(); render();
+  if(fromSkill)flashPend();
+}
+function hostTarget(kind){ pendFromSkill=false; pendSpend=false; // 手动，不推进回合
+  if(kind==='forceOut'){ openTargetUI(null,'forceOut'); return; }
+  openTargetUI(null,kind);
+}
+
+/* =============== 换卡 =============== */
+function openChooseCard(){
+  const c=curP(); if(!c)return;
+  pendCardTarget=c.id;
+  const list=$id('cardList'); list.innerHTML='';
+  DECK.forEach((cd,idx)=>{
+    const heldBy=S.players.filter(p=>p.card===idx&&p.id!==c.id).map(p=>p.name).join('、');
+    const b=document.createElement('button');
+    b.innerHTML='#'+pad(idx+1)+' · 触发词「'+effTrig(idx)+'」 · <b>'+cd.name+'</b> · '+cd.uses+' 次'+(heldBy?' <span class="badge">已持有：'+heldBy+'</span>':'')+'<div style="font-size:12px;color:var(--muted)">'+cd.txt+'</div>';
+    b.onclick=()=>{ pushUndo(); c.card=idx; c.uses=cd.uses; log('🎴 '+c.name+' 的技能卡改为【'+cd.name+'】'); save(); closeChooseCard(); render(); };
+    list.appendChild(b);
+  });
+  $id('cardOverlay').style.display='flex';
+}
+function closeChooseCard(){ $id('cardOverlay').style.display='none'; }
+let pendCardTarget=null;
+
+/* =============== 开局 =============== */
+$id('btnAddP').onclick=()=>{ if(S.started){toast('游戏已开始');return;} S.players.push(newPlayer(S.players.length)); buildSetup(); };
+$id('btnDelP').onclick=()=>{ if(S.started){toast('游戏已开始');return;} if(S.players.length<=2){toast('至少 2 人');return;} S.players.pop(); buildSetup(); };
+$id('btnAutoDeal').onclick=()=>{ if(S.started){toast('游戏已开始');return;}
+  const pool=[]; DECK.forEach((d,i)=>{ if(S.pool[i]&&!S.players.some(p=>p.card===i))pool.push(i); });
+  if(!pool.length){toast('技能池没有可用卡（全部未入池或已被持有）');return;}
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  S.players.forEach((p,i)=>{ if(i<pool.length){p.card=pool[i];p.uses=DECK[pool[i]].uses;} else {p.card=null;p.uses=0;} });
+  toast('已从技能池随机发卡（池内可用 '+pool.length+' 张）'); buildSetup(); };
+$id('btnUndoDeal').onclick=()=>{ if(S.started){toast('游戏已开始');return;} S.players.forEach(p=>{p.card=null;p.uses=0;}); toast('已撤销全部分卡'); buildSetup(); };
+$id('btnJoinLink').onclick=()=>{
+  const pool=[]; DECK.forEach((d,i)=>{ if(S.pool[i]&&!S.players.some(p=>p.card===i))pool.push(i); });
+  if(!pool.length){toast('技能池为空（或池内卡都已被持有），先调整「入池」');return;}
+  const url=location.href.split('#')[0]+'#join='+pool.join('-');
+  copyText(url,'玩家选卡链接已复制。把本文件一并发到群里（或部署到网站后直接用网址），玩家打开链接即可选卡');
+};
+$id('btnImportJoin').onclick=()=>{ if(S.started){toast('游戏已开始');return;} $id('importText').value=''; $id('chkOverride').checked=false; $id('importOverlay').style.display='flex'; };
+function copyText(t,msg){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>toast(msg||'已复制'),()=>{ fallbackCopy(t); prompt('自动复制失败，请手动复制：',t); });
+  } else { fallbackCopy(t); toast(msg||'已复制'); }
+}
+function fallbackCopy(t){ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
+function doImport(){
+  const override=$id('chkOverride').checked;
+  const lines=($id('importText').value||'').split(/\n+/).map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){toast('没有可导入的内容');return;}
+  let ok=0,skip=0;
+  lines.forEach(line=>{
+    let idx=null, name=null;
+    const mNum=line.match(/#\s*(\d{1,2})/);
+    if(mNum){
+      idx=+mNum[1]-1;
+      name=line.replace(/【[^】]*】/g,'').split(/→|：|:|选了|选择了/)[0].trim();
+    } else {
+      // 选卡码：名字 → base64({c:编号})
+      const parts=line.split(/→|：|:/); const tok=(parts.pop()||'').trim();
+      const dec=b64decode(tok.replace(/^【[^】]*】/,'').trim());
+      if(dec&&dec.c>=1&&dec.c<=DECK.length){ idx=dec.c-1; name=parts.join('').replace(/【[^】]*】/g,'').trim()||('玩家'+(S.players.length+1)); }
+    }
+    if(idx==null||idx<0||idx>=DECK.length||!name){skip++;return;}
+    const holder=S.players.find(x=>x.card===idx);
+    if(holder&&!override){ toast('#'+pad(idx+1)+' 已被 '+holder.name+' 持有，跳过 '+name); skip++; return; }
+    let p=S.players.find(x=>x.name===name);
+    if(!p){ p=newPlayer(S.players.length); p.name=name; S.players.push(p); }
+    if(holder&&holder!==p){ holder.card=null; holder.uses=0; log('⚖ 主持人裁定：#'+pad(idx+1)+' 由 '+holder.name+' 改判给 '+name); }
+    p.card=idx; p.uses=DECK[idx].uses; ok++;
+  });
+  $id('importOverlay').style.display='none';
+  save(); buildSetup(); renderPlayers();
+  toast('导入完成：成功 '+ok+' 条'+(skip?'，跳过 '+skip+' 条':''));
+}
+$id('btnStart').onclick=()=>{
+  pushUndo(); S.started=true; showTrue=false; $id('showState').textContent='隐藏';
+  S.cur=+$id('startSel').value||0; S.total=1; S.redN=0; S.lies=0;
+  S.pend={yMul:0,yRed:0,ySub:0,g10:0}; S.elimStack=[]; S.usedPassive={rev:{},out:{}};
+  S.players.forEach(p=>{ p.alive=true; p.banned=false; p.frozen=0; p.blocked=false; p.inverted=false; p.exchange=null; p.swapPending=false; p.note=null; });
+  log('<b>🚀 游戏开始：'+S.players.map(p=>p.name).join(' → ')+'</b>');
+  log('总数字从 1 开始，阈值 ≥100 或 &lt;1 触发爆炸');
+  render(); toast('开局成功！按颜色按钮开始第一轮。');
+};
+</script>
+</body>
+</html>

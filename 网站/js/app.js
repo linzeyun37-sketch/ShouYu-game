@@ -259,6 +259,12 @@
       ? '<a class="btn" href="' + esc(g.page) + '">打开完整玩法页</a>'
       : '';
 
+    var tools = (g.tools && g.tools.length)
+      ? '<div class="tool-links">' + g.tools.map(function (t) {
+          return '<a class="btn" href="' + esc(fileHref(t.href)) + '" target="_blank" rel="noopener">' + esc(t.label) + '</a>';
+        }).join("") + '</div>'
+      : '';
+
     var guide = (window.GUIDES || {})[g.id];
     var guideHtml;
     if (guide) {
@@ -312,6 +318,8 @@
         (pageBtn ? '<h2 class="sec-title">完整页面</h2><p>' + pageBtn + '</p>' : '') +
 
         '<h2 class="sec-title">原始资料</h2>' + files +
+
+        (tools ? '<h2 class="sec-title">工具与表格</h2>' + tools : '') +
 
         (related ? '<h2 class="sec-title">相关游戏</h2><ul class="related-list">' + related + '</ul>' : '') +
 

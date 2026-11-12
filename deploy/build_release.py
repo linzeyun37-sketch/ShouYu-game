@@ -11,6 +11,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# 网页工具（非资料文件）也进入公共目录；保留 网站/ 子路径以匹配 fileHref 的相对寻址
+EXTRA_PAGES = (
+    "网站/水果炸弹技能表玩家版.html",
+    "网站/水果炸弹主持人台.html",
+)
+
 
 def build(output):
     if output.exists():
@@ -38,6 +44,12 @@ def build(output):
     (site / "index.html").write_text(html, encoding="utf-8")
     for name in resources:
         target = site / "resources" / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, target)
+    for name in EXTRA_PAGES:
+        target = site / "resources" / name
+        if not (ROOT / name).is_file():
+            raise ValueError("Missing extra page: " + name)
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / name, target)
     files = {}
