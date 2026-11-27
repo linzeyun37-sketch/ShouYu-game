@@ -1,17 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="logo-title">
-  <title id="logo-title">指间趣游 · 手掌托起骰子</title>
-  <g stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 276 276" width="256" height="256" aria-hidden="true"><g><g xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
     <g transform="rotate(12 151 83)">
-      <rect x="105" y="37" width="92" height="92" rx="19" fill="#8bbde0" stroke="#2981bf" stroke-width="8.1" />
-      <g stroke="none">
-        <circle cx="130" cy="62" r="7" fill="#2679b3" stroke="none" stroke-width="13.0" />
-        <circle cx="151" cy="83" r="7" fill="#2679b3" stroke="none" stroke-width="13.0" />
-        <circle cx="172" cy="104" r="7" fill="#2679b3" stroke="none" stroke-width="13.0" />
+      <rect x="105" y="37" width="92" height="92" rx="19" fill="#fffdfa" stroke="#1f352b" stroke-width="10.4" />
+      <g>
+        <circle cx="130" cy="62" r="7" fill="#1f352b" stroke="none" stroke-width="0.0" />
+        <circle cx="151" cy="83" r="7" fill="#1f352b" stroke="none" stroke-width="0.0" />
+        <circle cx="172" cy="104" r="7" fill="#1f352b" stroke="none" stroke-width="0.0" />
       </g>
     </g>
-    <path d="M58 169 C75 155 85 151 99 157 L130 173 H157 C166 173 172 179 170 187 L201 163 C212 155 225 165 216 177 C205 191 179 210 155 221 C141 228 127 226 111 221 L58 206 Z" fill="#fce9da" stroke="#f78b36" stroke-width="8.1" />
-    <path d="M126 195 H157 C166 195 171 189 170 184" fill="none" stroke="#f78b36" stroke-width="8.1" />
-    <path d="M33 161 H59 V218 H33 Z" fill="#99d3a2" stroke="#3eab4f" stroke-width="8.1" />
-    <path d="M65 119 C62 102 67 87 79 76" fill="none" stroke-width="6.2" stroke="#3eab4f" />
+    <path d="M58 169 C75 155 85 151 99 157 L130 173 H157 C166 173 172 179 170 187 L201 163 C212 155 225 165 216 177 C205 191 179 210 155 221 C141 228 127 226 111 221 L58 206 Z" fill="#fffdfa" stroke="#1f352b" stroke-width="10.4" />
+    <path d="M126 195 H157 C166 195 171 189 170 184" fill="none" stroke="#1f352b" stroke-width="10.4" />
+    <path d="M33 161 H59 V218 H33 Z" fill="#fffdfa" stroke="#1f352b" stroke-width="10.4" />
+    <path d="M65 119 C62 102 67 87 79 76" fill="none" stroke-width="8.0" stroke="#1f352b" />
   </g>
-</svg>
+</g><g transform="translate(14 11)" style="mix-blend-mode:multiply"><g xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(12 151 83)">
+      <rect x="105" y="37" width="92" height="92" rx="19" fill="#7ebeec" stroke="none" stroke-width="0.0" />
+      <g>
+        <circle cx="130" cy="62" r="7" fill="none" stroke="none" stroke-width="0.0" />
+        <circle cx="151" cy="83" r="7" fill="none" stroke="none" stroke-width="0.0" />
+        <circle cx="172" cy="104" r="7" fill="none" stroke="none" stroke-width="0.0" />
+      </g>
+    </g>
+    <path d="M58 169 C75 155 85 151 99 157 L130 173 H157 C166 173 172 179 170 187 L201 163 C212 155 225 165 216 177 C205 191 179 210 155 221 C141 228 127 226 111 221 L58 206 Z" fill="#f9dbcd" stroke="none" stroke-width="0.0" />
+    <path d="M126 195 H157 C166 195 171 189 170 184" fill="none" stroke="none" stroke-width="0.0" />
+    <path d="M33 161 H59 V218 H33 Z" fill="#8fdb9b" stroke="none" stroke-width="0.0" />
+    <path d="M65 119 C62 102 67 87 79 76" fill="none" stroke-width="0.0" stroke="none" />
+  </g>
+</g></svg>

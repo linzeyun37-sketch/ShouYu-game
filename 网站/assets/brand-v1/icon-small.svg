@@ -1,11 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="logo-title">
-  <title id="logo-title">指间趣游</title>
-  <g stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="94" y="28" width="112" height="112" rx="24" fill="#8bbde0" stroke="#2981bf" stroke-width="9.9" />
-    <g stroke="none">
-      <circle cx="126" cy="60" r="10" fill="#2679b3" stroke="none" stroke-width="16.0" />
-      <circle cx="174" cy="108" r="10" fill="#2679b3" stroke="none" stroke-width="16.0" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 276 276" width="256" height="256" aria-hidden="true"><g><g xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="94" y="28" width="112" height="112" rx="24" fill="#fffdfa" stroke="#1f352b" stroke-width="10.4" />
+    <g>
+      <circle cx="126" cy="60" r="10" fill="#1f352b" stroke="none" stroke-width="0.0" />
+      <circle cx="174" cy="108" r="10" fill="#1f352b" stroke="none" stroke-width="0.0" />
     </g>
-    <path d="M35 173 C60 154 78 157 98 172 L131 187 H162 L205 165 C221 157 230 175 216 185 L163 220 C143 231 119 226 98 219 L35 203 Z" fill="#fce9da" stroke="#f78b36" stroke-width="9.9" />
+    <path d="M35 173 C60 154 78 157 98 172 L131 187 H162 L205 165 C221 157 230 175 216 185 L163 220 C143 231 119 226 98 219 L35 203 Z" fill="#fffdfa" stroke="#1f352b" stroke-width="10.4" />
   </g>
-</svg>
+</g><g transform="translate(14 11)" style="mix-blend-mode:multiply"><g xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="94" y="28" width="112" height="112" rx="24" fill="#7ebeec" stroke="none" stroke-width="0.0" />
+    <g>
+      <circle cx="126" cy="60" r="10" fill="none" stroke="none" stroke-width="0.0" />
+      <circle cx="174" cy="108" r="10" fill="none" stroke="none" stroke-width="0.0" />
+    </g>
+    <path d="M35 173 C60 154 78 157 98 172 L131 187 H162 L205 165 C221 157 230 175 216 185 L163 220 C143 231 119 226 98 219 L35 203 Z" fill="#f9dbcd" stroke="none" stroke-width="0.0" />
+  </g>
+</g></svg>
